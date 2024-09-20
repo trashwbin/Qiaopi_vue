@@ -152,6 +152,7 @@ body {
 }
 p {
   font-size: 14px;
+  color: #666666;
 }
 a {
     text-decoration-line: none;

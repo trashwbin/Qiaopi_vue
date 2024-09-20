@@ -88,12 +88,14 @@ export default {
           this.startCountdown()
           this.uuid = response.data.data.uuid
           this.responseMessage = response.data.msg
+          alert(this.responseMessage)
         } else {
           this.responseMessage = response.data.msg
-          alert('发送过于频繁请稍后再试')
+          alert(this.responseMessage)
         }
       } catch (error) {
         this.responseMessage = '发送验证码失败: ' + error
+        alert(this.responseMessage)
       }
     },
     // 用户注册请求
@@ -110,9 +112,10 @@ export default {
           confirmPassword: this.confirmPassword
         })
         this.responseMessage = response.data.msg || '注册成功'
-        alert('注册成功')
+        alert(this.responseMessage)
       } catch (error) {
         this.responseMessage = '注册失败: ' + error.response.data.msg
+        alert(this.responseMessage)
       }
     }
   },
@@ -194,17 +197,17 @@ body {
   background-image: linear-gradient(to right, #ECEED9, #B38554);
   color: #fff;
   margin: 0 auto;
-      background-color:#ECEED9;
-    border-radius:28px;
-    border:1px solid #ffffff;
-    display:inline-block;
-    cursor:pointer;
-    color:#ffffff;
-    font-family:Arial;
-    font-size:17px;
-    padding:16px 31px;
-    text-decoration:none;
-    text-shadow:0px 1px 0px #2f6627;
+  background-color:#ECEED9;
+  border-radius:28px;
+  border:1px solid #ffffff;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Arial;
+  font-size:17px;
+  padding:16px 31px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #2f6627;
 }
 
 .msg {
@@ -214,6 +217,7 @@ body {
 
 p {
   font-size: 14px;
+  color: #666666;
 }
 a {
     text-decoration-line: none;

@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="login-wrapper">
-      <div class="header">忘记密码</div>
+      <div class="header">找回密码</div>
       <div class="form-wrapper">
         <input v-model="email" type="text" name="username" placeholder="邮箱号" class="input-item">
         <span class="alert" v-if="isMistake">请输入正确的邮箱号</span>
-        <input v-model="password" type="password" name="password" placeholder="请重新输入新的密码" class="input-item">
+        <input v-model="password" type="password" name="password" placeholder="请重新输入新密码" class="input-item">
         <input v-model="confirmPassword" type="password" name="repassword" placeholder="再次确认密码" class="input-item">
         <span class="isSame" v-if="isSame">两次密码不一致请重新输入</span>
         <input type="text" v-model="code" name="repassword" placeholder="请输入邮箱验证码" class="email">
@@ -74,45 +74,55 @@ export default {
         }, 1000)
       }
     },
-    // 获取短信验证码
     async sendCode() {
-      if (!this.validFn()) {
-        return
-      }
-      if (!this.validatePassword()) {
-        return
-      }
       try {
-        const response = await axios.get('/api/user/sendCode', { params: { email: this.email } })
+        if (!this.validFn()) {
+          throw new Error('无效的邮箱地址')
+        }
+        if (!this.validatePassword()) {
+          throw new Error('两次密码不一致')
+        }
+        const response = await axios.get('/api/user/sendResetPasswordCode', {
+          params: { email: this.email }
+        })
         if (response.data.code === 200) {
-          this.startCountdown()
-          this.uuid = response.data.data.uuid
-          this.responseMessage = response.data.msg
+          this.responseMessage = '验证码已发送，请检查您的邮箱。'
+          alert(this.responseMessage)
+          this.startCountdown()// 开始倒计时
         } else {
           this.responseMessage = response.data.msg
-          alert('发送过于频繁请稍后再试')
+          alert(this.responseMessage)
         }
       } catch (error) {
-        this.responseMessage = '发送验证码失败: ' + error
+        console.error('Error:', error)
+        this.responseMessage = '发送验证码失败，请重试。'
+        alert(this.responseMessage)
       }
     },
-    // 用户注册请求
+    // 注册（重置密码）
     async register() {
-      if (!this.validFn() || !this.validatePassword()) {
-        return
-      }
       try {
-        const response = await axios.post('/api/user/register', {
+        if (!this.validFn() || !this.validatePassword()) {
+          throw new Error('表单验证失败')
+        }
+        const response = await axios.post('/api/user/resetPasswordByEmail', {
           username: this.email,
           password: this.password,
           code: this.code,
           uuid: this.uuid,
           confirmPassword: this.confirmPassword
         })
-        this.responseMessage = response.data.msg || '注册成功'
-        alert('注册成功')
+        if (response.data.code === 200) {
+          this.responseMessage = '密码重置成功，请使用新密码登录。'
+          alert(this.responseMessage)
+        } else {
+          this.responseMessage = response.data.msg
+          alert(this.responseMessage)
+        }
       } catch (error) {
-        this.responseMessage = '注册失败: ' + error.response.data.msg
+        console.error('Error:', error)
+        this.responseMessage = '密码重置失败，请重试。'
+        alert(this.responseMessage)
       }
     }
   },
@@ -214,6 +224,7 @@ body {
 
 p {
   font-size: 14px;
+  color: #666666;
 }
 a {
     text-decoration-line: none;
