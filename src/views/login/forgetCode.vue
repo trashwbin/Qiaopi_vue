@@ -12,7 +12,7 @@
         <button @click="sendCode" :disabled="second !== totalSecond" class="code">{{ second === totalSecond ? '获取验证码' :
           second + '秒后重新发送' }}</button>
         <button @click="register" class="btn" :disabled="isFormInvalid">Register</button>
-        <p>已有账号？<router-link to="/">去登录</router-link></p>
+        <p>已有账号？<router-link to="/login">去登录</router-link></p>
       </div>
     </div>
   </div>
@@ -136,6 +136,10 @@ export default {
 </script>
 
 <style scoped>
+* {
+  margin: 0;
+  padding: 0;
+}
 html {
   height: 100%;
 }
@@ -146,7 +150,7 @@ body {
 
 .container {
   position: relative;
-  height: 800px;
+  height: 810px;
   width: 100%;
   background-image: linear-gradient(to right, #ECEED9, #B38554);
 }

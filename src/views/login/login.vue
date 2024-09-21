@@ -73,7 +73,10 @@ export default {
 </script>
 
 <style scoped>
-
+* {
+  margin: 0;
+  padding: 0;
+}
 html {
     height: 100%;
 }
@@ -82,7 +85,7 @@ body {
 }
 .container {
     position: relative;
-    height: 800px;
+    height: 810px;
     width: 100%;
     background-image: linear-gradient(to right, #ECEED9, #B38554);
 }
