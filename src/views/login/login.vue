@@ -54,7 +54,10 @@ export default {
         const response = await axios.post('/api/user/login', data)
         if (response.data.code === 200) {
           alert('登录成功')
-          // 处理登录成功后的逻辑，比如跳转到主页
+          // 保存token到localStorage
+          localStorage.setItem('token', response.data.data.token)
+          // 跳转到主页或其他页面
+          this.$router.push({ name: 'Index' })
         } else {
           alert('登录失败: ' + response.data.msg)
           this.getPicCode()// 刷新验证码

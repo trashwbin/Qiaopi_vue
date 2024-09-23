@@ -5,6 +5,8 @@ import Register from '@/views/login/register.vue'
 import ForgetCode from '@/views/login/forgetCode.vue'
 import Impact from '@/views/import/import.vue'
 import Index from '@/views/index/index'
+import Letter from '@/views/index/letter'
+import Game from '@/views/index/game'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -32,7 +34,19 @@ const router = new VueRouter({
   {
     path: '/index',
     name: 'Index',
-    component: Index
+    component: Index,
+    children: [
+      {
+        path: '/letter',
+        name: 'Letter',
+        component: Letter
+      },
+      {
+        path: '/game',
+        name: 'Game',
+        component: Game
+      }
+    ]
   }
   ]
 })

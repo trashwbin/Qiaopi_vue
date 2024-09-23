@@ -20,7 +20,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>
@@ -45,15 +44,19 @@ export default {
 }
 .envelope {
     position: absolute;
-    top: 170px;
-    left: 490px;
     width: 400px;
+    height: 600px;
+    top: 50%;
+    left: 50%;
+    margin-left: -230px;
+    margin-top: -250px;
 }
 .img-3d {
     width: 100%;
 }
 .envelope:hover {
   transform:  rotateX(20deg) rotateY(330deg) ;
+  cursor: pointer;
 } /* 鼠标悬停时改变Z旋转
 /* 添加抖动动画的关键帧 */
 @keyframes shake {
