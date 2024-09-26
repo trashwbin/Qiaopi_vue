@@ -2,23 +2,44 @@
 <div class="container">
   <nav>
     <div class="banner">
-       <router-link to="/index" class="slider">首页</router-link>
-      <router-link to="/letter" class="slider">写信</router-link>
-      <router-link to="/game" class="slider">游戏</router-link>
-          <div class="animation" ref="slider"></div>
-         <router-link to="/login" class="login">登录</router-link>
-    <router-link to="/register" class="register">注册</router-link>
+      <router-link to="/introduce" class="slider" @click.native="setActive(0)">首页</router-link>
+      <router-link to="/letter" class="slider" @click.native="setActive(1)">写信</router-link>
+      <router-link to="/game" class="slider" @click.native="setActive(2)">游戏</router-link>
+      <div class="animation" :style="animationStyle"></div>
+      <router-link to="/login" class="login">登录</router-link>
+      <router-link to="/register" class="register">注册</router-link>
     </div>
   </nav>
   <router-view></router-view>
 </div>
-
 </template>
 
 <script>
-// import instance from '@/utils/request'
 export default {
-  name: 'QiaopiIndex'
+  name: 'QiaopiIndex',
+  data() {
+    return {
+      activeIndex: -1,
+      positions: [150, 250, 350] // 初始位置
+    }
+  },
+  computed: {
+    animationStyle() {
+      return {
+        left: this.activeIndex >= 0 ? `${this.positions[this.activeIndex]}px` : '150px',
+        backgroundColor: this.activeIndex === 0
+          ? '#D3BF9E'
+          : this.activeIndex === 1
+            ? '#C7A981'
+            : this.activeIndex === 2 ? '#B68C5C' : 'transparent'
+      }
+    }
+  },
+  methods: {
+    setActive(index) {
+      this.activeIndex = index
+    }
+  }
 }
 </script>
 
@@ -35,9 +56,11 @@ body {
 }
 .container {
     position: relative;
-    height: 810px;
+    height: 900px;
     width: 100%;
-    background-color: #ECEED9;
+    background-image: url(../../assets/imgs/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .banner {
   position: relative;
@@ -50,11 +73,9 @@ nav {
   position: relative;
   width: 100%;
   height: 60px;
-  background-image: linear-gradient(to right, #ECEED9, #B38554);
+  background-color: #772d2f;
   font-size: 0;
-  box-shadow: 1px 1px 1px linear-gradient(to right, #ECEED9, #B38554);
 }
-
 nav .slider {
   width: 100px;
   height: 100%;
@@ -80,22 +101,20 @@ nav .animation{
   border-radius: 8px;
   width: 100px;
   left: 150px;
-  /* background-color:#eceed9e8; */
 }
 
 nav .slider:hover ~ .animation {
-  left: 150px;
-  background-color: #f0db96;
+  background-color: #D3BF9E;
 }
 
 nav .slider:nth-child(2):hover ~ .animation {
   left: 250px;
-  background-color: #efbe64da;
+  background-color: #C7A981;
 }
 
 nav .slider:nth-child(3):hover ~ .animation {
   left: 350px;
-  background-color: #dfa929;
+  background-color: #B68C5C;
 }
 .login {
   position: absolute;

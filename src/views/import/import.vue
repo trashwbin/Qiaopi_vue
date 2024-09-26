@@ -1,6 +1,6 @@
 <template>
   <div class="background-image">
-    <div class="envelope"><img src="../../assets/imgs/envelope1.png" alt="" class="img-3d"  @click="shakeAndMoveImage" ref="shakeImage"></div>
+    <div class="envelope"><img src="../../assets/imgs/envelope1.png" class="img-3d"  @click="shakeAndMoveImage" ref="shakeImage"></div>
   </div>
 </template>
 

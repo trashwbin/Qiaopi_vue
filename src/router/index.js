@@ -7,6 +7,8 @@ import Impact from '@/views/import/import.vue'
 import Index from '@/views/index/index'
 import Letter from '@/views/index/letter'
 import Game from '@/views/index/game'
+import Introduce from '@/views/index/introduce'
+import Profile from '@/views/profile/index.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -27,12 +29,18 @@ const router = new VueRouter({
     component: ForgetCode
   },
   {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile
+  },
+  {
     path: '/',
     name: 'Impact',
     component: Impact
   },
   {
     path: '/index',
+    redirect: '/introduce',
     name: 'Index',
     component: Index,
     children: [
@@ -45,6 +53,11 @@ const router = new VueRouter({
         path: '/game',
         name: 'Game',
         component: Game
+      },
+      {
+        path: '/introduce',
+        name: 'Introduce',
+        component: Introduce
       }
     ]
   }
