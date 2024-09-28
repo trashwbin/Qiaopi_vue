@@ -2,9 +2,10 @@
 <div class="container">
   <nav>
     <div class="banner">
-      <router-link to="/introduce" class="slider" @click.native="setActive(0)">首页</router-link>
-      <router-link to="/letter" class="slider" @click.native="setActive(1)">写信</router-link>
-      <router-link to="/game" class="slider" @click.native="setActive(2)">游戏</router-link>
+      <router-link to="/introduce"><img src="../../assets/imgs/logo.png" alt="侨缘信使" class="logo"></router-link>
+      <router-link to="/introduce" class="slider" @click.native="navigateAndSetActive('/introduce')">首页</router-link>
+      <router-link to="/letter" class="slider" @click.native="navigateAndSetActive('/letter')">信海归舟</router-link>
+      <router-link to="/game" class="slider" @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
       <div class="animation" :style="animationStyle"></div>
       <router-link to="/login" class="login">登录</router-link>
       <router-link to="/register" class="register">注册</router-link>
@@ -38,7 +39,25 @@ export default {
   methods: {
     setActive(index) {
       this.activeIndex = index
+    },
+    navigateAndSetActive(path) {
+      if (this.$route.path !== path) {
+        this.$router.push(path)
+      }
     }
+  },
+  beforeRouteUpdate(to, from, next) {
+    const paths = {
+      '/introduce': 0,
+      '/letter': 1,
+      '/game': 2
+      // 其他路由映射
+    }
+    const index = paths[to.path]
+    if (index !== undefined) {
+      this.setActive(index)
+    }
+    next()
   }
 }
 </script>
@@ -67,6 +86,13 @@ body {
   width: 1200px;
   height: 60px;
   margin: 0 auto;
+}
+.logo {
+  position: absolute;
+  width: 70px;
+  height: 50px;
+  top: 5px;
+  left: 40px;
 }
 nav {
   margin: 0 auto;

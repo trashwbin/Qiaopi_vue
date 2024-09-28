@@ -10,21 +10,21 @@
       <div class="text">{{ texts[currentIndex] }}</div>
     </div>
     <div class="container">
-      <div class="box">
+      <div class="box" @click="navigateTo('/letter')">
         <div class="icon"></div>
         <div class="content">
           <h3>体验慢信方式</h3>
           <p>慢慢来，比较快。</p>
         </div>
       </div>
-      <div class="box">
+      <div class="box" @click="navigateTo('/game')">
         <div class="icon"></div>
         <div class="content">
           <h3>用趣味方式了解文化</h3>
           <p>趣味学习，文化传承。</p>
         </div>
       </div>
-      <div class="box">
+      <div class="box" @click="navigateTo('/profile')">
         <div class="icon"></div>
         <div class="content">
           <h3>收集精美的卡片</h3>
@@ -42,19 +42,17 @@ export default {
     return {
       images: [
         require('@/assets/imgs/bgd1.jpg'),
-        require('@/assets/imgs/background.jpg')
-        // require('@/assets/imgs/bgd3.jpg'),
-        // require('@/assets/imgs/bj5.png'),
-        // require('@/assets/imgs/bj6.png'),
-        // require('@/assets/imgs/bj7.png'),
-        // require('@/assets/imgs/bj8.png'),
-        // require('@/assets/imgs/bj10.png'),
-        // require('@/assets/imgs/bj9.jpg')
+        require('@/assets/imgs/bgd2.jpg'),
+        require('@/assets/imgs/bgd3.jpg'),
+        require('@/assets/imgs/bgd4.jpg'),
+        require('@/assets/imgs/bgd5.jpg')
       ],
       texts: [
-        '这里是第一张图片的文字内容',
-        '这里是第二张图片的文字内容'
-        // ...对应每张图片的文字内容
+        '嘿，你知道吗?有一种超神奇的“时光宝盒”，它叫侨批!',
+        '想象一下，很久很久以前，在遥远的异国他乡，有一群勇敢的人——华侨们。他们远离家乡，努力打拼。而侨批呢，就像是他们派出的魔法使者。',
+        '这些小小的书信和汇款合二为一的侨批，带着海外游子的思念、牵挂和爱，一路漂洋过海，飞回故乡。当亲人们收到侨批的那一刻，哇，那喜悦简直能照亮整个屋子!',
+        '侨批上的字呀，有的像在欢快地跳舞，诉说着对家人的深深思念;有的像在温柔地唱歌，表达着对故乡的眷恋。它可能会告诉你，华侨叔叔在国外遇到了哪些好玩的事情，或者叮家里的弟弟妹妹要好好读书。',
+        '侨批可不只是一张纸和一些钱哦，它是一座连接过去和现在的神奇桥梁。让我们能感受到那些勇敢的华侨们的奋斗故事和家国情怀。就像打开了一个装满惊喜的宝箱，每一封侨批都藏着一个动人的秘密。快来一起探索侨批的奇妙世界吧!'
       ],
       currentIndex: 0
     }
@@ -81,15 +79,18 @@ export default {
     },
     goTo(index) {
       this.currentIndex = index
+    },
+    navigateTo(path) {
+      this.$router.push(path)
     }
   },
   mounted() {
-    setInterval(this.next, 5000)
+    setInterval(this.next, 6000)
   }
 }
 </script>
-
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Kaiti:wght@400&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -126,10 +127,11 @@ export default {
 }
 
 .box .icon {
+  display: block;
   width: 100px;
   height: 100px;
   margin: 0 auto;
-  transition: box-shadow 0.5s ease;
+  transition: box-shadow 0.1s ease;
 }
 
 .box .content h3 {
@@ -149,13 +151,11 @@ export default {
 }
 
 /* Card 1 */
-.box:nth-child(1) .icon {
-  background-size: cover;
-}
 
 .box:nth-child(1):hover .icon {
   box-shadow: 0 0 0 400px #8c795b;
-  background: url('../../assets/imgs/backimg.png') center center no-repeat;
+  background: url('../../assets/imgs/icon1.png') center center no-repeat;
+  background-size:cover ;
 }
 
 .box:nth-child(1):hover p {
@@ -163,26 +163,30 @@ export default {
 }
 
 /* Card 2 */
-.box:nth-child(2) .icon {
-  background-size: cover;
-}
 
 .box:nth-child(2):hover .icon {
   box-shadow: 0 0 0 400px #442c1e;
+    background: url('../../assets/imgs/icon2.png') center center no-repeat;
+  background-size:cover ;
+}
+.box:nth-child(2):hover p {
+  display: none;
 }
 
 /* Card 3 */
-.box:nth-child(3) .icon {
-  background-size: cover;
-}
 
 .box:nth-child(3):hover .icon {
   box-shadow: 0 0 0 400px #3e451b;
+    background: url('../../assets/imgs/icon3.png') center center no-repeat;
+  background-size:cover ;
 }
 
 .box:hover {
   transform: translateY(-10px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+.box:nth-child(3):hover p {
+  display: none;
 }
 
 .box::before {
@@ -306,12 +310,12 @@ export default {
 .slide .text {
   position: absolute;
   top: 50%;
-  left: 85%;
-  transform: translate(-50%, -50%);
-  color: #fff;
+  left: 80%;
+  transform: translate(-25%, -50%);
+  color: #171717;
   font-size: 24px;
-  font-weight: bold;
   z-index: 10;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Kaiti', sans-serif;
+  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
 }
 </style>

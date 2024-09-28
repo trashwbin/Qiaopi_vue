@@ -28,10 +28,10 @@ export default {
   width: 100%;
   height: 810px;
   max-width: 100%; /* 限制图片最大宽度 */
-  transition: transform 0.1s; /* 设置动画过渡效果 */
-  background-image: url(../../assets/imgs/backimg.png);
+  transition: transform 0.3s; /* 设置动画过渡效果 */
+  background-image: url(../../assets/imgs/backimg.jpg);
   background-size: cover;
-  background-position: center;
+  background-position:center center;
 }
 .background-image::before {
   content: "";

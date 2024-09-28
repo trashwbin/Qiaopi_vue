@@ -3,8 +3,8 @@
     <div class="modal-container" @click.stop>
       <div class="modal-content">
         <div class="close-button" @click="closeModal">X</div>
-        <h2>写信</h2>
-        <form @submit.prevent="sendLetter">
+        <h2 v-if="!newLayout">写信</h2>
+        <form v-if="!newLayout" @submit.prevent="sendLetter">
           <div class="form-group">
             <label for="recipientUsername">收信人用户名:</label>
             <input type="text" id="recipientUsername" v-model="letter.recipientUsername" required>
@@ -33,12 +33,15 @@
               </option>
             </select>
           </div>
-          <div class="form-group">
+                    <div class="form-group">
             <label for="letterContent">信件内容:</label>
             <textarea id="letterContent" v-model="letter.content" required></textarea>
           </div>
-          <button type="submit">发送</button>
+          <button type="submit"> 生成信</button>
         </form>
+        <div v-else class="new-layout">
+          <div class="left-box"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -49,6 +52,7 @@ export default {
   data() {
     return {
       visible: false,
+      newLayout: false,
       letter: {
         recipientUsername: '',
         recipientAddress: '',
@@ -57,27 +61,26 @@ export default {
         penFont: '',
         content: ''
       },
+      inputContent: '',
       stationeryOptions: [
         { id: '1', name: '经典纸' },
         { id: '2', name: '豪华纸' }
         // ...更多选项
       ],
-      penFonts: ['楷书', '行书', '草书', '隶书', '篆书'] // 笔的字体选项
+      penFonts: ['楷书', '行书', '草书', '隶书', '篆书']
     }
   },
   methods: {
     openModal() {
       this.visible = true
+      this.newLayout = false
+      this.inputContent = ''
     },
     closeModal() {
       this.visible = false
     },
     sendLetter() {
-      // 发送信件的逻辑
-      console.log('Sending letter:', this.letter)
-      // 模拟发送信件
-      alert('信件已发送!')
-      this.closeModal()
+      this.newLayout = true
     }
   }
 }
@@ -97,19 +100,24 @@ export default {
 }
 
 .modal-container {
+  position: relative;
   background: #aaa89c;
   padding: 20px;
   border-radius: 10px;
-  width: 350px;
+  width: 600px;
+  height: 700px;
 }
 
 .modal-content {
-  margin: 0 auto;
-  max-width: 300px;
+  margin: 70px auto;
+  width: 600px;
+  height: 800px;
 }
 
 .close-button {
-  float: right;
+  position: absolute;
+  top: 5px;
+  right: 5px;
   cursor: pointer;
 }
 
@@ -124,7 +132,7 @@ export default {
 .form-group input,
 .form-group textarea,
 .form-group select {
-  width: 100%;
+  width: 300px;
   padding: 8px;
   margin-top: 5px;
   outline: none;
@@ -134,11 +142,29 @@ export default {
 }
 
 button {
-    width: 100px;
-    height: 50px;
-    border-radius: 50px;
-    background-color: #73705d;
-    border: 0px;
-    color: white;
+  width: 100px;
+  height: 50px;
+  border-radius: 50px;
+  background-color: #73705d;
+  border: 0px;
+  color: white;
+}
+
+.new-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 400px;
+}
+
+.left-box {
+  width: 600px;
+  height: 700px;
+  margin: 0 auto;
+  margin-top: 160px;
+  background-color: #eee;
+  /* background: url('../../assets/imgs/envelopbg.jpg'); */
+  background-size: cover;
 }
 </style>
