@@ -3,33 +3,62 @@
     <div class="login-wrapper">
       <div class="header">登录</div>
       <div class="form-wrapper">
-        <!-- <input type="text" ref="username" name="username" placeholder="用户名" class="input-item">
-        <input type="password" ref="password" name="password" placeholder="密码" class="input-item"> -->
-        <input type="text" v-model="code" name="code" placeholder="请输入图片验证码" class="pic">
+        <input type="text" v-model="loginForm.username" name="username" placeholder="用户名" class="input-item">
+        <input type="password" v-model="loginForm.password" name="password" placeholder="密码" class="input-item">
+        <input type="text" v-model="loginForm.code" name="code" placeholder="请输入图片验证码" class="pic">
         <div class="picbox">
           <img :src="captchaImg" alt="验证码" @click="handleGetPicCode">
         </div>
         <router-link to="/forget" class="forget">忘记密码</router-link>
-        <!-- <button @click="login" class="btn">Login</button> -->
+        <button @click="handleLogin" class="btn">Login</button>
       </div>
       <p>没有账号？<router-link to="/register">去注册</router-link></p>
     </div>
   </div>
 </template>
-
-<script setup>
+<script>
 import { getPicCode } from '@/api/login'
-import { ref } from 'vue'
+import useUserStore from '@/store/modules/user'
 
-const code = ref('')
-const captchaImg = ref('')
+export default {
+  data() {
+    return {
+      captchaImg: '',
+      loginForm: {
+        username: 'admin',
+        password: '123456',
+        code: '',
+        uuid: ''
+      }
+    }
+  },
+  methods: {
+    handleGetPicCode() {
+      getPicCode().then(res => {
+        this.captchaImg = 'data:image/gif;base64,' + res.data.img
+        this.loginForm.uuid = res.data.uuid
+      })
+    },
+    handleLogin() {
+      const userStore = useUserStore()
 
-function handleGetPicCode() {
-  getPicCode().then(res => {
-    captchaImg.value = 'data:image/gif;base64,' + res.data.img
-  })
+      userStore.login(this.loginForm)
+        .then(response => {
+          // 测试登录成功
+          console.log('Login successful:', response)
+          // 跳转到首页
+          this.$router.push({ name: 'Index' }) // Vue 2 中使用 this.$router 进行路由跳转
+        }).catch(error => {
+          // 测试登录失败
+          console.log('Login failed:', error)
+          this.handleGetPicCode() // 登录失败后重新获取验证码
+        })
+    }
+  },
+  created() {
+    this.handleGetPicCode() // 组件创建时获取验证码
+  }
 }
-
 </script>
 
 <style scoped>
