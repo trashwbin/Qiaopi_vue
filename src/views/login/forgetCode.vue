@@ -150,7 +150,7 @@ body {
 
 .container {
   position: relative;
-  height: 810px;
+  height: 900px;
   width: 100%;
   background-image: linear-gradient(to right, #ECEED9, #B38554);
 }
