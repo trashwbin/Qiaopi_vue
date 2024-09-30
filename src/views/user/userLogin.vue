@@ -5,15 +5,22 @@
       <div class="form-wrapper">
         <input type="text" v-model="loginForm.username" name="username" placeholder="用户名" class="input-item">
         <input type="password" v-model="loginForm.password" name="password" placeholder="密码" class="input-item">
-        <input type="text" v-model="loginForm.code" name="code" placeholder="请输入图片验证码" class="pic">
+        <!-- <input type="text" v-model="loginForm.code" name="code" placeholder="请输入图片验证码" class="pic">
         <div class="picbox">
           <img :src="captchaImg" alt="验证码" @click="handleGetPicCode">
-        </div>
+        </div> -->
         <router-link to="/forget" class="forget">忘记密码</router-link>
-        <button @click="handleLogin" class="btn">Login</button>
+        <button @click="handleCodePre" class="btn">登录</button>
       </div>
       <p>没有账号？<router-link to="/register">去注册</router-link></p>
     </div>
+    <el-dialog :visible.sync="codeOpen" title="输入验证码" width="500px" class="codeCheck">
+      <el-input v-model="loginForm.code" placeholder="验证码" style="width: 200px; height: ;" />
+      <div class="picbox">
+        <img :src="captchaImg" alt="验证码" @click="handleGetPicCode">
+      </div>
+      <button @click="handleLogin" class="btn">验证</button>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -23,6 +30,7 @@ import useUserStore from '@/store/modules/user'
 export default {
   data() {
     return {
+      codeOpen: false,
       captchaImg: '',
       loginForm: {
         username: 'admin',
@@ -33,6 +41,23 @@ export default {
     }
   },
   methods: {
+    handleCheckForm() {
+      if (!this.loginForm.username) {
+        this.$message.error('请输入用户名')
+        return false
+      }
+      if (!this.loginForm.password) {
+        this.$message.error('请输入密码')
+        return false
+      }
+      return true
+    },
+    handleCodePre() {
+      if (this.handleCheckForm()) {
+        this.handleGetPicCode() // 组件创建时获取验证码
+        this.codeOpen = true
+      }
+    },
     handleGetPicCode() {
       getPicCode().then(res => {
         this.captchaImg = 'data:image/gif;base64,' + res.data.img
@@ -41,7 +66,7 @@ export default {
     },
     handleLogin() {
       const userStore = useUserStore()
-
+      this.codeOpen = false
       userStore.login(this.loginForm)
         .then(response => {
           // 测试登录成功
@@ -56,7 +81,6 @@ export default {
     }
   },
   created() {
-    this.handleGetPicCode() // 组件创建时获取验证码
   }
 }
 </script>
@@ -182,13 +206,18 @@ span {
 }
 
 .picbox {
-  position: absolute;
-  top: 300px;
-  right: 100px;
+  /* position: absolute; */
+  display: inline-block;
+  /* top: 300px;
+  right: 100px; */
   width: 20%;
 }
 
 .picbox img {
   width: 100%;
+}
+
+.codeCheck {
+  margin-top: 100px;
 }
 </style>
