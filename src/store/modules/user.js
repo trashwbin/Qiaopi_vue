@@ -1,5 +1,4 @@
-import { login, logout } from '@/api/login'
-import { getUserInfo } from '@/api/user'
+import { getUserInfo, login, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import defAva from '@/assets/default-avatar.png'
 import { defineStore } from 'pinia'
