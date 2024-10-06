@@ -11,7 +11,8 @@ const useUserStore = defineStore(
       token: getToken(),
       id: '',
       name: '',
-      avatar: ''
+      avatar: '',
+      money: ''
     }),
     actions: {
       // 登录
@@ -22,24 +23,15 @@ const useUserStore = defineStore(
         const uuid = userInfo.uuid
         return new Promise((resolve, reject) => {
           login(username, password, code, uuid).then(res => {
-            setToken(res.data.token)
-            this.token = res.data.token
-            resolve()
-          }).catch(error => {
-            reject(error)
-          })
-        })
-      },
-      // 获取用户信息
-      getInfo() {
-        return new Promise((resolve, reject) => {
-          getInfo().then(res => {
-            const user = res.user
-            const avatar = (user.avatar === '' || user.avatar == null) ? defAva : process.env.VUE_APP_API + user.avatar
-            this.id = user.userId
-            this.name = user.userName
+            const data = res.data
+            setToken(data.token)
+            this.token = data.token
+            const avatar = (data.avatar === '' || data.avatar == null) ? defAva : process.env.VUE_APP_API + data.avatar
+            this.id = data.id
+            this.name = data.nickname
             this.avatar = avatar
-            resolve(res)
+            this.money = data.money
+            resolve()
           }).catch(error => {
             reject(error)
           })
