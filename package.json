@@ -8,8 +8,10 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@smallwei/avue": "^3.5.1",
     "axios": "^1.7.7",
     "core-js": "^3.8.3",
+    "element-theme-chalk": "^2.15.14",
     "element-ui": "^2.15.14",
     "http-proxy-middleware": "^3.0.2",
     "js-cookie": "^3.0.5",

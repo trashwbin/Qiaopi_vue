@@ -9,6 +9,9 @@ import Letter from '@/views/index/letter'
 import Game from '@/views/index/game'
 import Introduce from '@/views/index/introduce'
 import Profile from '@/views/profile/index.vue'
+import WriteLetter from '@/views/letter/WriteLetter.vue'
+import ReceiveLetter from '@/views/letter/ReceiveLetter.vue'
+import DriftingBottle from '@/views/letter/DriftingBottle.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -34,12 +37,12 @@ const router = new VueRouter({
     component: Profile
   },
   {
-    path: '/',
+    path: '/impact',
     name: 'Impact',
     component: Impact
   },
   {
-    path: '/index',
+    path: '/',
     redirect: '/introduce',
     name: 'Index',
     component: Index,
@@ -58,6 +61,21 @@ const router = new VueRouter({
         path: '/introduce',
         name: 'Introduce',
         component: Introduce
+      },
+      {
+        path: '/write',
+        name: 'WriteLetter',
+        component: WriteLetter
+      },
+      {
+        path: '/receive',
+        name: 'ReceiveLetter',
+        component: ReceiveLetter
+      },
+      {
+        path: 'drifting',
+        name: 'DriftingBottle',
+        component: DriftingBottle
       }
     ]
   }

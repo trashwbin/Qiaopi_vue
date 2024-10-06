@@ -47,7 +47,7 @@ section {
     flex-wrap: wrap;
     transform-style: preserve-3d;
     position: relative;
-    top: 40%;
+    top: 360px;
     left: 50%;
     transform: translate(-50%,-50%);
 }

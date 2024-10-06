@@ -14,7 +14,6 @@ export default {
 <style>
  .title{
     text-align: center;
-    background-image: linear-gradient(to right, #ECEED9, #B38554);
 }
 body {
   margin: 0;

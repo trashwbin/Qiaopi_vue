@@ -1,38 +1,72 @@
 <template>
+<div class="contain">
   <div class="banner">
-    <div class="slide">
-      <button class="pre" @click="prev">&lt;</button>
-      <button class="next" @click="next">&gt;</button>
-      <ul class="indicator">
-        <li v-for="(image, index) in images" :key="index" :class="{ active: index === currentIndex }" @click="goTo(index)"></li>
-      </ul>
-      <img :src="currentImage" class="pic" alt="Slideshow">
-      <div class="text">{{ texts[currentIndex] }}</div>
-    </div>
+    <section>
+        <h2 id="text"><img src="../../assets/imgs/bgdlogo.png" alt=""></h2>
+        <img src="../../assets/imgs/bg1.png" alt="" id="sticker">
+    </section>
+    <div class="introduce">
+      <div class="left">
+      <img src="../../assets/imgs/qiaopiIntroduce.png" alt="" class="title">
+      <img src="../../assets/imgs/bell.png" alt="" class="bell">
+    <div class="imgLoader"></div>
     <div class="container">
-      <div class="box" @click="navigateTo('/letter')">
-        <div class="icon"></div>
-        <div class="content">
-          <h3>体验慢信方式</h3>
-          <p>慢慢来，比较快。</p>
+        <div class="credit">
         </div>
-      </div>
-      <div class="box" @click="navigateTo('/game')">
-        <div class="icon"></div>
-        <div class="content">
-          <h3>用趣味方式了解文化</h3>
-          <p>趣味学习，文化传承。</p>
+
+        <div class="book">
+            <div class="gap"></div>
+            <div class="pages">
+                <div class="page"></div>
+                <div class="page"></div>
+                <div class="page"></div>
+                <div class="page"></div>
+                <div class="page"></div>
+                <div class="page"></div>
+            </div>
+            <div class="flips">
+                <div class="flip flip1">
+                    <div class="flip flip2">
+                        <div class="flip flip3">
+                            <div class="flip flip4">
+                                <div class="flip flip5">
+                                    <div class="flip flip6">
+                                        <div class="flip flip7"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
       </div>
-      <div class="box" @click="navigateTo('/profile')">
-        <div class="icon"></div>
-        <div class="content">
-          <h3>收集精美的卡片</h3>
-          <p>精美卡片，学习升级。</p>
-        </div>
-      </div>
+    <div class="right">
+      <p class="first">侨批，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的汇款和家书。这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重</p>
+        <p class="second">要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是华侨与家乡之间情感和经济联系的纽带。<br><span>侨批的传递往往依赖于专门的“水客”或“侨批局”，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。</span></p>
+        <p class="third">侨批作为独特的文化遗产，已被联合国教科文组织列入《世界记忆名录》，成为全人类共同的记忆财富。</p>
     </div>
   </div>
+    <div class="history">
+      <h1><img src="../../assets/imgs/title2.png" alt=""></h1>
+    <div class="banner">
+      <ul>
+        <li v-for="history in histories" :key="history.id"
+            :class="{ 'active': history.active }"
+            @mouseenter="toggleActive(history)"
+            @mouseleave="toggleInactive(history)">
+         <div class="pic" :style="{ backgroundImage: 'url(' + history.img + ')' }">
+            <span class="math">{{ history.math }}</span>
+            <span class="title">{{ history.title }}</span>
+            <p v-show="history.active">{{ history.description }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+    </div>
+</div>
 </template>
 
 <script>
@@ -40,282 +74,752 @@ export default {
   name: 'IndexIntroduce',
   data() {
     return {
-      images: [
-        require('@/assets/imgs/bgd1.jpg'),
-        require('@/assets/imgs/bgd2.jpg'),
-        require('@/assets/imgs/bgd3.jpg'),
-        require('@/assets/imgs/bgd4.jpg'),
-        require('@/assets/imgs/bgd5.jpg')
-      ],
-      texts: [
-        '嘿，你知道吗?有一种超神奇的“时光宝盒”，它叫侨批!',
-        '想象一下，很久很久以前，在遥远的异国他乡，有一群勇敢的人——华侨们。他们远离家乡，努力打拼。而侨批呢，就像是他们派出的魔法使者。',
-        '这些小小的书信和汇款合二为一的侨批，带着海外游子的思念、牵挂和爱，一路漂洋过海，飞回故乡。当亲人们收到侨批的那一刻，哇，那喜悦简直能照亮整个屋子!',
-        '侨批上的字呀，有的像在欢快地跳舞，诉说着对家人的深深思念;有的像在温柔地唱歌，表达着对故乡的眷恋。它可能会告诉你，华侨叔叔在国外遇到了哪些好玩的事情，或者叮家里的弟弟妹妹要好好读书。',
-        '侨批可不只是一张纸和一些钱哦，它是一座连接过去和现在的神奇桥梁。让我们能感受到那些勇敢的华侨们的奋斗故事和家国情怀。就像打开了一个装满惊喜的宝箱，每一封侨批都藏着一个动人的秘密。快来一起探索侨批的奇妙世界吧!'
-      ],
-      currentIndex: 0
-    }
-  },
-  computed: {
-    currentImage() {
-      return this.images[this.currentIndex]
+      histories: [
+        { id: 1, math: '01', title: '起步阶段', description: '19世纪中叶至19世纪末，随着中国东南沿海地区居民开始大规模移民海外，侨批开始出现，主要用于华侨与家人之间的通信和汇款。', img: require('@/assets/imgs/history1.png'), active: false },
+        { id: 2, math: '02', title: '发展阶段', description: '20世纪初至20世纪30年代，随着华侨数量的增加和海外华人社区的形成，侨批业务迅速发展，出现了专门从事侨批传递的“水客”和侨批局。', img: require('@/assets/imgs/history2.png'), active: false },
+        { id: 3, math: '03', title: '繁荣阶段', description: '20世纪30年代至20世纪40年代中期，侨批业务达到顶峰，成为华侨与家乡之间最主要的联系方式之一，侨批局遍布东南亚各地。', img: require('@/assets/imgs/history3.jpg'), active: false },
+        { id: 4, math: '04', title: '衰退阶段', description: '20世纪40年代中期至20世纪50年代，由于第二次世界大战的影响，国际邮件和汇款业务受阻侨批业务受到严重打击。', img: require('@/assets/imgs/history4.jpg'), active: false },
+        { id: 5, math: '05', title: '转型阶段', description: '20世纪50年代至20世纪70年代，随着战后重建和通信技术的发展，电话、电报等现代通信方式逐渐普及，侨批的传统功能开始减弱。', img: require('@/assets/imgs/history5.png'), active: false },
+        { id: 6, math: '06', title: '遗产化阶段', description: '20世纪未至今，随着现代通信技术的高度发展，侨批作为通信手段的功能已经消失，但它作为历史文化遗产的价值逐渐被认识和重视。', img: require('@/assets/imgs/history6.png'), active: false },
+        { id: 7, math: '07', title: '保护阶段', description: '21世纪初至今，侨批作为珍贵的历史文献，受到了学术界的广泛关注，多国政府和国际组织开始采取措施保护和研究侨批。', img: require('@/assets/imgs/history7.jpg'), active: false }
+      ]
     }
   },
   methods: {
-    next() {
-      if (this.currentIndex < this.images.length - 1) {
-        this.currentIndex++
-      } else {
-        this.currentIndex = 0
-      }
+    toggleActive(history) {
+      this.histories.forEach(function(h) {
+        h.active = false
+      })
+      history.active = true
     },
-    prev() {
-      if (this.currentIndex > 0) {
-        this.currentIndex--
-      } else {
-        this.currentIndex = this.images.length - 1
-      }
-    },
-    goTo(index) {
-      this.currentIndex = index
-    },
-    navigateTo(path) {
-      this.$router.push(path)
+    toggleInactive(history) {
+      history.active = false
     }
-  },
-  mounted() {
-    setInterval(this.next, 6000)
   }
 }
 </script>
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Kaiti:wght@400&display=swap');
 * {
   margin: 0;
   padding: 0;
   list-style: none;
+  box-sizing: border-box;
+}
+.contain {
+  width: 100%;
+  height: 2500px;
+  background-image: url(../../assets/imgs/background.jpg);
+  background-size: 100% 100%;
+  background-position: center center;
+  background-size: cover;
 }
 .banner {
   position: relative;
-  width: 1200px;
+  width: 1420px;
   height: 700px;
   margin: 0 auto;
 }
-.container {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: nowrap;
-  overflow: auto;
-  padding: 20px 40px;
+/* 侨批简介 */
+.introduce h1 {
   position: relative;
-  top: 15px;
-}
-.box {
-  position: relative;
-  width: 350px;
-  height: 150px;
-  padding: 40px;
-  background-color: #d5a758;
-  margin-right: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  text-align: center;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-}
-
-.box .icon {
-  display: block;
-  width: 100px;
+  width: 400px;
   height: 100px;
   margin: 0 auto;
-  transition: box-shadow 0.1s ease;
 }
-
-.box .content h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.box .content p {
-  line-height: 25px;
-  margin-bottom: 20px;
-}
-
-.box .content img {
+.introduce h1 img {
   width: 100%;
-  height: auto;
-  margin-top: 20px;
-}
-
-/* Card 1 */
-
-.box:nth-child(1):hover .icon {
-  box-shadow: 0 0 0 400px #8c795b;
-  background: url('../../assets/imgs/icon1.png') center center no-repeat;
-  background-size:cover ;
-}
-
-.box:nth-child(1):hover p {
-  display: none;
-}
-
-/* Card 2 */
-
-.box:nth-child(2):hover .icon {
-  box-shadow: 0 0 0 400px #442c1e;
-    background: url('../../assets/imgs/icon2.png') center center no-repeat;
-  background-size:cover ;
-}
-.box:nth-child(2):hover p {
-  display: none;
-}
-
-/* Card 3 */
-
-.box:nth-child(3):hover .icon {
-  box-shadow: 0 0 0 400px #3e451b;
-    background: url('../../assets/imgs/icon3.png') center center no-repeat;
-  background-size:cover ;
-}
-
-.box:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-}
-.box:nth-child(3):hover p {
-  display: none;
-}
-
-.box::before {
-  content: '';
-  width: 50%;
   height: 100%;
+}
+.introduce p {
   position: absolute;
-  left: 0;
-  top: 0;
-  background-color: rgba(255, 255, 255, .2);
-  z-index: 2;
-  transition: width 0.5s ease;
+  top: 28px;
+  left: 125px;
+  color: #924721;
 }
-
-.box:hover::before {
-  width: 100%;
-}
-
-.box .content {
-  position: relative;
-  z-index: 3;
-}
-/* 版心轮播图开始 */
-.slide {
+section{
   position: relative;
   width: 100%;
-  height: 500px;
-  margin-top: 50px;
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  section img {
+    position: absolute;
+    top: 220px;
+    left: 0;
+    width: 100%;
+  }
+  #sticker {
+    position: absolute;
+    top: 250px;
+    left: 0;
+    width: 100%;
+}
+  section #text {
+    position: absolute;
+    width: 600px;
+    height: 250px;
+    text-align: center;
+    top: 0px;
+  }
+  .left {
+    position: relative;
+    float: left;
+    width: 500px;
+    height: 800px;
+    padding-left:100px;
+  }
+  .left .title {
+    width: 360px;
+    height: 110px;
+    margin-top: 150px ;
+  }
+  /* 定义swing动画 */
+@keyframes swing {
+     0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(10deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(-10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* 应用动画到.bell类 */
+.bell {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 200px;
+    height: 250px;
+    animation: swing 3s linear infinite;
+}
+  .left .introduce {
+    width: 450px;
+    height: 200px;
+    margin: 0px auto;
+    margin-top: 50px;
+    background-color: white;
+  }
+  .right {
+    position: relative;
+    float: left;
+    width: 900px;
+    height: 900px;
+    margin-top: 20px;
+    background-image: url(../../assets/imgs/right.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+  }
+  .right .first {
+    position: absolute;
+    top: 110px;
+    left: 540px;
+    right: 20px;
+    text-indent: 2em;
+    z-index: 1;
+    color: #666;
+    font-size: 27px;
+    font-family: "KaiTi", "楷体", serif;
+  }
+  .right .second {
+    position: absolute;
+    top: 330px;
+    left: 180px;
+    right: 15px;
+    z-index: 1;
+    color: #666;
+    font-size: 27px;
+    font-family: "KaiTi", "楷体", serif;
+    text-align: left;
+  }
+  .right .second span {
+    display: block;
+    text-indent: 2em;
+  }
+  .right .third {
+    position: absolute;
+    top: 620px;
+    left: 180px;
+    right: 300px;
+    z-index: 1;
+    color: #666;
+    font-size: 27px;
+    font-family: "KaiTi", "楷体", serif;
+    text-align: left;
+    text-indent: 2em;
+  }
+  .imgLoader {
+  position: fixed;
+  -webkit-animation: preLoad 1s steps(1);
+          animation: preLoad 1s steps(1);
+  width: 1px;
+  height: 1px;
+}
+.credit {
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  font-size: 0.9em;
+  text-align: left;
+}
+
+.book {
+  position: relative;
+  perspective: 630px;
+  perspective-origin: center 50px;
+  transform: scale(1.2);
+  filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.25));
+}
+
+.page {
+  width: 210px;
+  height: 300px;
+  background-color: #bbb;
+  position: absolute;
+  top: 70px;
+  right: 50%;
+  transform-origin: 100% 100%;
+  border: solid #555 2px;
+  background-size: 420px 300px;
+  background-position: center;
+  transform-style: preserve-3d;
+  transform: rotateX(60deg) rotateY(3deg);
+}
+.page:nth-child(1) {
+  transform: rotateX(20deg) rotateY(3deg);
+}
+.page:nth-child(2) {
+  transform: rotateX(20deg) rotateY(4.5deg);
+}
+.page:nth-child(3) {
+  transform: rotateX(20deg) rotateY(6deg);
+  -webkit-animation: nextPage 25s infinite -24s steps(1);
+          animation: nextPage 25s infinite -24s steps(1);
+  background-size: 420px 300px;
+  background-position: -2px -2px;
+}
+.page:nth-child(4) {
+  transform: rotateX(20deg) rotateY(177deg);
+}
+.page:nth-child(5) {
+  transform: rotateX(20deg) rotateY(175.5deg);
+}
+.page:nth-child(6) {
+  transform: rotateX(20deg) rotateY(174deg);
   overflow: hidden;
 }
-
-.slide .pic {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.page:nth-child(6)::after {
+  content: "";
+  width: 210px;
+  height: 300px;
+  position: absolute;
+  top: 0px;
+  right: 0%;
+  transform-origin: center;
+  transform: rotateY(180deg);
+  -webkit-animation: nextPage 25s -20s infinite steps(1);
+          animation: nextPage 25s -20s infinite steps(1);
+  background-size: 420px 300px;
+  background-position: 100% -2px;
 }
 
-.slide .btn {
+.gap {
+  width: 10px;
+  height: 300px;
+  background: none;
+  transform: rotateX(60deg);
+  transform-origin: bottom;
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
+  top: 70px;
+  left: calc(50% - 5px);
+}
+.gap::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background-color: #555;
+  width: 10px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.pages,
+.flips {
+  transform-style: preserve-3d;
+}
+
+.flip {
+  width: 32px;
+  height: 300px;
+  position: absolute;
+  top: 70px;
+  transform-origin: 100% 100%;
+  right: 100%;
+  border: solid #555;
+  border-width: 2px 0px;
+  perspective: 4200px;
+  perspective-origin: center;
+  transform-style: preserve-3d;
+  background-size: 420px 300px;
+}
+.flip::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 0%;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  background-size: 420px 300px;
+}
+.flip.flip1 {
+  right: 50%;
+  -webkit-animation: flip1 5s infinite ease-in-out;
+          animation: flip1 5s infinite ease-in-out;
+  border-width: 2px 2px 2px 0;
+}
+.flip.flip1::after {
+  -webkit-animation: nextFlip1 20s -20s infinite steps(1);
+          animation: nextFlip1 20s -20s infinite steps(1);
+}
+.flip:not(.flip1) {
+  right: calc(100% - 2px);
+  top: -2px;
+  transform-origin: right;
+  -webkit-animation: flip2 5s ease-in-out infinite;
+          animation: flip2 5s ease-in-out infinite;
+}
+.flip.flip2::after {
+  -webkit-animation: nextFlip2 20s -20s infinite steps(1);
+          animation: nextFlip2 20s -20s infinite steps(1);
+}
+.flip.flip3::after {
+  -webkit-animation: nextFlip3 20s -20s infinite steps(1);
+          animation: nextFlip3 20s -20s infinite steps(1);
+}
+.flip.flip4::after {
+  -webkit-animation: nextFlip4 20s -20s infinite steps(1);
+          animation: nextFlip4 20s -20s infinite steps(1);
+}
+.flip.flip5::after {
+  -webkit-animation: nextFlip5 20s -20s infinite steps(1);
+          animation: nextFlip5 20s -20s infinite steps(1);
+}
+.flip.flip6::after {
+  -webkit-animation: nextFlip6 20s -20s infinite steps(1);
+          animation: nextFlip6 20s -20s infinite steps(1);
+}
+.flip.flip7::after {
+  -webkit-animation: nextFlip7 20s -20s infinite steps(1);
+          animation: nextFlip7 20s -20s infinite steps(1);
+}
+.flip.flip7 {
+  width: 30px;
+  border-width: 2px 0px 2px 2px;
+}
+.flip.flip7::after {
+  -webkit-animation: nextFlip7 20s -20s infinite steps(1);
+          animation: nextFlip7 20s -20s infinite steps(1);
+}
+@keyframes flip1 {
+  0%, 20% {
+    transform: rotateX(20deg) rotateY(6deg);
+  }
+  80%, 100% {
+    transform: rotateX(20deg) rotateY(174deg);
+  }
+}
+
+@keyframes flip2 {
+  0%, 20% {
+    transform: rotateY(0deg) translateY(0px);
+  }
+  50% {
+    transform: rotateY(-15deg) translateY(0px);
+  }
+}
+
+@keyframes preLoad {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+  }
+  25% {
+    background-image: url("../../assets/imgs/page2.png");
+  }
+  50% {
+    background-image: url("../../assets/imgs/page3.png");
+  }
+  75% {
+    background-image: url("../../assets/imgs/page4.png");
+  }
+  100% {
+    display: none;
+  }
+}
+
+@keyframes nextPage {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+  }
+  20% {
+    background-image: url("../../assets/imgs/page2.png");
+  }
+  40% {
+    background-image: url("../../assets/imgs/page3.png");
+  }
+  60% {
+    background-image: url("../../assets/imgs/page4.png");
+  }
+  80% {
+    background-image: url("../../assets/imgs/page5.png");
+  }
+}
+
+@keyframes nextFlip1 {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+    background-position: -178px -2px;
+    transform: rotateY(0deg);
+  }
+  25% {
+    background-image: url("../../assets/imgs/page2.png");
+    background-position: -210px -2px;
+    transform: rotateY(180deg);
+  }
+  50% {
+    background-image: url("../../assets/imgs/page3.png");
+    background-position: -178px -2px;
+    transform: rotateY(0deg);
+  }
+  75% {
+    background-image: url("../../assets/imgs/page4.png");
+    background-position: -210px -2px;
+    transform: rotateY(180deg);
+  }
+  100% {
+    background-image: url("../../assets/imgs/page1.png");
+    background-position: -178px -2px;
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes nextFlip2 {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+    background-position: -148px -2px;
+    transform: rotateY(0deg);
+  }
+  25% {
+    background-image: url("../../assets/imgs/page2.png");
+    background-position: -238px -2px;
+    transform: rotateY(180deg);
+  }
+  50% {
+    background-image: url("../../assets/imgs/page3.png");
+    background-position: -148px -2px;
+    transform: rotateY(0deg);
+  }
+  75% {
+    background-image: url("../../assets/imgs/page4.png");
+    background-position: -238px -2px;
+    transform: rotateY(180deg);
+  }
+  100% {
+    background-image: url("../../assets/imgs/page5.png");
+    background-position: -148px -2px;
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes nextFlip3 {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+    background-position: -118px -2px;
+    transform: rotateY(0deg);
+  }
+  25% {
+    background-image: url("../../assets/imgs/page2.png");
+    background-position: -268px -2px;
+    transform: rotateY(180deg);
+  }
+  50% {
+    background-image: url("../../assets/imgs/page3.png");
+    background-position: -118px -2px;
+    transform: rotateY(0deg);
+  }
+  75% {
+    background-image: url("../../assets/imgs/page4.png");
+    background-position: -268px -2px;
+    transform: rotateY(180deg);
+  }
+  100% {
+    background-image: url("../../assets/imgs/page5.png");
+    background-position: -118px -2px;
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes nextFlip4 {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+    background-position: -88px -2px;
+    transform: rotateY(0deg);
+  }
+  25% {
+    background-image: url("../../assets/imgs/page2.png");
+    background-position: -298px -2px;
+    transform: rotateY(180deg);
+  }
+  50% {
+    background-image: url("../../assets/imgs/page3.png");
+    background-position: -88px -2px;
+    transform: rotateY(0deg);
+  }
+  75% {
+    background-image: url("../../assets/imgs/page4.png");
+    background-position: -298px -2px;
+    transform: rotateY(180deg);
+  }
+  100% {
+    background-image: url("../../assets/imgs/page5.png");
+    background-position: -88px -2px;
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes nextFlip5 {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+    background-position: -58px -2px;
+    transform: rotateY(0deg);
+  }
+  25% {
+    background-image: url("../../assets/imgs/page2.png");
+    background-position: -328px -2px;
+    transform: rotateY(180deg);
+  }
+  50% {
+    background-image: url("../../assets/imgs/page3.png");
+    background-position: -58px -2px;
+    transform: rotateY(0deg);
+  }
+  75% {
+    background-image: url("../../assets/imgs/page4.png");
+    background-position: -328px -2px;
+    transform: rotateY(180deg);
+  }
+  100% {
+    background-image: url("../../assets/imgs/page5.png");
+    background-position: -58px -2px;
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes nextFlip6 {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+    background-position: -28px -2px;
+    transform: rotateY(0deg);
+  }
+  25% {
+    background-image: url("../../assets/imgs/page2.png");
+    background-position: -358px -2px;
+    transform: rotateY(180deg);
+  }
+  50% {
+    background-image: url("../../assets/imgs/page3.png");
+    background-position: -28px -2px;
+    transform: rotateY(0deg);
+  }
+  75% {
+    background-image: url("../../assets/imgs/page4.png");
+    background-position: -358px -2px;
+    transform: rotateY(180deg);
+  }
+  100% {
+    background-image: url("../../assets/imgs/page5.png");
+    background-position: -28px -2px;
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes nextFlip7 {
+  0% {
+    background-image: url("../../assets/imgs/page1.png");
+    background-position: -2px -2px;
+    transform: rotateY(0deg);
+  }
+  25% {
+    background-image: url("../../assets/imgs/page2.png");
+    background-position: -388px -2px;
+    transform: rotateY(180deg);
+  }
+  50% {
+    background-image: url("../../assets/imgs/page3.png");
+    background-position: -2px -2px;
+    transform: rotateY(0deg);
+  }
+  75% {
+    background-image: url("../../assets/imgs/page4.png");
+    background-position: -388px -2px;
+    transform: rotateY(180deg);
+  }
+  100% {
+    background-image: url("../../assets/imgs/page5.png");
+    background-position: -2px -2px;
+    transform: rotateY(0deg);
+  }
+}
+.twitterLink {
+  position: fixed;
+  bottom: 0.5em;
+  right: 0.5em;
+}
+.twitterLink img {
+  width: 2em;
+  filter: grayscale(100%);
+  transition: filter 0.25s;
+}
+.twitterLink img:hover {
+  filter: grayscale(0%);
+}
+/* 侨批历史 */
+.history {
+  width: 100%;
+  margin-top: 950px;
+}
+.history h1 {
+  width: 400px;
+  height: 100px;
+  margin: 0 auto;
+}
+.history h1 img {
+  width: 100%;
+  height: 100%;
+}
+
+.history .banner {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  width: 1320px;
+  height: 450px;
+}
+
+.history .banner h1 {
+  position: absolute;
+  width: 200px;
+  height: 25px;
+  top: -20px;
+  left: 480px;
+  font-size: 28px;
+}
+
+.history .banner ul {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.history .banner ul li {
+  position: relative;
+  flex: 0 0 141px;
+  height: 380px;
+  margin-right: 20px;
+  margin-top: 60px;
+  border-radius: 10px;
+  transition: all .5s;
   cursor: pointer;
-  padding: 10px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.history .banner ul li .pic {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+.history .banner ul li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+ background: linear-gradient(360deg, #b67c1095 0%, rgba(108, 63, 255, 0) 100%);
+  border-radius: 10px; /* 与 li 元素的 border-radius 一致 */
+  transition: opacity 0.5s; /* 平滑过渡效果 */
+  opacity: 1; /* 默认不显示 */
+}
+.history .banner ul li:hover::after {
+  opacity: 0; /* 鼠标悬停时显示 */
+}
+
+.history .banner ul li .pic .math {
+  position: absolute;
+  top: 200px;
+  left: 20px;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 40px;
+  z-index: 10;
+}
+
+.history .banner ul li .pic .title {
+  position: absolute;
+  top: 260px;
+  left: 20px;
+  font-size: 20px;
+  color: rgb(255, 255, 255);
+  z-index: 10;
+}
+
+.history .banner ul li .pic p {
+  display: none;
+  position: absolute;
+  top: 280px;
+  left: 0px;
+  color: white;
+  font-size: 14px;
+  width: 100%;
+  text-indent: 1em;
+  z-index: 10;
+}
+
+.history .banner ul .active {
+  flex-basis: 282px;
+}
+
+.history .banner ul .active .pic .title {
+  top: 215px;
+  left: 80px;
   font-size: 20px;
 }
 
-.slide .pre {
-  position: absolute;
-  z-index: 999;
-  opacity: 0;
-  top: 50%;
-  left: 0px;
-  width: 45px;
-  height: 45px;
-  border-radius: 50px;
-  border: 0px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 25px;
-  transition: all .3s linear;
-  cursor: pointer;
-  transform: translateY(-50%);
-}
-
-.slide .next {
-  position: absolute;
-  z-index: 999;
-  opacity: 0;
-  top: 50%;
-  right: 0px;
-  width: 45px;
-  height: 45px;
-  border-radius: 50px;
-  border: 0px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 25px;
-  cursor: pointer;
-  transition: all .3s linear;
-  cursor: pointer;
-  transform: translateY(-50%);
-}
-
-.slide:hover .pre {
-  opacity: 1;
-}
-
-.slide:hover .next {
-  opacity: 1;
-}
-
-.slide .indicator {
-  position: absolute;
-  bottom: 45px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 250px;
-  height: 10px;
-}
-
-.indicator li {
-  float: left;
-  width: 20px;
-  height: 5px;
-  border-radius: 5px;
-  margin-right: 6px;
-  background-color: rgba(255, 255, 255, .5);
-  cursor: pointer;
-}
-
-.indicator .active {
-  width: 30px;
-  height: 5px;
-  border-radius: 5px;
-  background-color: white;
-}
-.slide .text {
-  position: absolute;
-  top: 50%;
-  left: 80%;
-  transform: translate(-25%, -50%);
-  color: #171717;
-  font-size: 24px;
-  z-index: 10;
-  font-family: 'Kaiti', sans-serif;
-  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
+.history .banner ul .active .pic p {
+  display: block;
 }
 </style>

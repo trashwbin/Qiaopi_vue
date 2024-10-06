@@ -3,12 +3,12 @@
     <div class="login-wrapper">
       <div class="header">找回密码</div>
       <div class="form-wrapper">
-        <input v-model="email" type="text" name="username" placeholder="邮箱号" class="input-item">
+        <input v-model="email" type="text" name="username" placeholder="邮箱号" class="input-item" autocomplete="off">
         <span class="alert" v-if="isMistake">请输入正确的邮箱号</span>
         <input v-model="password" type="password" name="password" placeholder="请重新输入新密码" class="input-item">
         <input v-model="confirmPassword" type="password" name="repassword" placeholder="再次确认密码" class="input-item">
         <span class="isSame" v-if="isSame">两次密码不一致请重新输入</span>
-        <input type="text" v-model="code" name="repassword" placeholder="请输入邮箱验证码" class="email">
+        <input type="text" v-model="code" name="repassword" placeholder="邮箱验证码" class="email">
         <button @click="sendCode" :disabled="second !== totalSecond" class="code">{{ second === totalSecond ? '获取验证码' :
           second + '秒后重新发送' }}</button>
         <button @click="register" class="btn" :disabled="isFormInvalid">Register</button>
@@ -150,16 +150,19 @@ body {
 
 .container {
   position: relative;
-  height: 900px;
+  height: 1000px;
   width: 100%;
-  background-image: linear-gradient(to right, #ECEED9, #B38554);
+  background-image: url(../../assets/imgs/loginbgd.jpg);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .login-wrapper {
-  background-color: #fff;
+  background-color: rgba(255,255,255,0.6);
   width: 358px;
   height: 588px;
-  border-radius: 15px;
+  border-radius: 80px;
   padding: 0 50px;
   position: absolute;
   left: 50%;
@@ -171,54 +174,67 @@ body {
   font-size: 38px;
   font-weight: bold;
   text-align: center;
-  line-height: 200px;
+  line-height: 160px;
 }
 
 .input-item {
   display: block;
-  width: 100%;
-  margin-bottom: 20px;
+  width: 358px;
+  margin-bottom: 10px;
   border: 0;
-  padding: 10px;
-  border-bottom: 1px solid rgb(128, 125, 125);
+  padding: 20px;
+  box-sizing: border-box;
+  border-bottom: 2px solid rgb(0, 0, 0);
   font-size: 15px;
   outline: none;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .email {
   display: block;
-  width: 50%;
-  margin-bottom: 20px;
+  width: 160px;
+  margin-bottom: 10px;
   border: 0;
-  padding: 10px;
-  border-bottom: 1px solid rgb(128, 125, 125);
+  padding: 20px;
+  box-sizing: border-box;
+  border-bottom: 2px solid rgb(0, 0, 0);
   font-size: 15px;
   outline: none;
+  background-color: rgba(0, 0, 0, 0);
 }
 
-.input-item:placeholder {
+.input-item::placeholder {
   text-transform: uppercase;
+  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-size: 20px;
+  color: #000000;
+}
+.email::placeholder {
+  text-transform: uppercase;
+  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-size: 20px;
+  color: #000000;
 }
 
 .btn {
   text-align: center;
-  padding: 10px;
-  width: 100%;
-  margin-top: 40px;
-  background-image: linear-gradient(to right, #ECEED9, #B38554);
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%,0);
+  text-align: center;
+  width: 200px;
+  margin-top: 20px;
+  background-color: #B73E13;
   color: #fff;
-  margin: 0 auto;
-      background-color:#ECEED9;
-    border-radius:28px;
-    border:1px solid #ffffff;
-    display:inline-block;
-    cursor:pointer;
-    color:#ffffff;
-    font-family:Arial;
-    font-size:17px;
-    padding:16px 31px;
-    text-decoration:none;
-    text-shadow:0px 1px 0px #2f6627;
+  border-radius: 20px;
+  border: 1px solid #ffffff;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 17px;
+  padding: 16px 31px;
+  text-decoration: none;
 }
 
 .msg {
@@ -226,31 +242,34 @@ body {
   line-height: 88px;
 }
 
-p {
-  font-size: 14px;
-  color: #666666;
+p{
+  position: absolute;
+  bottom: 30px;
+  left: 150px;
+  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-size: 20px;
 }
+
 a {
-    text-decoration-line: none;
-    color: #A47348;
-    font-size: 12px;
+      text-decoration-line: none;
+  font-size: 18px;
 }
 
 .code {
   position: absolute;
-  top: 375px;
-  right: 80px;
+  top: 390px;
+  right: 90px;
   width: 110px;
   height: 40px;
-  border-radius: 40px;
   border: 0px;
-  color: #ECEED9;
-  background-color: #C2A278;
+  background-color: #B73E13;
+  color: #fff;
+  border-radius: 15px;
 }
 
 .alert {
   position: absolute;
-  top: 240px;
+  top: 220px;
   left: 60px;
   color: rgba(168, 4, 4, 0.873);
   font-size: 10px;

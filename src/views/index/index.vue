@@ -8,7 +8,8 @@
         <router-link to="/game" class="slider" @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
         <div class="animation" :style="animationStyle"></div>
         <div v-if="isLoggedIn" style="display: inline-block; height: 50px ; width: 50px;">
-          <img :src="userAvatar" style="height: 60px ; width: 60px; " alt="用户头像" class="avatar">
+          <img :src="userAvatar" style="height: 30px ; width: 30px; " alt="用户头像" class="avatar">
+          <router-link to="/profile" class="profile">个人中心</router-link>
         </div>
         <div v-else style="display: inline-block; height: 50px ; width: 50px;">
           <router-link to="/login" class="login">登录</router-link>
@@ -98,11 +99,11 @@ body {
 
 .container {
   position: relative;
-  height: 900px;
+  min-height: 100vh;
   width: 100%;
   background-image: url(../../assets/imgs/background.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
 }
 
 .banner {
@@ -121,12 +122,14 @@ body {
 }
 
 nav {
-  margin: 0 auto;
   position: relative;
   width: 100%;
   height: 60px;
-  background-color: #772d2f;
+  /* background-color: #772d2f; */
+  background-image: url(../../assets/imgs/logobgd.jpg);
+  background-repeat: repeat-x;
   font-size: 0;
+  line-height: 60px;
 }
 
 nav .slider {
@@ -137,7 +140,8 @@ nav .slider {
   display: inline-block;
   position: relative;
   z-index: 1;
-  left: -300px;
+  top: -10px;
+  left: -275px;
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
@@ -187,4 +191,20 @@ nav .slider:nth-child(3):hover~.animation {
   color: #f0db96;
   text-decoration: none;
 }
+.profile {
+  position: absolute;
+  right: -5px;
+  line-height: 60px;
+  font-size: 13px;
+  color: #ffffff;
+  text-decoration: none;
+}
+.avatar {
+  position: absolute;
+  top: 15px;
+  right: 60px;
+}
+ .isLoggedIn {
+  position: relative;
+ }
 </style>

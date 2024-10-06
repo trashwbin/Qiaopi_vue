@@ -3,7 +3,7 @@
     <div class="login-wrapper">
       <div class="header">登录</div>
       <div class="form-wrapper">
-        <input type="text" v-model="loginForm.username" name="username" placeholder="用户名" class="input-item">
+        <input type="text" v-model="loginForm.username" name="username" placeholder="用户名" class="input-item" autocomplete="off">
         <input type="password" v-model="loginForm.password" name="password" placeholder="密码" class="input-item">
         <!-- <input type="text" v-model="loginForm.code" name="code" placeholder="请输入图片验证码" class="pic">
         <div class="picbox">
@@ -101,16 +101,19 @@ body {
 
 .container {
   position: relative;
-  height: 810px;
+  height: 1000px;
   width: 100%;
-  background-image: linear-gradient(to right, #ECEED9, #B38554);
+  background-image: url(../../assets/imgs/loginbgd.jpg);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .login-wrapper {
-  background-color: #fff;
+  background-color: rgba(255,255,255,0.6);
   width: 358px;
   height: 588px;
-  border-radius: 15px;
+  border-radius: 80px;
   padding: 0 50px;
   position: absolute;
   left: 50%;
@@ -127,17 +130,28 @@ body {
 
 .input-item {
   display: block;
-  width: 100%;
+  width: 358px;
   margin-bottom: 20px;
   border: 0;
-  padding: 10px;
-  border-bottom: 1px solid rgb(128, 125, 125);
+  padding: 20px;
+  box-sizing: border-box;
+  border-bottom: 2px solid rgb(0, 0, 0);
   font-size: 15px;
   outline: none;
+  background-color: rgba(0, 0, 0, 0);
 }
 
-.input-item:placeholder {
+.input-item::placeholder {
   text-transform: uppercase;
+  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-size: 20px;
+  color: #000000;
+}
+.email::placeholder {
+  text-transform: uppercase;
+  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-size: 20px;
+  color: #000000;
 }
 
 .pic {
@@ -152,16 +166,16 @@ body {
 }
 
 .btn {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%,0);
   text-align: center;
-  padding: 10px;
-  margin: 0 auto;
-  width: 100%;
-  margin-top: 40px;
-  background-image: linear-gradient(to right, #ECEED9, #B38554);
+  width: 200px;
+  margin-top: 60px;
+  background-color: #B73E13;
   color: #fff;
-  background-color: #ECEED9;
-  border-radius: 28px;
-  border: 1px solid #ffffff;
+  border-radius: 20px;
+  border: 0;
   display: inline-block;
   cursor: pointer;
   color: #ffffff;
@@ -169,7 +183,6 @@ body {
   font-size: 17px;
   padding: 16px 31px;
   text-decoration: none;
-  text-shadow: 0px 1px 0px #2f6627;
 }
 
 .msg {
@@ -178,14 +191,16 @@ body {
 }
 
 p {
-  font-size: 14px;
-  color: #666666;
+  position: absolute;
+  bottom: 80px;
+  left: 150px;
+  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-size: 20px;
 }
 
 a {
   text-decoration-line: none;
-  color: #A47348;
-  font-size: 12px;
+  font-size: 18px;
 }
 
 .remember {
@@ -201,15 +216,13 @@ span {
 
 .forget {
   float: right;
-  font-size: 12px;
-  color: #A47348;
+  font-size: 16px;
+  color: #000000;
+  font-family: '方正姚体', sans-serif;
 }
 
 .picbox {
-  /* position: absolute; */
   display: inline-block;
-  /* top: 300px;
-  right: 100px; */
   width: 20%;
 }
 
