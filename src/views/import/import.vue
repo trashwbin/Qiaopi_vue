@@ -26,7 +26,7 @@ export default {
 .background-image {
   position: relative;
   width: 100%;
-  height: 810px;
+  height: 900px;
   max-width: 100%; /* 限制图片最大宽度 */
   transition: transform 0.3s; /* 设置动画过渡效果 */
   background-image: url(../../assets/imgs/backimg.jpg);

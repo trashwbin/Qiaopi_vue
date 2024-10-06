@@ -18,7 +18,7 @@
             <input type="text" id="senderAddress" v-model="letter.senderAddress" required>
           </div>
           <div class="form-group">
-            <label for="stationery">选择笔纸:</label>
+            <label for="stationery">选择信纸:</label>
             <select id="stationery" v-model="letter.stationery">
               <option v-for="stationery in stationeryOptions" :key="stationery.id" :value="stationery.id">
                 {{ stationery.name }}
