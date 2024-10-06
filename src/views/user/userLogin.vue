@@ -1,26 +1,30 @@
 <template>
   <div class="container">
     <div class="login-wrapper">
+      <!-- 登录表单 -->
       <div class="header">登录</div>
       <div class="form-wrapper">
         <input type="text" v-model="loginForm.username" name="username" placeholder="用户名" class="input-item" autocomplete="off">
         <input type="password" v-model="loginForm.password" name="password" placeholder="密码" class="input-item">
-        <!-- <input type="text" v-model="loginForm.code" name="code" placeholder="请输入图片验证码" class="pic">
-        <div class="picbox">
-          <img :src="captchaImg" alt="验证码" @click="handleGetPicCode">
-        </div> -->
         <router-link to="/forget" class="forget">忘记密码</router-link>
         <button @click="handleCodePre" class="btn">登录</button>
       </div>
       <p>没有账号？<router-link to="/register">去注册</router-link></p>
     </div>
-    <el-dialog :visible.sync="codeOpen" title="输入验证码" width="500px" class="codeCheck">
-      <el-input v-model="loginForm.code" placeholder="验证码" style="width: 200px; height: ;" />
-      <div class="picbox">
-        <img :src="captchaImg" alt="验证码" @click="handleGetPicCode">
+    <div v-if="codeOpen" class="overlay" @click="codeOpen = false"></div>
+    <div v-if="codeOpen" class="codeCheck">
+        <div class="code-header">
+          <span>输入验证码</span>
+          <button class="close-btn" @click="codeOpen = false">×</button>
+        <div class="code-content">
+          <input type="text" v-model="loginForm.code" placeholder="验证码" class="inputcode" style="width: 200px; height: 50px;" />
+          <div class="picbox" style="margin-left: 10px;">
+            <img :src="captchaImg" alt="验证码" @click="handleGetPicCode">
+          </div>
+        </div>
+        <button @click="handleLogin" class="checkbtn">验证</button>
       </div>
-      <button @click="handleLogin" class="btn">验证</button>
-    </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -222,8 +226,12 @@ span {
 }
 
 .picbox {
+  position: absolute;
+  top: 60px;
+  right: 50px;
   display: inline-block;
   width: 20%;
+  margin-top: 40px;
 }
 
 .picbox img {
@@ -231,6 +239,84 @@ span {
 }
 
 .codeCheck {
-  margin-top: 100px;
+ /* margin-top: 100px; */
+ background-color: #fff;
+ border-radius: 10px;
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ width: 300px;
+ height: 150px;
+ padding: 50px 50px;
+ position: absolute;
+ left: 50%;
+ top: 50%;
+ z-index: 999;
+ transform: translate(-50%, -50%);
 }
+.inputcode {
+  display: block;
+  width: 358px;
+  padding: 20px;
+  margin-top: 40px;
+  box-sizing: border-box;
+  font-size: 15px;
+  outline: none;
+  border: 1px #666 solid;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0);
+}
+.checkbtn {
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  transform: translate(-50%,0);
+  text-align: center;
+  width: 200px;
+  margin-top: 20px;
+  background-color: #B73E13;
+  color: #fff;
+  border-radius: 20px;
+  border: 0;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 17px;
+  padding: 16px 31px;
+  text-decoration: none;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* 黑色半透明遮罩 */
+  z-index: 998; /* 确保遮罩层在验证码弹框之下 */
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.code-header span {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+}
+
 </style>
