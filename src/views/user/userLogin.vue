@@ -4,7 +4,8 @@
       <!-- 登录表单 -->
       <div class="header">登录</div>
       <div class="form-wrapper">
-        <input type="text" v-model="loginForm.username" name="username" placeholder="用户名" class="input-item" autocomplete="off">
+        <input type="text" v-model="loginForm.username" name="username" placeholder="用户名" class="input-item"
+          autocomplete="off">
         <input type="password" v-model="loginForm.password" name="password" placeholder="密码" class="input-item">
         <router-link to="/forget" class="forget">忘记密码</router-link>
         <button @click="handleCodePre" class="btn">登录</button>
@@ -13,11 +14,12 @@
     </div>
     <div v-if="codeOpen" class="overlay" @click="codeOpen = false"></div>
     <div v-if="codeOpen" class="codeCheck">
-        <div class="code-header">
-          <span>输入验证码</span>
-          <button class="close-btn" @click="codeOpen = false">×</button>
+      <div class="code-header">
+        <span>输入验证码</span>
+        <button class="close-btn" @click="codeOpen = false">×</button>
         <div class="code-content">
-          <input type="text" v-model="loginForm.code" placeholder="验证码" class="inputcode" style="width: 200px; height: 50px;" />
+          <input type="text" v-model="loginForm.code" placeholder="验证码" class="inputcode"
+            style="width: 200px; height: 50px;" />
           <div class="picbox" style="margin-left: 10px;">
             <img :src="captchaImg" alt="验证码" @click="handleGetPicCode">
           </div>
@@ -28,7 +30,7 @@
   </div>
 </template>
 <script>
-import { getPicCode } from '@/api/login'
+import { getPicCode } from '@/api/user'
 import useUserStore from '@/store/modules/user'
 
 export default {
@@ -114,7 +116,7 @@ body {
 }
 
 .login-wrapper {
-  background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255, 255, 255, 0.6);
   width: 358px;
   height: 588px;
   border-radius: 80px;
@@ -147,13 +149,16 @@ body {
 
 .input-item::placeholder {
   text-transform: uppercase;
-  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-family: '方正姚体', sans-serif;
+  /* 设置 placeholder 的字体 */
   font-size: 20px;
   color: #000000;
 }
+
 .email::placeholder {
   text-transform: uppercase;
-  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-family: '方正姚体', sans-serif;
+  /* 设置 placeholder 的字体 */
   font-size: 20px;
   color: #000000;
 }
@@ -172,7 +177,7 @@ body {
 .btn {
   position: absolute;
   left: 50%;
-  transform: translate(-50%,0);
+  transform: translate(-50%, 0);
   text-align: center;
   width: 200px;
   margin-top: 60px;
@@ -198,7 +203,8 @@ p {
   position: absolute;
   bottom: 80px;
   left: 150px;
-  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-family: '方正姚体', sans-serif;
+  /* 设置 placeholder 的字体 */
   font-size: 20px;
 }
 
@@ -239,19 +245,20 @@ span {
 }
 
 .codeCheck {
- /* margin-top: 100px; */
- background-color: #fff;
- border-radius: 10px;
- box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
- width: 300px;
- height: 150px;
- padding: 50px 50px;
- position: absolute;
- left: 50%;
- top: 50%;
- z-index: 999;
- transform: translate(-50%, -50%);
+  /* margin-top: 100px; */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  height: 150px;
+  padding: 50px 50px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 999;
+  transform: translate(-50%, -50%);
 }
+
 .inputcode {
   display: block;
   width: 358px;
@@ -264,11 +271,12 @@ span {
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0);
 }
+
 .checkbtn {
   position: absolute;
   top: 150px;
   left: 50%;
-  transform: translate(-50%,0);
+  transform: translate(-50%, 0);
   text-align: center;
   width: 200px;
   margin-top: 20px;
@@ -284,14 +292,17 @@ span {
   padding: 16px 31px;
   text-decoration: none;
 }
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* 黑色半透明遮罩 */
-  z-index: 998; /* 确保遮罩层在验证码弹框之下 */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* 黑色半透明遮罩 */
+  z-index: 998;
+  /* 确保遮罩层在验证码弹框之下 */
 }
 
 .code-header {
@@ -318,5 +329,4 @@ span {
   cursor: pointer;
   font-size: 24px;
 }
-
 </style>
