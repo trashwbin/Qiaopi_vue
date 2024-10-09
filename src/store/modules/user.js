@@ -1,4 +1,4 @@
-import { login, logout } from '@/api/login'
+import { getUserInfo, login, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import defAva from '@/assets/default-avatar.png'
 import { defineStore } from 'pinia'
@@ -11,8 +11,8 @@ const useUserStore = defineStore(
       token: getToken(),
       id: '',
       name: '',
-      avatar: '',
-      money: ''
+      avatar: ''
+      // money: ''
     }),
     actions: {
       // 登录
@@ -30,8 +30,24 @@ const useUserStore = defineStore(
             this.id = data.id
             this.name = data.nickname
             this.avatar = avatar
-            this.money = data.money
+            // this.money = data.money
             resolve()
+          }).catch(error => {
+            reject(error)
+          })
+        })
+      },
+      // 获取用户信息
+      getUserInfo() {
+        return new Promise((resolve, reject) => {
+          getUserInfo().then(res => {
+            const data = res.data
+            const avatar = (data.avatar === '' || data.avatar == null) ? defAva : process.env.VUE_APP_API + data.avatar
+            this.id = data.id
+            this.name = data.nickname
+            this.avatar = avatar
+            // this.money = data.money
+            resolve(res)
           }).catch(error => {
             reject(error)
           })
