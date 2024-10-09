@@ -7,6 +7,7 @@ import Impact from '@/views/import/import.vue'
 import Index from '@/views/index/index'
 import Letter from '@/views/index/letter'
 import Game from '@/views/index/game'
+import Shop from '@/views/index/shop'
 import Introduce from '@/views/index/introduce'
 import Profile from '@/views/profile/index.vue'
 import WriteLetter from '@/views/letter/WriteLetter.vue'
@@ -61,6 +62,11 @@ const router = new VueRouter({
         path: '/introduce',
         name: 'Introduce',
         component: Introduce
+      },
+      {
+        path: '/shop',
+        name: 'Shop',
+        component: Shop
       },
       {
         path: '/write',

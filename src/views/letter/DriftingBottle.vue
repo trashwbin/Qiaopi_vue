@@ -19,7 +19,7 @@
       </div>
       <div class="form-group">
         <label for="friendContent">内容:</label>
-        <textarea id="friendContent" v-model="friendRequest.content" required></textarea>
+        <textarea id="friendContent" v-model="friendRequest.content"></textarea>
       </div>
       <button type="submit">发送</button>
     </form>
@@ -87,7 +87,7 @@ export default {
       friendRequest: { // 初始化 friendRequest 对象
         sender: '',
         friendAddress: '',
-        content: ''
+        content: '希望和你成为好友！'
       },
       letter: {
         recipientUsername: '',

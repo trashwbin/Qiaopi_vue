@@ -45,7 +45,6 @@
     <div class="right">
       <p class="first">侨批，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的汇款和家书。这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重</p>
         <p class="second">要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是华侨与家乡之间情感和经济联系的纽带。<br><span>侨批的传递往往依赖于专门的“水客”或“侨批局”，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。</span></p>
-        <p class="third">侨批作为独特的文化遗产，已被联合国教科文组织列入《世界记忆名录》，成为全人类共同的记忆财富。</p>
     </div>
   </div>
     <div class="history">
@@ -65,6 +64,22 @@
       </ul>
     </div>
   </div>
+  <div class="function">
+    <h1><img src="../../assets/imgs/functionbdg.png" alt=""></h1>
+      <div class="images-container">
+        <div class="top-row">
+          <router-link to="/drifting"><img src="../../assets/imgs/function1.png" alt="" class="function-img"></router-link>
+          <router-link to="/shop"><img src="../../assets/imgs/function2.png" alt="" class="function-img"></router-link>
+          <router-link to=""><img src="../../assets/imgs/function3.png" alt="" class="function-img"></router-link>
+        </div>
+        <div class="bottom-row">
+          <router-link to=""><img src="../../assets/imgs/function4.png" alt="" class="function-img"></router-link>
+          <router-link to="/write"><img src="../../assets/imgs/function5.png" alt="" class="function-img"></router-link>
+          <router-link to="/receive"><img src="../../assets/imgs/function6.png" alt="" class="function-img"></router-link>
+          <router-link to=""><img src="../../assets/imgs/function7.png" alt="" class="function-img"></router-link>
+        </div>
+      </div>
+    </div>
     </div>
 </div>
 </template>
@@ -107,7 +122,7 @@ export default {
 }
 .contain {
   width: 100%;
-  height: 2500px;
+  height: 3000px;
   background-image: url(../../assets/imgs/background.jpg);
   background-size: 100% 100%;
   background-position: center center;
@@ -229,7 +244,7 @@ section{
     right: 20px;
     text-indent: 2em;
     z-index: 1;
-    color: #666;
+    color: #000;
     font-size: 27px;
     font-family: "KaiTi", "楷体", serif;
   }
@@ -239,25 +254,13 @@ section{
     left: 180px;
     right: 15px;
     z-index: 1;
-    color: #666;
+    color: #000;
     font-size: 27px;
     font-family: "KaiTi", "楷体", serif;
     text-align: left;
   }
   .right .second span {
     display: block;
-    text-indent: 2em;
-  }
-  .right .third {
-    position: absolute;
-    top: 620px;
-    left: 180px;
-    right: 300px;
-    z-index: 1;
-    color: #666;
-    font-size: 27px;
-    font-family: "KaiTi", "楷体", serif;
-    text-align: left;
     text-indent: 2em;
   }
   .imgLoader {
@@ -702,7 +705,7 @@ section{
   width: 100%;
   margin-top: 950px;
 }
-.history h1 {
+.history h1{
   width: 400px;
   height: 100px;
   margin: 0 auto;
@@ -805,7 +808,6 @@ section{
   color: white;
   font-size: 14px;
   width: 100%;
-  text-indent: 1em;
   z-index: 10;
 }
 
@@ -821,5 +823,54 @@ section{
 
 .history .banner ul .active .pic p {
   display: block;
+}
+
+.function {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 200px;
+}
+.function h1 {
+  position: absolute;
+  top: -140px;
+  width: 400px;
+  height: 100px;
+}
+.function h1 img {
+  width: 100%;
+  height: 100%;
+}
+.function a {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+.images-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.top-row,
+.bottom-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.function-img {
+  width: 200px; /* 初始宽度 */
+  height: 200px; /* 初始高度 */
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.3s ease; /* 添加一个平滑的变换效果 */
+}
+
+.function-img:hover {
+  transform: scale(1.2); /* 鼠标悬停时放大到原来的1.2倍 */
 }
 </style>

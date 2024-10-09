@@ -6,6 +6,7 @@
         <router-link to="/introduce" class="slider" @click.native="navigateAndSetActive('/introduce')">首页</router-link>
         <router-link to="/letter" class="slider" @click.native="navigateAndSetActive('/letter')">信海归舟</router-link>
         <router-link to="/game" class="slider" @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
+        <router-link to="/shop" class="slider" @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
         <div class="animation" :style="animationStyle"></div>
         <div v-if="isLoggedIn" style="display: inline-block; height: 50px ; width: 50px;">
           <img :src="userAvatar" style="height: 30px ; width: 30px; " alt="用户头像" class="avatar">
@@ -27,8 +28,8 @@ export default {
   name: 'QiaopiIndex',
   data() {
     return {
-      activeIndex: -1,
-      positions: [150, 250, 350] // 初始位置
+      activeIndex: 0,
+      positions: [150, 250, 350, 450] // 初始位置
     }
   },
   computed: {
@@ -53,7 +54,7 @@ export default {
           ? '#D3BF9E'
           : this.activeIndex === 1
             ? '#C7A981'
-            : this.activeIndex === 2 ? '#B68C5C' : 'transparent'
+            : this.activeIndex === 2 ? '#B68C5C' : this.activeIndex === 3 ? '#a9773e' : 'transparent'
       }
     }
   },
@@ -71,8 +72,8 @@ export default {
     const paths = {
       '/introduce': 0,
       '/letter': 1,
-      '/game': 2
-      // 其他路由映射
+      '/game': 2,
+      '/shop': 3
     }
     const index = paths[to.path]
     if (index !== undefined) {
@@ -141,7 +142,7 @@ nav .slider {
   position: relative;
   z-index: 1;
   top: -10px;
-  left: -275px;
+  left: -225px;
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
@@ -157,7 +158,7 @@ nav .animation {
   transition: all 1s ease 0s;
   border-radius: 8px;
   width: 100px;
-  left: 150px;
+  left: 220px;
 }
 
 nav .slider:hover~.animation {
@@ -172,6 +173,10 @@ nav .slider:nth-child(2):hover~.animation {
 nav .slider:nth-child(3):hover~.animation {
   left: 350px;
   background-color: #B68C5C;
+}
+nav .slider:nth-child(4):hover~.animation {
+  left: 450px;
+  background-color: #a9773e;
 }
 
 .login {
