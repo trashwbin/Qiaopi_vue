@@ -77,11 +77,10 @@
         </el-row>
       </div>
       <div class="right">
-        <el-image v-loading="loading" @error="handleError" @load="handleLoad"
-          element-loading-background="rgba(0, 0, 0, 0.8)" crossorigin="anonymous" :src="letter.letterLink"
-          style="max-width: 100%; height: auto;">
-          <div slot="placeholder">
-            加载中<span class="dot">...</span>
+        <el-image v-loading="loading" @error="handleError" @load="handleLoad" crossorigin="anonymous"
+          :src="letter.letterLink" style="max-width: 100%; ">
+          <div slot="placeholder"
+            style="border-radius: 20px; width: 700px; height: 450px; text-align: center; align-items: center;">
           </div>
         </el-image>
       </div>
@@ -578,6 +577,11 @@ export default {
 
 ::v-deep .el-form-item {
   margin-bottom: 20px;
+}
+
+::v-deep .el-loading-mask {
+  background-color: rgba(222, 201, 162, .5) !important;
+  border-radius: 30px;
 }
 
 .demo-table-expand {
