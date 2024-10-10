@@ -58,6 +58,7 @@
 
 <script>
 import axios from 'axios'
+import { getUserMoney } from '@/api/user'
 import useUserStore from '@/store/modules/user'
 
 export default {
@@ -96,16 +97,13 @@ export default {
     }
   },
   methods: {
+    getUserMoney() {
+      getUserMoney().then(res => {
+        this.money = res.data.money
+      })
+    },
     async getUserInfo(token) {
       const response = await axios.get('/api/user/getUserInfo', {
-        headers: {
-          Authorization: token
-        }
-      })
-      return response
-    },
-    async getUserMoney(token) {
-      const response = await axios.get('/api/user/getUserMoney', {
         headers: {
           Authorization: token
         }
@@ -203,153 +201,175 @@ export default {
   background-size: 100% 100%;
   background-position: top center;
 }
+
 .banner {
-    position: relative;
-    margin: 0 auto;
-    width: 1300px;
-    height: 800px;
-  }
-  .banner .profile{
-    position: absolute;
-    top: -80px;
-    left: 35%;
-    transform: translateY(-50%);
-    width: 400px;
-    height: 100px;
-  }
-  .banner h1 img {
-    width: 100%;
-    height: 100%;
-  }
-  .data {
-    position: relative;
-    left: 50px;
-    width: 350px;
-    height: 600px;
-    padding-top: 30px;
-    box-sizing: border-box;
-    margin-top: 60px;
-    background-color: rgb(194, 179, 153);
-  }
-  .data .pic {
-    position: absolute;
-    top: 0;
-    width: 350px;
-    height: 250px;
-  }
-  .data .pic img {
-    width: 100%;
-    height: 100%;
-  }
-  .data .name {
-    position: absolute;
-    left: 20px;
-    top: 265px;
-    font-size: 42px;
-    font-weight: bold;
-    font-family: '华文新魏', sans-serif;
-  }
-    .data .userid {
-    position: absolute;
-    top: 320px;
-    left: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: '华文中宋', sans-serif;
-  }
-  .userid span {
-    font-size: 16px;
-    font-weight: normal;
-    margin-left: 2px;
-    font-family: Arial, sans-serif;
-  }
-  .data .adress {
-    position: absolute;
-    top: 480px;
-    left: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: '华文中宋', sans-serif;
-  }
-  .adress span {
-    font-size: 16px;
-    font-weight: normal;
-    margin-left: 2px;
-    font-family: Arial, sans-serif;
-  }
-  .data .money {
-    position: absolute;
-    top: 440px;
-    left: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: '华文中宋', sans-serif;
-  }
-   .money span {
-    position: absolute;
-    left: 90px;
-    top: 8px;
-    font-size: 16px;
-    font-weight: normal;
-    font-family: Arial, sans-serif;
-  }
-   .data .sex {
-    position: absolute;
-    top: 360px;
-    left: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: '华文中宋', sans-serif;
-  }
-  .data .email {
-    position: absolute;
-    top: 400px;
-    left: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: '华文中宋', sans-serif;
-  }
-  .email span {
-    position: absolute;
-    left: 65px;
-    top: 8px;
-    font-size: 16px;
-    font-weight: normal;
-    font-family: Arial, sans-serif;
-  }
-   .sex span {
-    font-size: 16px;
-    font-weight: normal;
-    font-family: Arial, sans-serif;
-  }
-  .store {
-    position: absolute;
-    left: 600px;
-    top: 0;
-    width: 600px;
-    height: 650px;
-    background-color: rgb(154, 141, 141);
-  }
-  .store img {
-    width: 50px;
-    height: 100px;
-  }
-  .data button {
-    position: absolute;
-    bottom: 20px;
-    left: 100px;
-    width: 100px;
-    height: 50px;
-    background-color: #dcdcd9;
-    border: 0;
-    border-radius: 25px;
-    cursor: pointer;
-  }
-  .data button:hover {
-    background-color: #9b9b95;
-    color: white;
-  }
-  .edit-modal {
+  position: relative;
+  margin: 0 auto;
+  width: 1300px;
+  height: 800px;
+}
+
+.banner .profile {
+  position: absolute;
+  top: -80px;
+  left: 35%;
+  transform: translateY(-50%);
+  width: 400px;
+  height: 100px;
+}
+
+.banner h1 img {
+  width: 100%;
+  height: 100%;
+}
+
+.data {
+  position: relative;
+  left: 50px;
+  width: 350px;
+  height: 600px;
+  padding-top: 30px;
+  box-sizing: border-box;
+  margin-top: 60px;
+  background-color: rgb(194, 179, 153);
+}
+
+.data .pic {
+  position: absolute;
+  top: 0;
+  width: 350px;
+  height: 250px;
+}
+
+.data .pic img {
+  width: 100%;
+  height: 100%;
+}
+
+.data .name {
+  position: absolute;
+  left: 20px;
+  top: 265px;
+  font-size: 42px;
+  font-weight: bold;
+  font-family: '华文新魏', sans-serif;
+}
+
+.data .userid {
+  position: absolute;
+  top: 320px;
+  left: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: '华文中宋', sans-serif;
+}
+
+.userid span {
+  font-size: 16px;
+  font-weight: normal;
+  margin-left: 2px;
+  font-family: Arial, sans-serif;
+}
+
+.data .adress {
+  position: absolute;
+  top: 480px;
+  left: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: '华文中宋', sans-serif;
+}
+
+.adress span {
+  font-size: 16px;
+  font-weight: normal;
+  margin-left: 2px;
+  font-family: Arial, sans-serif;
+}
+
+.data .money {
+  position: absolute;
+  top: 440px;
+  left: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: '华文中宋', sans-serif;
+}
+
+.money span {
+  position: absolute;
+  left: 90px;
+  top: 8px;
+  font-size: 16px;
+  font-weight: normal;
+  font-family: Arial, sans-serif;
+}
+
+.data .sex {
+  position: absolute;
+  top: 360px;
+  left: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: '华文中宋', sans-serif;
+}
+
+.data .email {
+  position: absolute;
+  top: 400px;
+  left: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: '华文中宋', sans-serif;
+}
+
+.email span {
+  position: absolute;
+  left: 65px;
+  top: 8px;
+  font-size: 16px;
+  font-weight: normal;
+  font-family: Arial, sans-serif;
+}
+
+.sex span {
+  font-size: 16px;
+  font-weight: normal;
+  font-family: Arial, sans-serif;
+}
+
+.store {
+  position: absolute;
+  left: 600px;
+  top: 0;
+  width: 600px;
+  height: 650px;
+  background-color: rgb(154, 141, 141);
+}
+
+.store img {
+  width: 50px;
+  height: 100px;
+}
+
+.data button {
+  position: absolute;
+  bottom: 20px;
+  left: 100px;
+  width: 100px;
+  height: 50px;
+  background-color: #dcdcd9;
+  border: 0;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.data button:hover {
+  background-color: #9b9b95;
+  color: white;
+}
+
+.edit-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -390,13 +410,15 @@ export default {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .save {
-    width: 100px;
-    height: 50px;
-    background-color: rgb(194, 179, 153);
-    border: 0;
-    border-radius: 25px;
+  width: 100px;
+  height: 50px;
+  background-color: rgb(194, 179, 153);
+  border: 0;
+  border-radius: 25px;
 }
+
 .save:hover {
   color: white;
   background-color: rgb(157, 138, 138);

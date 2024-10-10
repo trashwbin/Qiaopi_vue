@@ -26,10 +26,12 @@ const useUserStore = defineStore(
             const data = res.data
             setToken(data.token)
             this.token = data.token
+            console.log(data)
             const avatar = (data.avatar === '' || data.avatar == null) ? defAva : process.env.VUE_APP_API + data.avatar
             this.id = data.id
             this.name = data.nickname
             this.avatar = avatar
+
             // this.money = data.money
             resolve()
           }).catch(error => {
