@@ -181,6 +181,7 @@ export default {
 
 .write {
   position: absolute;
+  top: 0;
   left: 0;
   width: 150px;
   height: 350px;
@@ -193,6 +194,7 @@ export default {
 .send {
   position: absolute;
   bottom: 0;
+  left: 0;
   width: 150px;
   height: 350px;
   background-color: rgb(183, 164, 164);
@@ -210,6 +212,7 @@ export default {
 .left {
   position: absolute;
   width: 320px;
+  height: 200px;
   top: 20px;
   left: 180px;
   padding: 20px;

@@ -17,7 +17,7 @@
         <label for="friendAddress">个人地址:</label>
         <input type="text" id="friendAddress" v-model="friendRequest.friendAddress" required>
       </div>
-      <div class="form-group">
+      <div class="form-group special">
         <label for="friendContent">内容:</label>
         <textarea id="friendContent" v-model="friendRequest.content"></textarea>
       </div>
@@ -60,7 +60,7 @@
                 </option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group special">
               <label for="letterContent">信件内容:</label>
               <textarea id="letterContent" v-model="letter.content" required></textarea>
             </div>
@@ -245,14 +245,12 @@ export default {
   height: 650px;
   background-color: white;
 }
-
-.form-group {
-  margin-bottom: 15px;
+h2 {
+  height: 30px;
 }
-
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  height: 35px;
 }
 
 .form-group input,
@@ -280,11 +278,8 @@ button:hover {
   background-color: #0056b3;
 }
 .friend-modal {
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
-  height: 100%;
+  height: 780px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -292,7 +287,7 @@ button:hover {
 
 .modal-content {
   border-radius: 5px;
-  width: 400px;
+  width: 300px;
   background-color: rgb(204, 204, 186);
 }
 
@@ -302,19 +297,17 @@ button:hover {
 }
 
 .form-group {
-  margin-bottom: 15px;
+  height: 80px;
 }
-
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 60%;
-  padding: 8px;
   border-radius: 4px;
   resize: none;
   outline: none;

@@ -1,5 +1,11 @@
 import request from '@/utils/request'
-
+// 获取用户猪仔钱
+export function getUserMoney() {
+  return request({
+    url: '/user/getUserMoney',
+    method: 'get'
+  })
+}
 // 获取用户详细信息
 export function getUserInfo() {
   return request({
