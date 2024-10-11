@@ -25,8 +25,8 @@
               </el-select>
             </el-form-item>
             <el-form-item label="颜色" prop="fontColorId" style="margin-left: -10px; flex: 1;">
-              <el-select v-model="letterGen.fontColorId" placeholder="颜色" style="width: 85px; ">
-                <el-option v-for="item in repository.fontColors" :key="item.id" :label="item.description"
+              <el-select v-model="letterGen.fontColorId" placeholder="颜色" style="width: 85px; margin-top:10px;">
+                <el-option v-for=" item in repository.fontColors" :key="item.id" :label="item.description"
                   :value="item.id" @change="handleChange" />
               </el-select>
             </el-form-item>
