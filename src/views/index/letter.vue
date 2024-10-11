@@ -68,6 +68,7 @@ export default {
   position: relative;
   width: 300px;
   height: 400px;
+  /* margin-top: 150px; */
   box-shadow: 0 15px 15px rgba(0, 0, 0, 0.5);
 }
 

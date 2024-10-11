@@ -33,11 +33,6 @@ const router = new VueRouter({
     component: ForgetCode
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    component: Profile
-  },
-  {
     path: '/impact',
     name: 'Impact',
     component: Impact
@@ -48,6 +43,11 @@ const router = new VueRouter({
     name: 'Index',
     component: Index,
     children: [
+      {
+        path: '/profile',
+        name: 'Profile',
+        component: Profile
+      },
       {
         path: '/letter',
         name: 'Letter',

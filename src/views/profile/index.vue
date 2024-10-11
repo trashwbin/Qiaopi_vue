@@ -4,16 +4,18 @@
       <h1 class="profile"><img src="../../assets/imgs/profile.png" alt=""></h1>
       <div class="data">
         <div class="pic"><img src="../../assets/default-avatar.png" alt=""></div>
+        <div class="information">
         <div class="name">{{ user.nickname }}</div>
         <div class="userid">用户名：<span>{{ user.username }}</span></div>
         <div class="adress">个人地址: <span>{{ user.address }}</span></div>
         <div class="money">猪仔钱：<span>{{ money }}</span></div>
         <div class="sex">性别：<span>{{ user.sex }}</span></div>
         <div class="email">邮箱：<span>{{ user.email }}</span></div>
+        </div>
         <button @click="showEditModal">修改内容</button>
       </div>
       <div class="store">
-        <h1>我的仓库</h1>
+        <!-- <h1>我的仓库</h1>
         <div v-for="item in repository.fonts" :key="item.id">
           <h2>{{ item.name }}</h2>
           <img :src="item.previewImage" alt="字体预览" />
@@ -21,8 +23,45 @@
         <div v-for="item in repository.papers" :key="item.id">
           <h2>{{ item.name }}</h2>
           <img :src="item.previewImage" alt="信纸预览" />
-        </div>
-      </div>
+        </div> -->
+        <img src="../../assets/imgs/store.png" alt="仓库" class="bgd">
+        <img src="../../assets/imgs/color.png" alt="墨水" class="ink" @click="showInkImage">
+        <img src="../../assets/imgs/pen.png" alt="笔" class="pen" @click="showWordImage">
+        <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage" >
+        <!-- 墨水展示台 -->
+<div v-if="showInkImageModal" class="image-modal">
+  <div class="colorbox">  <div
+    class="box"
+    v-for="color in inkColors"
+    :key="color.id"
+    :style="{ backgroundColor: color.hexCode }"
+  ></div></div>
+  <span class="close" @click="showInkImageModal = false">&times;</span>
+  <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+    </div>
+    <!-- 字体展示台 -->
+<div v-if="showWordModal" class="image-modal">
+  <div class="penboxs">  <div class="penbox"
+      v-for="font in wordFonts"
+      :key="font.id"
+    >
+      {{ font.name }}
+    </div></div>
+  <span class="close" @click="showWordModal = false">&times;</span>
+  <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+    </div>
+    <!-- 信纸展示台 -->
+<div v-if="showEnvelopeModal" class="image-modal">
+  <div class="penboxs">      <div class="envelopebox"
+      v-for="paper in paperPreviews"
+      :key="paper.id"
+      :style="{ backgroundImage: 'url(' + paper.previewImage + ')' }"
+    >
+    </div></div>
+  <span class="close" @click="showEnvelopeModal= false">&times;</span>
+  <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+    </div>
+</div>
       <!-- 弹窗结构 -->
       <div v-if="editModalVisible" class="edit-modal">
         <div class="modal-content">
@@ -58,13 +97,18 @@
 
 <script>
 import axios from 'axios'
-import { getUserMoney } from '@/api/user'
 import useUserStore from '@/store/modules/user'
 
 export default {
   name: 'UserProfile',
   data() {
     return {
+      wordFonts: [], // 存储字体信息
+      inkColors: [], // 存储墨水颜色的 hexCode
+      paperPreviews: [], // 存储信纸预览图信息
+      showInkImageModal: false,
+      showWordModal: false,
+      showEnvelopeModal: false,
       user: {},
       money: '',
       repository: {
@@ -95,15 +139,44 @@ export default {
     } catch (error) {
       console.error('请求错误:', error)
     }
+    try {
+      const userStore = useUserStore()
+      const token = userStore.token // 从 Pinia store 获取 token
+      const repoResponse = await axios.get('/api/user/getUserRepository', {
+        headers: {
+          Authorization: token
+        }
+      })
+      if (repoResponse.data.code === 200 && repoResponse.data.data) {
+        this.repository = repoResponse.data.data
+        this.inkColors = repoResponse.data.data.fontColors // 存储墨水颜色信息
+        this.wordFonts = repoResponse.data.data.fonts // 存储字体信息
+        this.paperPreviews = repoResponse.data.data.papers // 存储信纸预览图信息
+      }
+    } catch (error) {
+      console.error('获取用户仓库错误:', error)
+    }
   },
   methods: {
-    getUserMoney() {
-      getUserMoney().then(res => {
-        this.money = res.data.money
-      })
+    showInkImage() {
+      this.showInkImageModal = true // 显示墨水图片
+    },
+    showWordImage() {
+      this.showWordModal = true // 显示墨水图片
+    },
+    showEnvelopeImage() {
+      this.showEnvelopeModal = true // 显示墨水图片
     },
     async getUserInfo(token) {
       const response = await axios.get('/api/user/getUserInfo', {
+        headers: {
+          Authorization: token
+        }
+      })
+      return response
+    },
+    async getUserMoney(token) {
+      const response = await axios.get('/api/user/getUserMoney', {
         headers: {
           Authorization: token
         }
@@ -190,7 +263,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+/* .container {
   position: relative;
   top: -60px;
   padding-top: 120px;
@@ -200,176 +273,191 @@ export default {
   background-image: url(../../assets/imgs/background.jpg);
   background-size: 100% 100%;
   background-position: top center;
-}
-
+} */
 .banner {
-  position: relative;
-  margin: 0 auto;
-  width: 1300px;
-  height: 800px;
-}
-
-.banner .profile {
-  position: absolute;
-  top: -80px;
-  left: 35%;
-  transform: translateY(-50%);
-  width: 400px;
-  height: 100px;
-}
-
-.banner h1 img {
-  width: 100%;
-  height: 100%;
-}
-
-.data {
-  position: relative;
-  left: 50px;
-  width: 350px;
-  height: 600px;
-  padding-top: 30px;
-  box-sizing: border-box;
-  margin-top: 60px;
-  background-color: rgb(194, 179, 153);
-}
-
-.data .pic {
-  position: absolute;
-  top: 0;
-  width: 350px;
-  height: 250px;
-}
-
-.data .pic img {
-  width: 100%;
-  height: 100%;
-}
-
-.data .name {
-  position: absolute;
-  left: 20px;
-  top: 265px;
-  font-size: 42px;
-  font-weight: bold;
-  font-family: '华文新魏', sans-serif;
-}
-
-.data .userid {
-  position: absolute;
-  top: 320px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.userid span {
-  font-size: 16px;
-  font-weight: normal;
-  margin-left: 2px;
-  font-family: Arial, sans-serif;
-}
-
-.data .adress {
-  position: absolute;
-  top: 480px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.adress span {
-  font-size: 16px;
-  font-weight: normal;
-  margin-left: 2px;
-  font-family: Arial, sans-serif;
-}
-
-.data .money {
-  position: absolute;
-  top: 440px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.money span {
-  position: absolute;
-  left: 90px;
-  top: 8px;
-  font-size: 16px;
-  font-weight: normal;
-  font-family: Arial, sans-serif;
-}
-
-.data .sex {
-  position: absolute;
-  top: 360px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.data .email {
-  position: absolute;
-  top: 400px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.email span {
-  position: absolute;
-  left: 65px;
-  top: 8px;
-  font-size: 16px;
-  font-weight: normal;
-  font-family: Arial, sans-serif;
-}
-
-.sex span {
-  font-size: 16px;
-  font-weight: normal;
-  font-family: Arial, sans-serif;
-}
-
-.store {
-  position: absolute;
-  left: 600px;
-  top: 0;
-  width: 600px;
-  height: 650px;
-  background-color: rgb(154, 141, 141);
-}
-
-.store img {
-  width: 50px;
-  height: 100px;
-}
-
-.data button {
-  position: absolute;
-  bottom: 20px;
-  left: 100px;
-  width: 100px;
-  height: 50px;
-  background-color: #dcdcd9;
-  border: 0;
-  border-radius: 25px;
-  cursor: pointer;
-}
-
-.data button:hover {
-  background-color: #9b9b95;
-  color: white;
-}
-
-.edit-modal {
+    position: relative;
+    margin: 0 auto;
+    width: 1300px;
+    height: 800px;
+  }
+  .banner .profile{
+    position: absolute;
+    top: -20px;
+    left: 35%;
+    transform: translateY(-50%);
+    width: 400px;
+    height: 100px;
+  }
+  .banner h1 img {
+    width: 100%;
+    height: 100%;
+  }
+  .data {
+    position: relative;
+    top: 60px;
+    left: 50px;
+    width: 350px;
+    height: 640px;
+    padding-top: 30px;
+    box-sizing: border-box;
+    margin-top: 60px;
+    background-image: url(../../assets/imgs/profilebgd.png);
+    background-position: center center;
+    background-size: cover;
+  }
+  .data .pic {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%,0);
+    width: 250px;
+    height: 200px;
+  }
+  .data .pic img {
+    width: 100%;
+    height: 100%;
+  }
+  .data .name {
+    position: absolute;
+    left: 20px;
+    font-size: 42px;
+    font-weight: bold;
+    font-family: '华文新魏', sans-serif;
+  }
+    .data .userid {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: '华文中宋', sans-serif;
+  }
+  .userid span {
+    font-size: 16px;
+    font-weight: normal;
+    margin-left: 2px;
+    font-family: Arial, sans-serif;
+  }
+  .data .adress {
+    position: absolute;
+    top: 210px;
+    left: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: '华文中宋', sans-serif;
+  }
+  .adress span {
+    font-size: 16px;
+    font-weight: normal;
+    margin-left: 2px;
+    font-family: Arial, sans-serif;
+  }
+  .data .money {
+    position: absolute;
+    top: 170px;
+    left: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: '华文中宋', sans-serif;
+  }
+   .money span {
+    position: absolute;
+    left: 90px;
+    top: 8px;
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Arial, sans-serif;
+  }
+   .data .sex {
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: '华文中宋', sans-serif;
+  }
+  .data .email {
+    position: absolute;
+    top: 130px;
+    left: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: '华文中宋', sans-serif;
+  }
+  .email span {
+    position: absolute;
+    left: 65px;
+    top: 8px;
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Arial, sans-serif;
+  }
+   .sex span {
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Arial, sans-serif;
+  }
+  .store {
+    position: absolute;
+    left: 396px;
+    top: 60px;
+    width: 850px;
+    height: 640px;
+    background-image: url(../../assets/imgs/frame.png);
+    background-position:center center;
+    background-size:cover;
+  }
+  .store .bgd {
+    position: absolute;
+    top: 35px;
+    left: 40px;
+    width: 768px;
+    height: 578px;
+  }
+  .data .information {
+    position: relative;
+    top: 240px;
+    left: 25px;
+    width: 300px;
+    height: 300px;
+    background-color: #ADA587;
+  }
+  .ink {
+    position: absolute;
+    bottom: 180px;
+    left: 200px;
+    cursor: pointer;
+  }
+  .pen {
+    position: absolute;
+    bottom: 180px;
+    left: 330px;
+    cursor: pointer;
+  }
+  .envelope {
+    position: absolute;
+    width: 100px;
+    height: 70px;
+    bottom: 180px;
+    left: 450px;
+    cursor: pointer;
+  }
+  .data button {
+    position: absolute;
+    bottom: 85px;
+    left: 100px;
+    width: 100px;
+    height: 40px;
+    background-color: #c0c0a8;
+    border: 0;
+    border-radius: 25px;
+    cursor: pointer;
+  }
+  .data button:hover {
+    background-color: #6f6f5e;
+    color: white;
+  }
+  .edit-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -410,18 +498,65 @@ export default {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
 .save {
-  width: 100px;
-  height: 50px;
-  background-color: rgb(194, 179, 153);
-  border: 0;
-  border-radius: 25px;
+    width: 100px;
+    height: 50px;
+    background-color: rgb(194, 179, 153);
+    border: 0;
+    border-radius: 25px;
 }
-
 .save:hover {
   color: white;
   background-color: rgb(157, 138, 138);
   cursor: pointer;
+}
+.image-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+.image-modal span {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+}
+
+.modal-image {
+ width: 100%;
+}
+.colorbox {
+  position: absolute;
+  top: 50px;
+  left: 80px;
+}
+.box {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc; /* 可选的边框样式 */
+}
+.penboxs {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+}
+.penbox {
+  float: left;
+  width: 80px;
+  height: 60px;
+  border: 1px solid #000000; /* 可选的边框样式 */
+}
+.envelopebox {
+  float: left;
+  width: 80px;
+  height: 120px;
+  margin-right: 10px;
+  border: 1px solid #000000;
+  background-position: center center;
+  background-size: cover;
 }
 </style>

@@ -6,13 +6,18 @@
         <router-link to="/introduce" class="slider" @click.native="navigateAndSetActive('/introduce')">首页</router-link>
         <router-link to="/letter" class="slider" @click.native="navigateAndSetActive('/letter')">信海归舟</router-link>
         <router-link to="/game" class="slider" @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
-        <router-link to="/shop" class="slider" @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
+        <router-link to="/shop" class="slider" @click.native="navigateAndSetActive('/shop')">兑换商城</router-link>
         <div class="animation" :style="animationStyle"></div>
-        <div v-if="isLoggedIn" style="display: inline-block; height: 50px ; width: 50px;">
-          <img :src="userAvatar" style="height: 30px ; width: 30px; " alt="用户头像" class="avatar">
-          <router-link to="/profile" class="profile">个人中心</router-link>
+        <div class="money"><img src="../../assets/imgs/pigmoney.png" alt="猪仔钱"></div>
+        <p class="pig">猪仔钱：{{ money }}</p>
+        <div v-if="isLoggedIn" class="avatar-container" @mouseover="showMenu = true" @mouseleave="showMenu = false">
+          <img :src="userAvatar" style="height: 30px; width: 30px;" alt="用户头像" class="avatar">
+          <div v-if="showMenu" class="dropdown">
+            <router-link to="/profile" class="profile">个人中心</router-link>
+            <router-link to="/login" class="logout">切换账号</router-link>
+          </div>
         </div>
-        <div v-else style="display: inline-block; height: 50px ; width: 50px;">
+        <div v-else>
           <router-link to="/login" class="login">登录</router-link>
           <router-link to="/register" class="register">注册</router-link>
         </div>
@@ -23,11 +28,14 @@
 </template>
 
 <script>
+import { getUserMoney } from '@/api/user'
 import useUserStore from '@/store/modules/user'
 export default {
   name: 'QiaopiIndex',
   data() {
     return {
+      money: 0,
+      showMenu: false,
       activeIndex: 0,
       positions: [150, 250, 350, 450] // 初始位置
     }
@@ -54,7 +62,7 @@ export default {
           ? '#D3BF9E'
           : this.activeIndex === 1
             ? '#C7A981'
-            : this.activeIndex === 2 ? '#B68C5C' : this.activeIndex === 3 ? '#a9773e' : 'transparent'
+            : this.activeIndex === 2 ? '#B68C5C' : this.activeIndex === 3 ? '#B68C5C' : 'transparent'
       }
     }
   },
@@ -66,6 +74,14 @@ export default {
       if (this.$route.path !== path) {
         this.$router.push(path)
       }
+    }
+  },
+  async created() {
+    try {
+      const res = await getUserMoney() // 调用异步函数
+      this.money = res.data.money// 将获取到的钱赋值给组件的 money 数据属性
+    } catch (error) {
+      console.error('获取用户资金失败:', error)
     }
   },
   beforeRouteUpdate(to, from, next) {
@@ -111,7 +127,10 @@ body {
   position: relative;
   width: 1200px;
   height: 60px;
+  box-sizing: border-box;
+  padding: 10px;
   margin: 0 auto;
+  line-height: 60px;
 }
 
 .logo {
@@ -126,7 +145,6 @@ nav {
   position: relative;
   width: 100%;
   height: 60px;
-  /* background-color: #772d2f; */
   background-image: url(../../assets/imgs/logobgd.jpg);
   background-repeat: repeat-x;
   font-size: 0;
@@ -140,9 +158,9 @@ nav .slider {
   font-size: 18px;
   display: inline-block;
   position: relative;
-  z-index: 1;
+  z-index: 5;
   top: -10px;
-  left: -225px;
+  left: -250px;
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
@@ -175,13 +193,14 @@ nav .slider:nth-child(3):hover~.animation {
   background-color: #B68C5C;
 }
 nav .slider:nth-child(4):hover~.animation {
-  left: 450px;
-  background-color: #a9773e;
+  left: 400px;
+  background-color: #875d2d;
 }
 
 .login {
   position: absolute;
-  right: 100px;
+  right: 50px;
+  top: 0px;
   line-height: 60px;
   font-size: 15px;
   color: #f0db96;
@@ -190,26 +209,74 @@ nav .slider:nth-child(4):hover~.animation {
 
 .register {
   position: absolute;
-  right: 50px;
+  right: 10px;
+  top: 0;
   line-height: 60px;
   font-size: 15px;
   color: #f0db96;
   text-decoration: none;
 }
-.profile {
+.money {
   position: absolute;
-  right: -5px;
-  line-height: 60px;
+  top: 10px;
+  right: 180px;
+  width: 30px;
+  height: 20px;
+}
+.money img {
+  width: 100%;
+  height: 100%;
+}
+.pig {
+  position: absolute;
+  top: 0;
+  left: 1020px;
+  font-size: 12px;
+  color: #ffffff;
+}
+.profile {
   font-size: 13px;
   color: #ffffff;
   text-decoration: none;
 }
+.logout {
+  font-size: 13px;
+  color: #ffffff;
+  text-decoration: none;
+}
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
 .avatar {
   position: absolute;
-  top: 15px;
-  right: 60px;
+  top: -30px;
+  right: -360px;
+  z-index: 10;
 }
- .isLoggedIn {
-  position: relative;
- }
+.dropdown {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 80px;
+  border-radius: 25px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  right: -390px;
+  top: 1px;
+}
+.dropdown a {
+  color: black;
+  padding: 0 5px;
+  text-decoration: none;
+  display: block;
+}
+.dropdown a:hover {
+  border-radius: 25px;
+  background-color: #f1f1f1;
+}
+.avatar-container:hover .dropdown {
+  border-radius: 25px;
+  display: block;
+}
 </style>
