@@ -6,7 +6,7 @@
         <router-link to="/introduce" class="slider" @click.native="navigateAndSetActive('/introduce')">首页</router-link>
         <router-link to="/letter" class="slider" @click.native="navigateAndSetActive('/letter')">信海归舟</router-link>
         <router-link to="/game" class="slider" @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
-        <router-link to="/shop" class="slider" @click.native="navigateAndSetActive('/shop')">兑换商城</router-link>
+        <router-link to="/shop" class="slider" @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
         <div class="animation" :style="animationStyle"></div>
         <div class="money"><img src="../../assets/imgs/pigmoney.png" alt="猪仔钱"></div>
         <p class="pig">猪仔钱：{{ money }}</p>
@@ -89,7 +89,11 @@ export default {
       '/introduce': 0,
       '/letter': 1,
       '/game': 2,
-      '/shop': 3
+      '/shop': 3,
+      '/write': 1,
+      '/drifting': 1,
+      '/receive': 1,
+      '/profile': -1
     }
     const index = paths[to.path]
     if (index !== undefined) {

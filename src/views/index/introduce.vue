@@ -263,6 +263,18 @@ section{
     display: block;
     text-indent: 2em;
   }
+  /* .right .third {
+    position: absolute;
+    top: 620px;
+    left: 180px;
+    right: 300px;
+    z-index: 1;
+    color: #000;
+    font-size: 27px;
+    font-family: "KaiTi", "楷体", serif;
+    text-align: left;
+    text-indent: 2em;
+  } */
   .imgLoader {
   position: fixed;
   -webkit-animation: preLoad 1s steps(1);
