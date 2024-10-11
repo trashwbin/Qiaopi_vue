@@ -133,12 +133,12 @@ export default {
   data() {
     // eslint-disable-next-line
     var validateAddress = (rule, value, callback) => {
-      // 定义市级以上城市列表
+      // 定义市级以上城市列表,以及省、市、自治区、特别行政区等关键字列表
       const cities = [
         '北京', '上海', '天津', '重庆',
         '广州', '深圳', '成都', '武汉', '南京', '杭州', '西安', '沈阳', '长沙', '济南', '青岛', '大连', '苏州', '宁波', '厦门', '福州',
-        '哈尔滨', '长春', '合肥', '南昌', '郑州', '昆明', '贵阳', '南宁', '海口', '太原', '石家庄', '呼和浩特', '乌鲁木齐', '银川', '兰州', '西宁', '拉萨', '长春', '杭州', '福州', '济南', '青岛', '郑州', '武汉', '长沙', '广州', '南宁', '海口', '成都', '贵阳', '昆明', '西安', '兰州', '西宁', '银川', '乌鲁木齐',
-        '香港', '澳门', '台湾'
+        '哈尔滨', '长春', '合肥', '南昌', '郑州', '昆明', '贵阳', '南宁', '海口', '太原', '石家庄', '呼和浩特', '乌鲁木齐', '银川', '兰州', '西宁', '拉萨',
+        '香港', '澳门', '台湾', '河北', '山西', '黑龙江', '吉林', '辽宁', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '海南', '四川', '贵州', '云南', '陕西', '甘肃', '青海', '台湾', '内蒙古', '广西', '西藏', '宁夏', '新疆'
       ]
 
       // 定义需要包含的关键字列表
@@ -267,7 +267,6 @@ export default {
       this.showTip = true
     },
     generateLetter(letterGen) {
-      this.showTip = false
       this.$refs[letterGen].validate((valid) => {
         if (valid) {
           // 生成信件
@@ -290,6 +289,10 @@ export default {
       this.letter.senderAddress.latitude = this.senderAddress[1]
       this.letter.senderAddress.formattedAddress = this.senderAddress[2]
 
+      this.letter.letterContent = this.letterGen.letterContent
+      this.letter.senderName = this.letterGen.senderName
+      this.letter.recipientName = this.letterGen.recipientName
+
       this.submitForm('letter')
     },
     /** 提交按钮 */
@@ -297,7 +300,7 @@ export default {
       this.$refs[letter].validate((valid) => {
         if (valid) {
           // 提交表单
-          // console.log('提交表单:', this.letter)
+          console.log('提交表单:', this.letter)
           sendLetter(this.letter).then(res => {
             this.$message({
               message: '发送成功',
