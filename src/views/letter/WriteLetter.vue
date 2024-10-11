@@ -21,13 +21,12 @@
               <el-select v-model="letterGen.fontId" placeholder="字体" style="width: 85px;">
                 <el-option v-for="item in repository.fonts" :key="item.id" :label="item.name" :value="item.id"
                   @change="handleChange" />
-                :value="item.id" />
               </el-select>
             </el-form-item>
             <el-form-item label="颜色" prop="fontColorId" style="margin-left: -10px; flex: 1;">
-              <el-select v-model="letterGen.fontColorId" placeholder="颜色" style="width: 85px; " @change="handleChange">
+              <el-select v-model="letterGen.fontColorId" placeholder="颜色" style="width: 85px; ">
                 <el-option v-for="item in repository.fontColors" :key="item.id" :label="item.description"
-                  :value="item.id" />
+                  :value="item.id" @change="handleChange" />
               </el-select>
             </el-form-item>
           </div>
@@ -268,12 +267,13 @@ export default {
       this.showTip = true
     },
     generateLetter(letterGen) {
+      // this.showTip = false
       this.$refs[letterGen].validate((valid) => {
         if (valid) {
           // 生成信件
           // console.log('生成信件:', this.letterGen)
           generateLetter(this.letterGen).then(res => {
-            this.letter.letterLink = res.data.letterLink
+            this.letter.letterLink = res.data
             this.showTip = false
           })
         } else {
@@ -431,6 +431,7 @@ export default {
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
   /* 垂直对齐子元素 */
+  line-height: 40px;
 }
 
 .selectPage {
@@ -580,11 +581,6 @@ export default {
 
 ::v-deep .el-form-item {
   margin-bottom: 20px;
-}
-
-::v-deep .el-loading-mask {
-  background-color: rgba(222, 201, 162, .5) !important;
-  border-radius: 30px;
 }
 
 .demo-table-expand {
