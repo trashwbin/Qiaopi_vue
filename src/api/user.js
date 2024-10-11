@@ -1,8 +1,36 @@
 import request from '@/utils/request'
-// 获取用户猪仔钱
+
+export function getMyAddress() {
+  return request({
+    url: '/user/getMyAddress',
+    method: 'get'
+  })
+}
+export function getFriendAddress(friendId) {
+  return request({
+    url: '/user/getFriendAddress',
+    method: 'get',
+    params: { friendId }
+  })
+}
+
+// 获取用户猪仔币
 export function getUserMoney() {
   return request({
     url: '/user/getUserMoney',
+    method: 'get'
+  })
+}
+export function getUserFriends() {
+  return request({
+    url: '/user/getMyFriends',
+    method: 'get'
+  })
+}
+// 获取用户仓库
+export function getUserRepository() {
+  return request({
+    url: '/user/getUserRepository',
     method: 'get'
   })
 }

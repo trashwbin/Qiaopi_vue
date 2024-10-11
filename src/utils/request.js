@@ -58,6 +58,7 @@ service.interceptors.request.use((config) => {
       }
     }
   }
+  // console.log(config)
   return config
 }, (error) => {
   console.log(error)
@@ -83,7 +84,8 @@ service.interceptors.response.use(res => {
   }
   // console.log(res)
   if (code === 200) {
-    Message.success(message)
+    // 请求成功不弹出提示
+    // Message.success(message)
   }
   return Promise.resolve(res.data)
 }, error => {
