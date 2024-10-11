@@ -546,14 +546,12 @@ export default {
 }
 .penbox {
   float: left;
-  display: inline-block;
   width: 80px;
   height: 60px;
   border: 1px solid #000000; /* 可选的边框样式 */
 }
 .envelopebox {
   float: left;
-  display: inline-block;
   width: 80px;
   height: 120px;
   margin-right: 10px;
