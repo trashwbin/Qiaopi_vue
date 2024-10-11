@@ -29,6 +29,21 @@
             </div>
             <button>开始探索</button>
         </div>
+         <div class="card">
+            <div class="box">
+                <div class="img-box">
+                    <img src="../../assets/imgs/card3.jpg" alt="">
+                </div>
+                <div class="con-box">
+                    <div>
+                        <h2>侨悦翻享</h2>
+                        <p>侨悦翻享是一款旨在通过趣味互动方式加深用户对侨批文化了解的游戏。通过翻翻乐游戏，用户将有机会探索侨批文化的独特魅力，同时享受游戏带来的乐趣。玩家的目标是通过匹配相同的侨批图片，了解背后的故事和历史信息，同时积累猪仔钱。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button>开始探索</button>
+        </div>
     </section>
 </template>
 
@@ -105,6 +120,7 @@ section {
     padding: 20px;
     background: linear-gradient(30deg, #c1bfa0, #868b67);
     transform: translateZ(100px);
+    cursor: pointer;
 }
 
 .card .box .con-box div h2 {

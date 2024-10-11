@@ -9,16 +9,17 @@
     <div v-if="currentView === 'write'">
       <div class="left">
         <el-form :model="letterGen" :inline="true" label-width="55px" :rules="rules" ref="letterGen"
-          hide-required-asterisk="true">
+          :hide-required-asterisk="true">
           <el-form-item label="信纸" prop="paperId" style="margin-left: -10px;">
-            <el-select v-model="letterGen.paperId" placeholder="信纸" style="width: 200px; height: 10px;" height="10">
+            <el-select v-model="letterGen.paperId" placeholder="信纸" style="width: 200px; height: 10px;margin-top:10px;"
+              height="10">
               <el-option v-for="item in repository.papers" :key="item.id" :label="item.name" :value="item.id"
                 @change="handleChange" />
             </el-select>
           </el-form-item>
           <div style="display: flex;">
             <el-form-item label="字体" prop="fontId" style="margin-left: -10px; flex: 1;">
-              <el-select v-model="letterGen.fontId" placeholder="字体" style="width: 85px;">
+              <el-select v-model="letterGen.fontId" placeholder="字体" style="width: 85px; margin-top:10px;">
                 <el-option v-for="item in repository.fonts" :key="item.id" :label="item.name" :value="item.id"
                   @change="handleChange" />
               </el-select>
@@ -31,10 +32,12 @@
             </el-form-item>
           </div>
           <el-form-item label="寄信人" prop="senderName" style="margin-left: -10px; " label-width="65px">
-            <el-input v-model="letterGen.senderName" placeholder="请输入寄信人" @input="handleChange" />
+            <el-input v-model="letterGen.senderName" placeholder="请输入寄信人" @input="handleChange"
+              style="margin-top:10px;" />
           </el-form-item>
           <el-form-item label="收信人" prop="recipientName" style="margin-left: -10px;" label-width="65px">
-            <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend" />
+            <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend"
+              style="margin-top:10px;" />
           </el-form-item>
           <el-popover placement="right" width="250" trigger="manual" v-model="showFriend">
             <el-table :data="selectFriend" style="width: 100%" :show-header="false" highlight-current-row
@@ -63,7 +66,7 @@
           <div class="text">
             <el-form-item label="信的内容：" prop="letterContent" style=" text-align: center;" label-width="100px">
               <el-input v-model="letterGen.letterContent" placeholder="请开始写信吧" required type="textarea"
-                :autosize="{ minRows: 10, maxRows: 12 }" style="width: 120%;" resize="none"
+                :autosize="{ minRows: 10, maxRows: 12 }" style="width: 120%;margin-left: -10px;" resize="none"
                 @input="handleChange"></el-input>
             </el-form-item>
           </div>
@@ -456,7 +459,7 @@ export default {
 .left {
   position: absolute;
   width: 320px;
-  top: 30px;
+  top: 10px;
   left: 80px;
   padding: 20px;
   box-sizing: border-box;

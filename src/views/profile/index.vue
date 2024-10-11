@@ -11,8 +11,25 @@
         <div class="money">猪仔钱：<span>{{ money }}</span></div>
         <div class="sex">性别：<span>{{ user.sex }}</span></div>
         <div class="email">邮箱：<span>{{ user.email }}</span></div>
+        <div class="friends-container">
+<!-- 好友列表浮窗 -->
+<div v-if="showFriendsModal" class="friends-modal">
+  <div class="modal-content">
+    <span class="close" @click="toggleFriendsModal">&times;</span>
+    <h2>我的好友</h2>
+    <div class="friends-container">
+      <div class="friend" v-for="friend in friends" :key="friend.id">
+        <div class="friendname">{{ friend.name }}</div>
+        <div class="friendsex">{{ friend.sex }}</div>
+        <div class="friendemail">{{ friend.email }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
         </div>
-        <button @click="showEditModal">修改内容</button>
+        <button @click="toggleFriendsModal" class="friends">查看我的好友</button>
+        <button @click="showEditModal" class="showEdit">修改内容</button>
       </div>
       <div class="store">
         <!-- <h1>我的仓库</h1>
@@ -103,6 +120,8 @@ export default {
   name: 'UserProfile',
   data() {
     return {
+      showFriendsModal: false,
+      friends: [],
       wordFonts: [], // 存储字体信息
       inkColors: [], // 存储墨水颜色的 hexCode
       paperPreviews: [], // 存储信纸预览图信息
@@ -122,26 +141,6 @@ export default {
     try {
       const userStore = useUserStore()
       const token = userStore.token // 从 Pinia store 获取 token
-      const userResponse = await this.getUserInfo(token)
-      if (userResponse && userResponse.data.code === 200) {
-        this.user = userResponse.data.data
-      }
-
-      const moneyResponse = await this.getUserMoney(token)
-      if (moneyResponse && moneyResponse.data.code === 200) {
-        this.money = moneyResponse.data.data.money
-      }
-
-      const repoResponse = await this.getUserRepository(token)
-      if (repoResponse && repoResponse.data.code === 200) {
-        this.repository = repoResponse.data.data
-      }
-    } catch (error) {
-      console.error('请求错误:', error)
-    }
-    try {
-      const userStore = useUserStore()
-      const token = userStore.token // 从 Pinia store 获取 token
       const repoResponse = await axios.get('/api/user/getUserRepository', {
         headers: {
           Authorization: token
@@ -156,8 +155,34 @@ export default {
     } catch (error) {
       console.error('获取用户仓库错误:', error)
     }
+    try {
+      const userStore = useUserStore()
+      const token = userStore.token // 从Pinia store获取token
+      const userResponse = await this.getUserInfo(token)
+      if (userResponse && userResponse.data.code === 200) {
+        this.user = userResponse.data.data
+      }
+
+      const moneyResponse = await this.getUserMoney(token)
+      if (moneyResponse && moneyResponse.data.code === 200) {
+        this.money = moneyResponse.data.data.money
+      }
+
+      const repoResponse = await this.getUserRepository(token)
+      if (repoResponse && repoResponse.data.code === 200) {
+        this.repository = repoResponse.data.data
+      }
+
+      // 获取好友列表
+      this.getMyFriends(token)
+    } catch (error) {
+      console.error('请求错误:', error)
+    }
   },
   methods: {
+    toggleFriendsModal() {
+      this.showFriendsModal = !this.showFriendsModal
+    },
     showInkImage() {
       this.showInkImageModal = true // 显示墨水图片
     },
@@ -166,6 +191,22 @@ export default {
     },
     showEnvelopeImage() {
       this.showEnvelopeModal = true // 显示墨水图片
+    },
+    async getMyFriends(token) {
+      try {
+        const response = await axios.get('/api/user/getMyFriends', {
+          headers: {
+            Authorization: token
+          }
+        })
+        if (response.data.code === 200) {
+          this.friends = response.data.data
+        } else {
+          console.error('获取好友列表失败:', response.data.msg)
+        }
+      } catch (error) {
+        console.error('获取好友列表错误:', error)
+      }
     },
     async getUserInfo(token) {
       const response = await axios.get('/api/user/getUserInfo', {
@@ -442,10 +483,10 @@ export default {
     left: 450px;
     cursor: pointer;
   }
-  .data button {
+  .data .showEdit{
     position: absolute;
     bottom: 85px;
-    left: 100px;
+    left: 50px;
     width: 100px;
     height: 40px;
     background-color: #c0c0a8;
@@ -558,5 +599,56 @@ export default {
   border: 1px solid #000000;
   background-position: center center;
   background-size: cover;
+}
+.friends-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 400px;
+  background-color: #deddd3;
+  border-radius: 25px;
+  z-index: 1000;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content {
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: -40px;
+  right: -10px;
+  cursor: pointer;
+}
+.friends {
+    position: absolute;
+    top: 515px;
+    left: 200px;
+    width: 100px;
+    height: 40px;
+    background-color: #c0c0a8;
+    border: 0;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.friend {
+  width: 80%;
+  height: 80px;
+  margin-left: 30px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.friendname, .friendsex, .friendemail {
+  font-size: 18px;
+  margin-bottom: 5px;
 }
 </style>
