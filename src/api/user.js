@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+// 获取用户功能卡
+export function getMyFunctionCard() {
+  return request({
+    url: '/user/getMyFunctionCard',
+    method: 'get'
+  })
+}
+
+// 获取用户地址
 export function getMyAddress() {
   return request({
     url: '/user/getMyAddress',

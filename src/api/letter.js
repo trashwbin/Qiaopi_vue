@@ -15,3 +15,23 @@ export function sendLetter(data) {
     data: data
   })
 }
+
+export function getMyNotReadLetter() {
+  return request({
+    url: '/letter/getMyNotReadLetter',
+    method: 'get'
+  })
+}
+export function getMyReceiveLetter() {
+  return request({
+    url: '/letter/getMyReceiveLetter',
+    method: 'get'
+  })
+}
+
+export function getMySendLetter() {
+  return request({
+    url: '/letter/getMySendLetter',
+    method: 'get'
+  })
+}
