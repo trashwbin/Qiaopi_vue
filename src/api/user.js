@@ -86,3 +86,33 @@ export function logout() {
     method: 'post'
   })
 }
+// 修改用户名
+export function updateUsername(username) {
+  return request({
+    method: 'post',
+    url: '/user/updateUsername',
+    data: {
+      username // 确保请求体是一个 JSON 对象
+    }
+  })
+}
+// 修改昵称
+export function updateNickname(nickname) {
+  return request({
+    method: 'post',
+    url: '/user/updateUserInfo',
+    data: {
+      nickname // 确保请求体是一个 JSON 对象
+    }
+  })
+}
+// 修改性别
+export function updateSex(sex) {
+  return request({
+    method: 'post',
+    url: '/user/updateUserInfo',
+    data: {
+      sex // 确保请求体是一个 JSON 对象
+    }
+  })
+}

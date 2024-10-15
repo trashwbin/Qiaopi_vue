@@ -12,7 +12,7 @@
                     </div>
                 </div>
             </div>
-            <button>开始探索</button>
+            <router-link to='/know'><button>开始探索</button><spinner v-if="loading" :width="60" :height="60" :radius="30" :length="8" :line-width="4" color="#ffffff" /></router-link>
         </div>
         <div class="card">
             <div class="box">
@@ -49,7 +49,21 @@
 
 <script>
 export default {
-  name: 'IndexGame'
+  name: 'IndexGame',
+  data() {
+    return {
+      loading: false // 控制加载动画的显示
+    }
+  }
+//   methods: {
+//     startLoading(event) {
+//       this.loading = true
+//       setTimeout(() => {
+//         this.loading = false
+//         this.$router.push({ name: 'Know', params: { id: 1 } })
+//       }, 2000) // 2秒后跳转
+//     }
+//   }
 }
 </script>
 

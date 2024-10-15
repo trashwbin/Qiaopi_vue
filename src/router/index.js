@@ -13,6 +13,7 @@ import Profile from '@/views/profile/index.vue'
 import WriteLetter from '@/views/letter/WriteLetter.vue'
 import ReceiveLetter from '@/views/letter/ReceiveLetter.vue'
 import DriftingBottle from '@/views/letter/DriftingBottle.vue'
+import GameKown from '@/views/game/know.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -82,6 +83,11 @@ const router = new VueRouter({
         path: 'drifting',
         name: 'DriftingBottle',
         component: DriftingBottle
+      },
+      {
+        path: 'know',
+        name: 'GameKnow',
+        component: GameKown
       }
     ]
   }

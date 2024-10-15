@@ -8,8 +8,8 @@
         <router-link to="/game" class="slider" @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
         <router-link to="/shop" class="slider" @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
         <div class="animation" :style="animationStyle"></div>
-        <div class="money"><img src="../../assets/imgs/pigmoney.png" alt="猪仔钱"></div>
-        <p class="pig">猪仔钱：{{ money }}</p>
+        <div class="money" v-if="isLoggedIn"><img src="../../assets/imgs/pigmoney.png" alt="猪仔钱"></div>
+        <p class="pig" v-if="isLoggedIn">猪仔钱：{{ money }}</p>
         <div v-if="isLoggedIn" class="avatar-container" @mouseover="showMenu = true" @mouseleave="showMenu = false">
           <img :src="userAvatar" style="height: 30px; width: 30px;" alt="用户头像" class="avatar">
           <div v-if="showMenu" class="dropdown">
@@ -93,7 +93,8 @@ export default {
       '/write': 1,
       '/drifting': 1,
       '/receive': 1,
-      '/profile': -1
+      '/profile': -1,
+      '/know': 2
     }
     const index = paths[to.path]
     if (index !== undefined) {

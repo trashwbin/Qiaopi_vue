@@ -3,14 +3,78 @@
     <div class="banner">
       <h1 class="profile"><img src="../../assets/imgs/profile.png" alt=""></h1>
       <div class="data">
-        <div class="pic"><img src="../../assets/default-avatar.png" alt=""></div>
+        <div class="pic"><img src="user.avatar" alt=""></div>
         <div class="information">
-        <div class="name">{{ user.nickname }}</div>
-        <div class="userid">用户名：<span>{{ user.username }}</span></div>
-        <div class="adress">个人地址: <span>{{ user.address }}</span></div>
-        <div class="money">猪仔钱：<span>{{ money }}</span></div>
-        <div class="sex">性别：<span>{{ user.sex }}</span></div>
+        <div class="name">{{ user.nickname }}<el-link icon="el-icon-edit" class="edit"  @click="showEditNicknameDialog" style="font-family:'华文中宋', sans-serif;">编辑</el-link></div>
+        <!-- 修改昵称弹窗 -->
+<el-dialog
+  title="修改昵称"
+  :visible.sync="editNicknameDialogVisible"
+  width="30%"
+  @close="editNicknameDialogVisible = false"
+>
+  <el-form ref="nicknameForm" :model="user" label-width="80px">
+    <el-form-item label="昵称">
+      <el-input v-model="user.nickname" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="editNicknameDialogVisible = false" class="cancel">取消</el-button>
+    <el-button type="primary" @click="updateNickname" style="background-color:#888B69;">确定</el-button>
+  </span>
+</el-dialog>
+        <div class="userid">用户名：<span>{{ user.username }}</span><el-link icon="el-icon-edit" class="edit" @click="showEditUsernameDialog">编辑</el-link></div>
+        <el-dialog
+  title="修改用户名"
+  :visible.sync="editUsernameDialogVisible"
+  width="30%"
+  @close="editUsernameDialogVisible = false"
+>
+  <el-form ref="usernameForm" :model="user" label-width="80px">
+    <el-form-item label="用户名">
+      <el-input v-model="user.username" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="editUsernameDialogVisible = false" class="cancel">取消</el-button>
+    <el-button type="primary" @click="updateUsername" style="background-color:#888B69;">确定</el-button>
+  </span>
+</el-dialog>
+        <div class="sex">性别：<span>{{ user.sex }}</span><el-link icon="el-icon-edit" class="edit"  @click="showEditSexDialog">编辑</el-link></div>
+        <!-- 修改性别弹窗 -->
+<el-dialog
+  title="修改性别"
+  :visible.sync="editSexDialogVisible"
+  width="30%"
+  @close="editSexDialogVisible = false"
+>
+  <el-form ref="sexForm" :model="user" label-width="80px">
+    <el-form-item label="性别">
+      <el-select v-model="user.sex" placeholder="请选择">
+        <el-option label="男" value="男"></el-option>
+        <el-option label="女" value="女"></el-option>
+      </el-select>
+    </el-form-item>
+  </el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="editSexDialogVisible = false" class="cancel">取消</el-button>
+    <el-button type="primary" @click="updateSex" style="background-color:#888B69;">确定</el-button>
+  </span>
+</el-dialog>
         <div class="email">邮箱：<span>{{ user.email }}</span></div>
+
+<!-- 地址列表弹窗 -->
+<div v-if="showAddressesModal" class="address-modal">
+  <div class="modal-content">
+    <span class="close" @click="showAddressesModal = false">&times;</span>
+    <h2>我的地址</h2>
+    <ul>
+      <li v-for="item in addresses" :key="item.id">
+        {{ item.formattedAddress }} <!-- 显示地址信息 -->
+      </li>
+    </ul>
+  </div>
+</div>
         <div class="friends-container">
 <!-- 好友列表浮窗 -->
 <div v-if="showFriendsModal" class="friends-modal">
@@ -19,28 +83,20 @@
     <h2>我的好友</h2>
     <div class="friends-container">
       <div class="friend" v-for="friend in friends" :key="friend.id">
-        <div class="friendname">{{ friend.name }}</div>
-        <div class="friendsex">{{ friend.sex }}</div>
-        <div class="friendemail">{{ friend.email }}</div>
+        <div class="friendname">姓名：{{ friend.name }}</div>
+        <div class="friendsex">性别：{{ friend.sex }}</div>
+        <div class="friendemail">邮箱号：{{ friend.email }}</div>
+         <div class="friendadress">地址：{{ friend.address}}</div>
       </div>
     </div>
   </div>
 </div>
 </div>
         </div>
-        <button @click="toggleFriendsModal" class="friends">查看我的好友</button>
-        <button @click="showEditModal" class="showEdit">修改内容</button>
+        <a @click="showAddressesModal=true " class="address">查看我的地址</a>
+        <a @click="toggleFriendsModal" class="friends">查看我的好友</a>
       </div>
       <div class="store">
-        <!-- <h1>我的仓库</h1>
-        <div v-for="item in repository.fonts" :key="item.id">
-          <h2>{{ item.name }}</h2>
-          <img :src="item.previewImage" alt="字体预览" />
-        </div>
-        <div v-for="item in repository.papers" :key="item.id">
-          <h2>{{ item.name }}</h2>
-          <img :src="item.previewImage" alt="信纸预览" />
-        </div> -->
         <img src="../../assets/imgs/store.png" alt="仓库" class="bgd">
         <img src="../../assets/imgs/color.png" alt="墨水" class="ink" @click="showInkImage">
         <img src="../../assets/imgs/pen.png" alt="笔" class="pen" @click="showWordImage">
@@ -79,40 +135,13 @@
   <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
     </div>
 </div>
-      <!-- 弹窗结构 -->
-      <div v-if="editModalVisible" class="edit-modal">
-        <div class="modal-content">
-          <span class="close" @click="hideEditModal">&times;</span>
-          <h2>修改个人信息</h2>
-          <form @submit.prevent="updateUserInfo">
-            <div class="form-group">
-              <label for="nickname">昵称:</label>
-              <input type="text" id="nickname" v-model="user.nickname" required>
-            </div>
-            <div class="form-group">
-              <label for="username">用户名:</label>
-              <input type="text" id="username" v-model="user.username" required>
-            </div>
-            <div class="form-group">
-              <label for="sex">性别:</label>
-              <select id="sex" v-model="user.sex">
-                <option value="男">男</option>
-                <option value="女">女</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="email">邮箱:</label>
-              <input type="email" id="email" v-model="user.email" required>
-            </div>
-            <button type="submit" class="save">保存</button>
-          </form>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Message } from 'element-ui'
+import { getMyAddress, updateUsername, updateNickname, updateSex } from '@/api/user'
 import axios from 'axios'
 import useUserStore from '@/store/modules/user'
 
@@ -120,6 +149,11 @@ export default {
   name: 'UserProfile',
   data() {
     return {
+      editSexDialogVisible: false, // 控制性别编辑弹窗显示的状态
+      editNicknameDialogVisible: false, // 控制昵称编辑弹窗显示的状态
+      editUsernameDialogVisible: false,
+      showAddressesModal: false, // 控制地址列表弹窗显示的状态
+      addresses: [],
       showFriendsModal: false,
       friends: [],
       wordFonts: [], // 存储字体信息
@@ -141,10 +175,22 @@ export default {
     try {
       const userStore = useUserStore()
       const token = userStore.token // 从 Pinia store 获取 token
+
+      // 获取用户信息
+      const userResponse = await this.getUserInfo(token)
+      if (userResponse && userResponse.data.code === 200) {
+        this.user = userResponse.data.data
+      }
+
+      // 获取用户的钱数
+      const moneyResponse = await this.getUserMoney(token)
+      if (moneyResponse && moneyResponse.data.code === 200) {
+        this.money = moneyResponse.data.data.money
+      }
+
+      // 获取用户仓库信息
       const repoResponse = await axios.get('/api/user/getUserRepository', {
-        headers: {
-          Authorization: token
-        }
+        headers: { Authorization: token }
       })
       if (repoResponse.data.code === 200 && repoResponse.data.data) {
         this.repository = repoResponse.data.data
@@ -152,34 +198,23 @@ export default {
         this.wordFonts = repoResponse.data.data.fonts // 存储字体信息
         this.paperPreviews = repoResponse.data.data.papers // 存储信纸预览图信息
       }
-    } catch (error) {
-      console.error('获取用户仓库错误:', error)
-    }
-    try {
-      const userStore = useUserStore()
-      const token = userStore.token // 从Pinia store获取token
-      const userResponse = await this.getUserInfo(token)
-      if (userResponse && userResponse.data.code === 200) {
-        this.user = userResponse.data.data
-      }
-
-      const moneyResponse = await this.getUserMoney(token)
-      if (moneyResponse && moneyResponse.data.code === 200) {
-        this.money = moneyResponse.data.data.money
-      }
-
-      const repoResponse = await this.getUserRepository(token)
-      if (repoResponse && repoResponse.data.code === 200) {
-        this.repository = repoResponse.data.data
-      }
 
       // 获取好友列表
-      this.getMyFriends(token)
+      await this.getMyFriends(token)
+
+      // 获取好友地址
+      await this.updateFriendsAddresses(token)
+
+      // 获取我的地址
+      await this.fetchAddresses(token)
     } catch (error) {
       console.error('请求错误:', error)
     }
   },
   methods: {
+    showEditSexDialog() {
+      this.editSexDialogVisible = true
+    },
     toggleFriendsModal() {
       this.showFriendsModal = !this.showFriendsModal
     },
@@ -238,66 +273,66 @@ export default {
     hideEditModal() {
       this.editModalVisible = false
     },
-    // async updateUserName() {
-    //   try {
-    //     const token = useUserStore().token
-    //     const response = await axios.post('/api/user/updateUsername', this.user, {
-    //       headers: {
-    //         Authorization: token
-    //       }
-    //     })
-    //     if (response.data.code === 200) {
-    //       this.hideEditModal()
-    //       // 更新成功后重新加载用户信息
-    //       this.getUserInfo(token)
-    //     } else {
-    //       alert(response.data.msg)
-    //     }
-    //   } catch (error) {
-    //     console.error('更新用户信息错误:', error)
-    //   }
-    // },
-    async updateUserInfo() {
-      try {
-        const token = useUserStore().token
-        const response = await axios.post('/api/user/updateUserInfo', {
-          nickname: this.user.nickname,
-          avatar: this.user.avatar, // 确保 user 对象有 avatar 属性
-          sex: this.user.sex
-        }, {
-          headers: {
-            Authorization: token
+    showEditNicknameDialog() {
+      this.editNicknameDialogVisible = true
+    },
+    async updateNickname() {
+      await updateNickname(this.user.nickname).then(res => {
+        Message.success('修改昵称成功')
+        this.user.nickname = res.data.nickname // 更新用户名
+      })
+    },
+    async updateSex() {
+      await updateSex(this.user.sex).then(res => {
+        Message.success('修改昵称成功')
+        this.user.sex = res.data.sex // 更新用户名
+      })
+    },
+    fetchAddresses() {
+      // 获取我的地址
+      getMyAddress().then(res => {
+        this.addresses = res.data
+        for (let i = 0; i < this.addresses.length; i++) {
+          if (this.addresses[i].isDefault) {
+            this.senderAddress = this.addresses[i]
           }
+        }
+      })
+    },
+    async getFriendAddress(friendId, token) {
+      try {
+        const response = await axios.get('/api/user/getFriendAddress', {
+          params: { friendId },
+          headers: { Authorization: token }
         })
-        if (response.data.code === 200) {
-          this.hideEditModal()
-          // 重新加载用户信息
-          this.getUserInfo(token)
-          alert(response.data.msg || '操作成功')
+        if (response.data.code === 200 && response.data.data.length > 0) {
+          return response.data.data[0].formattedAddress
         } else {
-          alert(response.data.msg || '操作失败')
+          console.error('获取好友地址失败:', response.data.msg)
+          return null
         }
       } catch (error) {
-        console.error('更新用户信息错误:', error)
-        alert('更新用户信息时发生错误')
+        console.error('获取好友地址错误:', error)
+        return null
       }
-      try {
-        const token = useUserStore().token
-        const response = await axios.post('/api/user/updateUsername', this.user, {
-          headers: {
-            Authorization: token
-          }
-        })
-        if (response.data.code === 200) {
-          this.hideEditModal()
-          // 更新成功后重新加载用户信息
-          this.getUserInfo(token)
-        } else {
-          alert(response.data.msg)
+    },
+    async updateFriendsAddresses(token) {
+      for (const friend of this.friends) {
+        const address = await this.getFriendAddress(friend.id, token)
+        if (address) {
+          this.$set(friend, 'address', address)
         }
-      } catch (error) {
-        console.error('更新用户信息错误:', error)
       }
+    },
+    showEditUsernameDialog() {
+      this.editUsernameDialogVisible = true
+    },
+    // 更新用户名
+    async updateUsername() {
+      await updateUsername(this.user.username).then(res => {
+        Message.success('修改用户名成功')
+        this.user.username = res.data.username // 更新用户名
+      })
     }
   }
 }
@@ -360,6 +395,7 @@ export default {
   }
   .data .name {
     position: absolute;
+    top: 10px;
     left: 20px;
     font-size: 42px;
     font-weight: bold;
@@ -367,7 +403,7 @@ export default {
   }
     .data .userid {
     position: absolute;
-    top: 50px;
+    top: 70px;
     left: 20px;
     font-size: 22px;
     font-weight: bold;
@@ -379,39 +415,9 @@ export default {
     margin-left: 2px;
     font-family: Arial, sans-serif;
   }
-  .data .adress {
-    position: absolute;
-    top: 210px;
-    left: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: '华文中宋', sans-serif;
-  }
-  .adress span {
-    font-size: 16px;
-    font-weight: normal;
-    margin-left: 2px;
-    font-family: Arial, sans-serif;
-  }
-  .data .money {
-    position: absolute;
-    top: 170px;
-    left: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: '华文中宋', sans-serif;
-  }
-   .money span {
-    position: absolute;
-    left: 90px;
-    top: 8px;
-    font-size: 16px;
-    font-weight: normal;
-    font-family: Arial, sans-serif;
-  }
    .data .sex {
     position: absolute;
-    top: 90px;
+    top: 110px;
     left: 20px;
     font-size: 22px;
     font-weight: bold;
@@ -419,7 +425,7 @@ export default {
   }
   .data .email {
     position: absolute;
-    top: 130px;
+    top: 150px;
     left: 20px;
     font-size: 22px;
     font-weight: bold;
@@ -487,16 +493,7 @@ export default {
     position: absolute;
     bottom: 85px;
     left: 50px;
-    width: 100px;
-    height: 40px;
-    background-color: #c0c0a8;
-    border: 0;
-    border-radius: 25px;
     cursor: pointer;
-  }
-  .data button:hover {
-    background-color: #6f6f5e;
-    color: white;
   }
   .edit-modal {
   position: fixed;
@@ -505,17 +502,33 @@ export default {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 400px;
-  background-color: #deddd3;
+  background-image: url(../../assets/imgs/profilebgd.png);
   border-radius: 25px;
   z-index: 1000;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
-.modal-content {
-  position: relative;
+.address-modal {
+  position: fixed; /* 使用固定定位 */
+  top: 50%; /* 定位到页面的垂直中心 */
+  left: 50%; /* 定位到页面的水平中心 */
+  transform: translate(-50%, -50%); /* 使弹窗正好位于中心 */
+  width: 300px; /* 弹窗的宽度 */
+  background-image: url(../../assets/imgs/profilebgd.png);
+  border-radius: 8px; /* 弹窗的边框圆角 */
+  z-index: 1000; /* 确保弹窗在最上层 */
+  padding: 20px; /* 弹窗内边距 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 弹窗的阴影 */
 }
 
+ul {
+  list-style: none; /* 移除列表项的默认样式 */
+  padding: 0; /* 移除默认的内边距 */
+}
+
+li {
+  margin-bottom: 10px; /* 列表项之间的间距 */
+}
 .close {
   position: absolute;
   top: -40px;
@@ -536,19 +549,19 @@ export default {
 .form-group select {
   width: 80%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid rgb(194, 179, 153);
   border-radius: 4px;
 }
 .save {
     width: 100px;
     height: 50px;
-    background-color: rgb(194, 179, 153);
+    background-color: #c0c0a8;
     border: 0;
     border-radius: 25px;
 }
 .save:hover {
   color: white;
-  background-color: rgb(157, 138, 138);
+  background-color: #6f6f5e;;
   cursor: pointer;
 }
 .image-modal {
@@ -607,7 +620,7 @@ export default {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 400px;
-  background-color: #deddd3;
+  background-image: url(../../assets/imgs/profilebgd.png);
   border-radius: 25px;
   z-index: 1000;
   padding: 20px;
@@ -626,29 +639,48 @@ export default {
 }
 .friends {
     position: absolute;
-    top: 515px;
-    left: 200px;
-    width: 100px;
-    height: 40px;
-    background-color: #c0c0a8;
-    border: 0;
-    border-radius: 25px;
+    top: 500px;
+    left: 180px;
     cursor: pointer;
+    color: #565648;
 }
 
 .friend {
   width: 80%;
-  height: 80px;
+  height: 90px;
+  text-align: left;
   margin-left: 30px;
   margin-bottom: 10px;
   padding: 10px;
-  background-color: #ffffff;
+  background-color: #c0c0a8;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.friendname, .friendsex, .friendemail {
-  font-size: 18px;
+.friendname, .friendsex, .friendemail{
+  font-size: 15px;
   margin-bottom: 5px;
+}
+.address {
+  position: absolute;
+  top: 500px;
+  left: 70px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #565648;
+}
+.data a {
+  font-size:15px ;
+}
+.cancel:hover {
+  border:#6f6f5e 1px solid;
+  background-color: #e2ddcb;
+  color: #6f6f5e ;
+}
+.el-link:hover {
+  color:  #6f6f5e;
+}
+.el-link {
+  margin-left: 20px;
 }
 </style>

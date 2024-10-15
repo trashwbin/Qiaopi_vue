@@ -8,10 +8,11 @@
     </div>
     <div v-if="currentView === 'write'">
       <div class="left">
-       <el-form :model="letterGen" :inline="true" label-width="55px" :rules="rules" ref="letterGen"
-  :hide-required-asterisk="true">
+        <el-form :model="letterGen" :inline="true" label-width="55px" :rules="rules" ref="letterGen"
+          :hide-required-asterisk="true">
           <el-form-item label="信纸" prop="paperId" style="margin-left: -10px;">
-            <el-select v-model="letterGen.paperId" placeholder="信纸" style="width: 200px; height: 10px;margin-top:10px;" height="10">
+            <el-select v-model="letterGen.paperId" placeholder="信纸" style="width: 200px; height: 10px;margin-top:10px;"
+              height="10">
               <el-option v-for="item in repository.papers" :key="item.id" :label="item.name" :value="item.id"
                 @change="handleChange" />
             </el-select>
@@ -24,17 +25,19 @@
               </el-select>
             </el-form-item>
             <el-form-item label="颜色" prop="fontColorId" style="margin-left: -10px; flex: 1;">
-              <el-select v-model="letterGen.fontColorId" placeholder="颜色" style="width: 85px; margin-top:10px;" @change="handleChange">
-                <el-option v-for="item in repository.fontColors" :key="item.id" :label="item.description"
-                  :value="item.id" />
+              <el-select v-model="letterGen.fontColorId" placeholder="颜色" style="width: 85px; margin-top:10px;">
+                <el-option v-for=" item in repository.fontColors" :key="item.id" :label="item.description"
+                  :value="item.id" @change="handleChange" />
               </el-select>
             </el-form-item>
           </div>
           <el-form-item label="寄信人" prop="senderName" style="margin-left: -10px; " label-width="65px">
-            <el-input v-model="letterGen.senderName" placeholder="请输入寄信人" @input="handleChange" style="margin-top:10px;" />
+            <el-input v-model="letterGen.senderName" placeholder="请输入寄信人" @input="handleChange"
+              style="margin-top:10px;" />
           </el-form-item>
           <el-form-item label="收信人" prop="recipientName" style="margin-left: -10px;" label-width="65px">
-            <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend" style="margin-top:10px;" />
+            <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend"
+              style="margin-top:10px;" />
           </el-form-item>
           <el-popover placement="right" width="250" trigger="manual" v-model="showFriend">
             <el-table :data="selectFriend" style="width: 100%" :show-header="false" highlight-current-row
@@ -111,13 +114,10 @@
 
     </div>
     <div v-else-if="currentView === 'send'">
-      <div class="content" v-if="showContent">
-        <!-- 已写信的内容 -->
-        <h2>已写的信</h2>
-        <p>这里是您已经写的信件...</p>
-      </div>
-      <div class="content" v-if="showContent">
-
+      <div class="sendbox" v-if="showContent">
+<div v-for="(letter, index) in generatedLetters" :key="index">
+      <img :src="letter.letterLink" alt="信件预览" />
+    </div>
       </div>
     </div>
   </div>
@@ -165,6 +165,7 @@ export default {
       callback()
     }
     return {
+      generatedLetters: [], // 用于存储生成的信件
       loading: true,
       params: {
         zoom: 15, // 地图显示的缩放级别范围，在PC上，默认范围[3,18]，取值范围[3-18]；在移动设备上，默认范围[3-19]，取值范围[3-19]
@@ -269,11 +270,14 @@ export default {
     generateLetter(letterGen) {
       this.$refs[letterGen].validate((valid) => {
         if (valid) {
-          // 生成信件
-          // console.log('生成信件:', this.letterGen)
           generateLetter(this.letterGen).then(res => {
-            this.letter.letterLink = res.data.letterLink
+            this.letter.letterLink = res.data
             this.showTip = false
+            // 将生成的信件信息存储在数组和localStorage中
+            this.generatedLetters.push({
+              letterLink: this.letter.letterLink
+            })
+            localStorage.setItem('generatedLetters', JSON.stringify(this.generatedLetters))
           })
         } else {
           return false
@@ -430,6 +434,7 @@ export default {
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
   /* 垂直对齐子元素 */
+  line-height: 40px;
 }
 
 .selectPage {
@@ -581,11 +586,6 @@ export default {
   margin-bottom: 20px;
 }
 
-::v-deep .el-loading-mask {
-  background-color: rgba(222, 201, 162, .5) !important;
-  border-radius: 30px;
-}
-
 .demo-table-expand {
   font-size: 0;
 }
@@ -601,5 +601,13 @@ export default {
 
 .dialog-footer {
   text-align: center;
+}
+.sendbox {
+  width: 200px;
+  height: 80px;
+}
+.sendbox img {
+  width: 100%;
+  height: 100%;
 }
 </style>

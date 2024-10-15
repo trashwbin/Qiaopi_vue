@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import axios from 'axios'
 export default {
   name: 'IndexReg',
@@ -86,16 +87,16 @@ export default {
         const response = await axios.get('/api/user/sendCode', { params: { email: this.email } })
         if (response.data.code === 200) {
           this.startCountdown()
-          this.uuid = response.data.data.uuid
+          // this.uuid = response.data.data.uuid
           this.responseMessage = response.data.msg
-          alert(this.responseMessage)
+          Message.success(this.responseMessage)
         } else {
           this.responseMessage = response.data.msg
-          alert(this.responseMessage)
+          Message.success(this.responseMessage)
         }
       } catch (error) {
         this.responseMessage = '发送验证码失败: ' + error
-        alert(this.responseMessage)
+        Message.success(this.responseMessage)
       }
     },
     // 用户注册请求
@@ -112,10 +113,10 @@ export default {
           confirmPassword: this.confirmPassword
         })
         this.responseMessage = response.data.msg || '注册成功'
-        alert(this.responseMessage)
+        Message.success(this.responseMessage)
       } catch (error) {
         this.responseMessage = '注册失败: ' + error.response.data.msg
-        alert(this.responseMessage)
+        Message.success(this.responseMessage)
       }
     }
   },

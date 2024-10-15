@@ -16,6 +16,7 @@ export default {
     text-align: center;
 }
 body {
+  overflow-x: hidden; /* 隐藏水平滚动条 */
   margin: 0;
   padding: 0;
 }

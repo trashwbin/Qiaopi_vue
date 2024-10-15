@@ -2,8 +2,9 @@
 <div class="contain">
   <div class="banner">
     <section>
-        <h2 id="text"><img src="../../assets/imgs/bgdlogo.png" alt=""></h2>
-        <img src="../../assets/imgs/bg1.png" alt="" id="sticker">
+        <h2 id="text"><img src="../../assets/imgs/bgdlogo.png" alt="" class="logo"></h2>
+        <img src="../../assets/imgs/index1.png" alt="" id="sticker1">
+        <img src="../../assets/imgs/index2.png" alt="" id="sticker2">
     </section>
     <div class="introduce">
       <div class="left">
@@ -68,17 +69,23 @@
     <h1><img src="../../assets/imgs/functionbdg.png" alt=""></h1>
       <div class="images-container">
         <div class="top-row">
-          <router-link to="/drifting"><img src="../../assets/imgs/function1.png" alt="" class="function-img"></router-link>
-          <router-link to="/shop"><img src="../../assets/imgs/function2.png" alt="" class="function-img"></router-link>
-          <router-link to=""><img src="../../assets/imgs/function3.png" alt="" class="function-img"></router-link>
+          <router-link to="/drifting"><img src="../../assets/imgs/function1.png" alt="" class="function-img"   title="这是漂流瓶"></router-link>
+          <router-link to="/shop"><img src="../../assets/imgs/function2.png" alt="" class="function-img"  title="这是兑换商城"></router-link>
+          <router-link to=""><img src="../../assets/imgs/function3.png" alt="" class="function-img" title="这是故事线探索"></router-link>
         </div>
         <div class="bottom-row">
-          <router-link to=""><img src="../../assets/imgs/function4.png" alt="" class="function-img"></router-link>
-          <router-link to="/write"><img src="../../assets/imgs/function5.png" alt="" class="function-img"></router-link>
-          <router-link to="/receive"><img src="../../assets/imgs/function6.png" alt="" class="function-img"></router-link>
-          <router-link to=""><img src="../../assets/imgs/function7.png" alt="" class="function-img"></router-link>
+          <router-link to=""><img src="../../assets/imgs/function4.png" alt="" class="function-img" title="这是游戏翻翻乐"></router-link>
+          <router-link to="/write"><img src="../../assets/imgs/function5.png" alt="" class="function-img" title="这是写信"></router-link>
+          <router-link to="/receive"><img src="../../assets/imgs/function6.png" alt="" class="function-img" title="这是收信"></router-link>
+          <router-link to=""><img src="../../assets/imgs/function7.png" alt="" class="function-img" title="这是知识问答"></router-link>
         </div>
       </div>
+    </div>
+    <div class="bottom">
+      <img src="../../assets/imgs/online.png" alt="" class="online">
+      <img src="../../assets/imgs/oversees.png" alt="" class="oversees">
+      <img src="../../assets/imgs/logo.png" alt="" class="logo1">
+      <p class="contact">联系我们：3348620049@qq.com</p>
     </div>
     </div>
 </div>
@@ -130,7 +137,7 @@ export default {
 }
 .banner {
   position: relative;
-  width: 1420px;
+  width: 1440px;
   height: 700px;
   margin: 0 auto;
 }
@@ -160,24 +167,64 @@ section{
   align-items: center;
 }
 
-  section img {
+  section .logo {
     position: absolute;
     top: 220px;
     left: 0;
     width: 100%;
   }
-  #sticker {
+  #sticker1 {
     position: absolute;
-    top: 250px;
+    top: 220px;
     left: 0;
-    width: 100%;
+    width: 50%;
+    animation: moveright 1.5s forwards;
+}
+@keyframes moveright {
+  0% {
+    left: -800px;
+    top: 500px;
+  }
+  100% {
+    top: 220px;
+    left: 0;
+  }
+}
+  #sticker2 {
+    position: absolute;
+    top: 220px;
+    right: 0;
+    width: 50%;
+    animation: moveleft 1.5s forwards;
+}
+@keyframes moveleft {
+  0% {
+    right: -800px;
+    top: 500px;
+  }
+  100% {
+    top: 220px;
+    right: 0;
+  }
 }
   section #text {
     position: absolute;
-    width: 600px;
-    height: 250px;
+    width: 750px;
+    height: 320px;
     text-align: center;
-    top: 0px;
+    top: -1000px;
+    animation: move 1.5s ease-in-out forwards;
+  }
+  @keyframes move {
+    0% {
+      width: 300px;
+      top: -1000px;
+    }
+    100% {
+      width: 750px;
+      top:-100px;
+    }
+
   }
   .left {
     position: relative;
@@ -789,9 +836,6 @@ section{
   transition: opacity 0.5s; /* 平滑过渡效果 */
   opacity: 1; /* 默认不显示 */
 }
-.history .banner ul li:hover::after {
-  opacity: 0; /* 鼠标悬停时显示 */
-}
 
 .history .banner ul li .pic .math {
   position: absolute;
@@ -884,5 +928,58 @@ section{
 
 .function-img:hover {
   transform: scale(1.2); /* 鼠标悬停时放大到原来的1.2倍 */
+}
+.tip {
+  position: absolute;
+  bottom: -30px; /* 根据需要调整位置 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  visibility: hidden; /* 默认不可见 */
+  opacity: 0;
+  transition: visibility 0.3s, opacity 0.3s; /* 平滑过渡效果 */
+}
+
+.function-img:hover p {
+  visibility: visible; /* 鼠标悬停时可见 */
+  opacity: 1;
+}
+.bottom {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  margin-top: 50px;
+  background-image: url(../../assets/imgs/logobgd.jpg);
+  background-repeat: repeat-x;
+  font-size: 0;
+  line-height: 60px;
+}
+.online {
+  position: absolute;
+  top: 30px;
+  left: 120px;
+  width: 25%;
+}
+.oversees {
+  position: absolute;
+  width: 20%;
+  top: 50px;
+  left: 480px;
+}
+.logo1 {
+  position: absolute;
+  width: 5%;
+  top: 35px;
+  left: 800px;
+}
+.contact {
+  position: absolute;
+  top: 40px;
+  right: 180px;
+  font-size: 23px;
+  color: rgba(255, 255, 255, 0.6);
 }
 </style>

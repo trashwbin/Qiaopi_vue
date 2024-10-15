@@ -18,7 +18,7 @@
         <input type="text" id="friendAddress" v-model="friendRequest.friendAddress" required>
       </div>
       <div class="form-group special">
-        <label for="friendContent">内容:</label>
+        <label for="friendContent" style="margin-bottom:20px">内容:</label>
         <textarea id="friendContent" v-model="friendRequest.content"></textarea>
       </div>
       <button type="submit">发送</button>
@@ -62,7 +62,7 @@
             </div>
             <div class="form-group special">
               <label for="letterContent">信件内容:</label>
-              <textarea id="letterContent" v-model="letter.content" required></textarea>
+              <textarea id="letterContent" v-model="letter.content" required style="margin-top:20px"></textarea>
             </div>
             <button>预览</button>
             <button type="submit">发送</button>
@@ -71,9 +71,12 @@
         <div class="right"></div>
       </div>
     <div class="friend" v-if="activeButton === 'smallbtn5'"></div>
-    <div class="smallbtn1" @click="select('smallbtn1')">捡漂流瓶</div>
-    <div class="smallbtn2" @click="select('smallbtn4')">新消息</div>
-    <div class="smallbtn3" @click="select('smallbtn3')">写漂流瓶</div>
+    <div class="smallbtn1" @click="select('smallbtn1')" :class="activeButtonClass('smallbtn1')"
+>捡漂流瓶</div>
+    <div class="smallbtn2" @click="select('smallbtn4')" :class="activeButtonClass('smallbtn4')"
+>新消息</div>
+    <div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')"
+>写漂流瓶</div>
 </div>
 </template>
 
@@ -124,6 +127,13 @@ export default {
       console.log('发送信件', this.letter)
     }
   },
+  computed: {
+    activeButtonClass() {
+      return (button) => {
+        return this.activeButton === button ? 'active' : ''
+      }
+    }
+  },
   mounted() {
     this.showWrite() // 确保 showWrite 方法已经定义
   }
@@ -135,7 +145,7 @@ export default {
   margin-top: 40px;
   width: 1200px;
   height: 730px;
-  background-color: blanchedalmond;
+  background-color: rgb(248, 235, 211);
   display: flex; /* 使用 Flexbox 布局 */
   align-items: flex-start;
 }
@@ -145,7 +155,9 @@ export default {
   top: 20px;
   width: 950px;
   height: 600px;
-  background-color: white;
+  background-image: url(../../assets/imgs/drifting.jpg);
+  background-position: center center;
+  background-size: cover;
 }
 .banner .letter {
   position: absolute;
@@ -192,7 +204,7 @@ export default {
     width: 100px;
     height: 50px;
     line-height: 50px;
-    background-color: rgb(165, 144, 42);
+    background-color: rgb(220, 212, 204);
     border: 0;
     border-radius: 25px;
 }
@@ -203,7 +215,7 @@ export default {
     width: 100px;
     height: 50px;
     line-height: 50px;
-    background-color: rgb(165, 144, 42);
+    background-color: rgb(220, 212, 204);
     border: 0;
     border-radius: 25px;
 }
@@ -214,7 +226,7 @@ export default {
     width: 100px;
     height: 50px;
     line-height: 50px;
-    background-color: rgb(165, 144, 42);
+    background-color: rgb(220, 212, 204);
     border: 0;
     border-radius: 25px;
 }
@@ -279,7 +291,7 @@ button:hover {
 }
 .friend-modal {
   width: 100%;
-  height: 780px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -288,11 +300,14 @@ button:hover {
 .modal-content {
   border-radius: 5px;
   width: 300px;
-  background-color: rgb(204, 204, 186);
+  margin-top: 50px;
+  background-color: rgb(248, 235, 211);
 }
 
 .close {
-  float: right;
+  position: absolute;
+  top: 0px;
+  right: 330px;
   cursor: pointer;
 }
 
@@ -322,9 +337,14 @@ button {
   border-radius: 4px;
   cursor: pointer;
   margin-right: 10px;
+  margin-top: 50px;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #35471a;
+}
+.smallbtn1.active, .smallbtn2.active, .smallbtn3.active {
+  background-color: #73705d; /* 激活状态下的背景颜色 */
+  color: white;
 }
 </style>
