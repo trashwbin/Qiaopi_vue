@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import { createPinia } from 'pinia'
 import Avue from '@smallwei/avue'
 import '@smallwei/avue/lib/index.css'
+import './assets/css/common.css'
 Vue.config.productionTip = false
 const pinia = createPinia()
 
