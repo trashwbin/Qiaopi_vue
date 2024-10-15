@@ -74,10 +74,8 @@ service.interceptors.request.use((config) => {
 let errorMessageShown = false
 // 响应拦截器
 service.interceptors.response.use(res => {
-  console.log(res)
   // 未设置状态码则默认成功状态
   const code = res.data.code || 200
-  console.log(code)
   // 获取错误信息
   const msg = errorCode[code] || res.data.msg || errorCode.default
   // 二进制数据则直接返回
@@ -85,9 +83,7 @@ service.interceptors.response.use(res => {
     return res.data
   }
   if (code === 401) {
-    console.log('401, 无效的会话，或者会话已过期，请重新登录。')
     useUserStore().logOut().then(() => {
-      console.log('401, 无效的会话，或者会话已过期，请重新登录。')
       location.href = '/login'
     })
     // eslint-disable-next-line

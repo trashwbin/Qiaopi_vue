@@ -190,7 +190,7 @@
               </div>
               <div class="card_item">
                 <i class="el-icon-message"></i>
-                收信人邮箱：{{ letterVo.email }}
+                收信人邮箱：{{ letterVo.recipientEmail }}
               </div>
               <div class="card_item">
                 <i class="el-icon-map-location"></i>
@@ -202,7 +202,7 @@
               </div>
               <div class="card_item">
                 <i class="el-icon-date"></i>
-                写信时间：{{ formatDate(letterVo.createTime) }}
+                写信时间：{{ formatDateTime(letterVo.createTime) }}
               </div>
               <div class="card_item">
                 <i class="el-icon-s-home"></i>
@@ -212,16 +212,31 @@
                 <i class="el-icon-user"></i>
                 寄信人：{{ letterVo.senderName }}
               </div>
-              <div>
+              <div style="margin-left: 20px;">
 
-                <i class="el-icon-postcard"></i>
-                <el-button type="text">使用卡片</el-button>
-                <el-divider direction="vertical"></el-divider>
                 <i class="el-icon-document-add"></i>
-                <el-button type="text">再写一封</el-button>
+                <el-button type="text" @click="writeMore">再写一封</el-button>
                 <el-divider direction="vertical"></el-divider>
+
+                <el-popover placement="bottom" width="160" v-model="isUseCard">
+                  <el-select no-data-text="没有功能卡哦" v-model="useCardDto.cardId" placeholder="请选择功能卡">
+                    <el-option v-for="item in myFunctionCards" :key="item.id" :label="item.cardName" :value="item.id">
+                      <span style="float: left">{{ item.cardName }}</span>
+                      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.number }}</span>
+                    </el-option>
+                  </el-select>
+                  <div style="text-align: right; margin: 0;margin-top: 10px;">
+                    <el-button size="mini" type="text" @click="isUseCard = false">取消</el-button>
+                    <el-button type="primary" size="mini" @click="useCard">确定</el-button>
+                  </div>
+
+                  <el-button slot="reference" type="text"><i class="el-icon-postcard"
+                      style="color: #fff;"></i>使用卡片</el-button>
+                </el-popover>
+
+                <!-- <el-divider direction="vertical"></el-divider>
                 <i class="el-icon-delete"></i>
-                <el-button type="text">忍痛</el-button>
+                <el-button type="text">忍痛</el-button> -->
               </div>
             </el-card>
 
@@ -294,6 +309,11 @@ export default {
       callback()
     }
     return {
+      isUseCard: false,
+      useCardDto: {
+        cardId: '',
+        letterId: ''
+      },
       letterStatusMap: {
         0: '未发送',
         1: '已发送',
@@ -304,7 +324,7 @@ export default {
       showProgress: true,
       showLetterDetail: true,
       showMask: false,
-      isVisible: false,
+      isVisible: true,
       letterVo: {
         letterId: '',
         senderName: '',
@@ -329,7 +349,7 @@ export default {
       },
       coverUrl: 'http://110.41.58.26:9000/qiaopi/qiaopi-images/cover/823eec55-0d12-41bd-a013-483892daf166.png',
       imageUrl: 'http://110.41.58.26:9000/qiaopi/qiaopi-images/letter/7780d647-ac9a-4ac0-9342-ad35e9e709d1.png',
-      scale: 1,
+      scale: 0,
       rotation: 0,
       marginLeft: 0,
       marginTop: 0,
@@ -341,7 +361,7 @@ export default {
       isFullscreen: false,
       // 信件图片列表
       mySendList: [],
-
+      myFunctionCards: {},
       // 图片加载状态
       loading: false,
       // 地图组件
@@ -443,6 +463,12 @@ export default {
   },
 
   methods: {
+    writeMore() {
+      this.closeImageViewer()
+      setTimeout(() => {
+        this.currentView = 'write'
+      }, 2300)
+    },
     handleShowProgress() {
       this.showProgress = !this.showProgress
       const progress = document.querySelector('.progress')
@@ -461,6 +487,16 @@ export default {
         aside.style.left = '-270px'
         // aside.classList.toggle('aside_close')
       }
+    },
+    formatDateTime(dateString) {
+      const date = new Date(dateString)
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
+      const seconds = String(date.getSeconds()).padStart(2, '0')
+      return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`
     },
     formatDate(dateString) {
       const date = new Date(dateString)
@@ -681,14 +717,23 @@ export default {
     },
     getMyFunctionCard() {
       getMyFunctionCard().then(res => {
-        this.mySendList = res.data
+        this.myFunctionCards = res.data
       })
     },
     // 使用卡片
     useCard() {
-      useCard().then(res => {
-        this.mySendList = res.data
-      })
+      this.useCardDto.letterId = this.letterVo.id
+      if (this.useCardDto.cardId !== '') {
+        useCard(this.useCardDto).then(res => {
+          this.letterVo = res.data
+          this.$message({
+            message: '使用成功',
+            type: 'success'
+          })
+          this.getMyFunctionCard()
+        })
+      }
+      this.isUseCard = false
     },
     handleChangePage(val) {
       // console.log(val)
@@ -847,6 +892,7 @@ export default {
     },
     showSend() {
       this.getMySendLetter()
+      this.getMyFunctionCard()
       this.showContent = true
       this.currentView = 'send'
     }
@@ -971,13 +1017,21 @@ export default {
   color: #666;
 }
 
-::v-deep .el-input__inner,
+.selectPage ::v-deep .el-input__inner,
 ::v-deep .el-textarea__inner {
   height: 35px;
   border-radius: 10px;
   border: 1px solid #1296db;
   background-color: rgba(222, 201, 162, 0.6) !important;
   color: #b00f0f;
+}
+
+::v-deep .el-input__inner,
+::v-deep .el-textarea__inner {
+  height: 35px;
+  border: 1px solid #1296db;
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  color: #666;
 }
 
 ::v-deep .el-dialog {
