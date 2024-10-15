@@ -3,7 +3,12 @@ import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth'
 import cache from '@/plugins/cache'
 import { tansParams } from '@/utils/qiaopi'
+import errorCode from './errorCode'
+import useUserStore from '@/store/modules/user'
 // import router from '@/router'
+
+// 是否显示重新登录
+export const isRelogin = { show: false }
 // 创建axios实例
 const service = axios.create({
   method: 'get',
@@ -66,40 +71,58 @@ service.interceptors.request.use((config) => {
 }
 )
 
+let errorMessageShown = false
 // 响应拦截器
 service.interceptors.response.use(res => {
-  // console.log(111)
+  console.log(res)
   // 未设置状态码则默认成功状态
   const code = res.data.code || 200
+  console.log(code)
   // 获取错误信息
-  const message = res.data.msg || '未知错误'
-  if (code !== 200) {
-    Message.error(message)
-    // console.log(message)
-    if (code === 401) { // 登录状态已过期.处理路由重定向
-      // router.push('/login')
-      // TODO: 重新登录
-      Message.error('登录状态已过期，请重新登录')
-    }
+  const msg = errorCode[code] || res.data.msg || errorCode.default
+  // 二进制数据则直接返回
+  if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
+    return res.data
   }
-  // console.log(res)
-  if (code === 200) {
-    // 请求成功不弹出提示
-    // Message.success(message)
+  if (code === 401) {
+    console.log('401, 无效的会话，或者会话已过期，请重新登录。')
+    useUserStore().logOut().then(() => {
+      console.log('401, 无效的会话，或者会话已过期，请重新登录。')
+      location.href = '/login'
+    })
+    // eslint-disable-next-line
+    return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+  } else if (code === 500) {
+    Message({ message: msg, type: 'error' })
+    return Promise.reject(new Error(msg))
+  } else if (code === 601) {
+    Message({ message: msg, type: 'warning' })
+    return Promise.reject(new Error(msg))
+  } else if (code !== 200) {
+    // this.$notify.error({ title: msg })
+    Message({ message: msg, type: 'error' })
+    // eslint-disable-next-line
+    return Promise.reject('error')
+  } else {
+    return Promise.resolve(res.data)
   }
-  return Promise.resolve(res.data)
 }, error => {
+  console.log(111)
+  console.log('err' + error)
   let { message } = error
+
   if (error && error.response) {
     switch (error.response.status) {
       case 401:
         // router.push('/login')
+        location.href = '/login'
         message = error.response.data.msg || '未授权的访问'
         break
       case 405:
         message = '请求错误'
     }
   }
+
   if (message === 'Network Error') {
     message = '后端接口连接异常'
   } else if (message.includes('timeout')) {
@@ -107,7 +130,16 @@ service.interceptors.response.use(res => {
   } else if (message.includes('Request failed with status code')) {
     message = '系统接口' + message.substr(message.length - 3) + '异常'
   }
-  Message.error(message)
+  // Message({ message: message, type: 'error', duration: 5 * 1000 })
+
+  // Throttle error messages to show only one within 1 second
+  if (!errorMessageShown) {
+    errorMessageShown = true
+    Message({ message: message, type: 'error', duration: 5 * 1000 })
+    setTimeout(() => {
+      errorMessageShown = false
+    }, 1000)
+  }
   return Promise.reject(error)
 }
 )

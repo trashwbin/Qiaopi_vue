@@ -98,7 +98,7 @@ export function logout() {
 // 修改用户名
 export function updateUsername(username) {
   return request({
-    method: 'post',
+    method: 'put',
     url: '/user/updateUsername',
     data: {
       username // 确保请求体是一个 JSON 对象

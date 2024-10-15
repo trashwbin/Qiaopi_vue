@@ -30,6 +30,7 @@
 <script>
 import { getUserMoney } from '@/api/user'
 import useUserStore from '@/store/modules/user'
+
 export default {
   name: 'QiaopiIndex',
   data() {
@@ -44,8 +45,7 @@ export default {
 
     // 通过计算属性获取用户的登录状态和信息
     isLoggedIn() {
-      const userStore = useUserStore()
-      return !!userStore.token // 如果 token 存在，则表示已登录
+      return this.isLoggedInCheck() // 如果 token 存在，则表示已登录
     },
     userName() {
       const userStore = useUserStore()
@@ -67,6 +67,19 @@ export default {
     }
   },
   methods: {
+    isLoggedInCheck() {
+      const userStore = useUserStore()
+      if (userStore.token) {
+        getUserMoney().then(
+          res => {
+            // 将获取到的钱赋值给组件的 money 数据属性
+            this.money = res.data.money
+          }
+          // 调用异步函数
+        )
+      }
+      return userStore.token
+    },
     setActive(index) {
       this.activeIndex = index
     },
@@ -74,14 +87,6 @@ export default {
       if (this.$route.path !== path) {
         this.$router.push(path)
       }
-    }
-  },
-  async created() {
-    try {
-      const res = await getUserMoney() // 调用异步函数
-      this.money = res.data.money// 将获取到的钱赋值给组件的 money 数据属性
-    } catch (error) {
-      console.error('获取用户资金失败:', error)
     }
   },
   beforeRouteUpdate(to, from, next) {
@@ -197,6 +202,7 @@ nav .slider:nth-child(3):hover~.animation {
   left: 350px;
   background-color: #B68C5C;
 }
+
 nav .slider:nth-child(4):hover~.animation {
   left: 400px;
   background-color: #875d2d;
@@ -221,6 +227,7 @@ nav .slider:nth-child(4):hover~.animation {
   color: #f0db96;
   text-decoration: none;
 }
+
 .money {
   position: absolute;
   top: 10px;
@@ -228,10 +235,12 @@ nav .slider:nth-child(4):hover~.animation {
   width: 30px;
   height: 20px;
 }
+
 .money img {
   width: 100%;
   height: 100%;
 }
+
 .pig {
   position: absolute;
   top: 0;
@@ -239,47 +248,55 @@ nav .slider:nth-child(4):hover~.animation {
   font-size: 12px;
   color: #ffffff;
 }
+
 .profile {
   font-size: 13px;
   color: #ffffff;
   text-decoration: none;
 }
+
 .logout {
   font-size: 13px;
   color: #ffffff;
   text-decoration: none;
 }
+
 .avatar-container {
   position: relative;
   display: inline-block;
 }
+
 .avatar {
   position: absolute;
   top: -30px;
   right: -360px;
   z-index: 10;
 }
+
 .dropdown {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
   min-width: 80px;
   border-radius: 25px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   right: -390px;
   top: 1px;
 }
+
 .dropdown a {
   color: black;
   padding: 0 5px;
   text-decoration: none;
   display: block;
 }
+
 .dropdown a:hover {
   border-radius: 25px;
   background-color: #f1f1f1;
 }
+
 .avatar-container:hover .dropdown {
   border-radius: 25px;
   display: block;
