@@ -209,7 +209,7 @@
                 我的地址：{{ letterVo.senderAddress.formattedAddress }}
               </div>
               <div class="card_item">
-
+                <i class="el-icon-user"></i>
                 寄信人：{{ letterVo.senderName }}
               </div>
               <div>
