@@ -98,7 +98,7 @@ export function logout() {
 // 修改用户名
 export function updateUsername(username) {
   return request({
-    method: 'post',
+    method: 'put',
     url: '/user/updateUsername',
     data: {
       username // 确保请求体是一个 JSON 对象
@@ -108,7 +108,7 @@ export function updateUsername(username) {
 // 修改昵称
 export function updateNickname(nickname) {
   return request({
-    method: 'post',
+    method: 'put',
     url: '/user/updateUserInfo',
     data: {
       nickname // 确保请求体是一个 JSON 对象
@@ -118,10 +118,29 @@ export function updateNickname(nickname) {
 // 修改性别
 export function updateSex(sex) {
   return request({
-    method: 'post',
+    method: 'put',
     url: '/user/updateUserInfo',
     data: {
       sex // 确保请求体是一个 JSON 对象
+    }
+  })
+}
+// 获取用户头像
+export function getAvatarList() {
+  return request({
+    method: 'get',
+    url: '/user/getAvatarList'
+  })
+}
+// 修改密码
+export function updatePassword(oldPassword, newPassword, confirmPassword) {
+  return request({
+    method: 'put',
+    url: '/user/updatePassword',
+    data: {
+      oldPassword,
+      newPassword,
+      confirmPassword
     }
   })
 }

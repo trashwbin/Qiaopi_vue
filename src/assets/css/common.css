@@ -31,6 +31,11 @@
   padding-bottom: 17px;
 }
 
+/* // el-popover的z-index问题 */
+.el-popover {
+  z-index: 3000 !important;
+}
+
 /* 就这两条样式，修了一天 */
 .animate-move-center {
   /* position: relative; */

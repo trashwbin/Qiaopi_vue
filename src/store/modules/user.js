@@ -27,7 +27,7 @@ const useUserStore = defineStore(
             setToken(data.token)
             this.token = data.token
             console.log(data)
-            const avatar = (data.avatar === '' || data.avatar == null) ? defAva : process.env.VUE_APP_API + data.avatar
+            const avatar = (data.avatar === '' || data.avatar == null) ? defAva : data.avatar
             this.id = data.id
             this.name = data.nickname
             this.avatar = avatar
@@ -44,7 +44,7 @@ const useUserStore = defineStore(
         return new Promise((resolve, reject) => {
           getUserInfo().then(res => {
             const data = res.data
-            const avatar = (data.avatar === '' || data.avatar == null) ? defAva : process.env.VUE_APP_API + data.avatar
+            const avatar = (data.avatar === '' || data.avatar == null) ? defAva : data.avatar
             this.id = data.id
             this.name = data.nickname
             this.avatar = avatar

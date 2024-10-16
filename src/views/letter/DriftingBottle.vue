@@ -1,9 +1,9 @@
 <template>
   <div class="banner">
     <div class="pick" v-if="activeButton === 'smallbtn1'">
-        <button class="bigbtn" @click="select('smallbtn2')">捡一个</button>
+        <button class="bigbtn" @click="getDriftBottle();select('smallbtn2')" >捡一个</button>
     </div>
-    <div class="letter" v-if="activeButton === 'smallbtn2'">
+ <div class="letter" v-if="activeButton === 'smallbtn2'" :style="'background-image: url(' + letter.url + ');'">
     <div class="friend-modal" v-if="isFriendModalVisible">
    <div class="modal-content">
     <span class="close" @click="toggleFriendModal">&times;</span>
@@ -25,12 +25,12 @@
     </form>
   </div>
 </div>
-    <button class="bigbtn1">扔会海里</button>
+    <button class="bigbtn1" @click="getDriftBottle()">再捡一个</button>
     <button class="bigbtn2" @click="toggleFriendModal">成为好友</button>
     </div>
     <div class="write" v-if="activeButton === 'smallbtn3'">
      <div class="left">
-          <h2>写信</h2>
+          <h2>写漂流瓶</h2>
           <form @submit.prevent="sendLetter">
             <!-- <div class="form-group">
               <label for="recipientUsername">收信人用户名:</label>
@@ -39,33 +39,14 @@
             <div class="form-group">
               <label for="recipientAddress">收信人地址:</label>
               <input type="text" id="recipientAddress" v-model="letter.recipientAddress" required>
-            </div>
-            <div class="form-group">
-              <label for="senderAddress">我的地址:</label>
-              <input type="text" id="senderAddress" v-model="letter.senderAddress" required>
             </div> -->
-            <div class="form-group">
-              <label for="stationery">选择信纸:</label>
-              <select id="stationery" v-model="letter.stationery">
-                <option v-for="stationery in stationeryOptions" :key="stationery.id" :value="stationery.id">
-                  {{ stationery.name }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="penFont">选择笔的字体:</label>
-              <select id="penFont" v-model="letter.penFont">
-                <option v-for="font in penFonts" :key="font" :value="font">
-                  {{ font }}
-                </option>
-              </select>
-            </div>
+               <avue-input-map :params="params" :autosize="{ minRows: 1, maxRows: 4 }" placeholder="请选择寄信地址"
+     v-model="senderAddress"></avue-input-map>
             <div class="form-group special">
-              <label for="letterContent">信件内容:</label>
+              <label for="letterContent">信件内容：</label>
               <textarea id="letterContent" v-model="letter.content" required style="margin-top:20px"></textarea>
             </div>
-            <button>预览</button>
-            <button type="submit">发送</button>
+            <button type="submit" @click="generateDriftBottle">发送</button>
           </form>
         </div>
         <div class="right"></div>
@@ -81,6 +62,11 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
+// import axios from 'axios'
+// import useUserStore from '@/store/modules/user'
+
+import { getDriftBottle, showDriftBottle, generateDriftBottle } from '@/api/drifting'
 export default {
   name: 'DriftingBottle',
   data() {
@@ -98,14 +84,10 @@ export default {
         senderAddress: '',
         stationery: null,
         penFont: null,
-        content: ''
-      },
-      stationeryOptions: [
-        { id: 1, name: '信纸1' },
-        { id: 2, name: '信纸2' },
-        { id: 3, name: '信纸3' }
-      ],
-      penFonts: ['字体1', '字体2', '字体3']
+        content: '',
+        url: '',
+        generateDriftBottleUrl: ' '
+      }
     }
   },
   methods: {
@@ -123,8 +105,36 @@ export default {
       console.log('发送好友请求', this.friendRequest)
       this.isFriendModalVisible = false
     },
-    sendLetter() {
-      console.log('发送信件', this.letter)
+    async getDriftBottle() {
+      const response = await getDriftBottle()
+      if (response.code === 200) {
+        this.letter.url = response.data.bottleUrl
+        Message.success(response.msg)
+      } else {
+        Message.error(response.msg)
+      }
+    },
+    async showDriftBottle() {
+      const response = await showDriftBottle()
+      if (response.code === 200) {
+        this.letter.url = response.data
+        Message.success(response.msg)
+      } else {
+        Message.error(response.msg)
+      }
+    },
+    async generateDriftBottle() {
+      if (!this.letter.senderAddress || !this.letter.content) {
+        Message.error('请填写完整的发送者地址和内容')
+        return
+      }
+      const response = await generateDriftBottle(this.letter.senderAddress, this.letter.content)
+      if (response.code === 200) {
+        Message.success(response.msg)
+        // this.letter.url = response.data.data
+      } else {
+        Message.error(response.msg)
+      }
     }
   },
   computed: {
@@ -135,7 +145,8 @@ export default {
     }
   },
   mounted() {
-    this.showWrite() // 确保 showWrite 方法已经定义
+    this.showWrite()
+    // this.showDriftBottle()// 在组件挂载后获取漂流瓶图片
   }
 }
 </script>
@@ -165,7 +176,9 @@ export default {
   top: 20px;
   width: 950px;
   height: 600px;
-  background-color: white;
+  background-position: center center;
+  background-size:contain;
+  background-repeat: no-repeat;
 }
 .banner .bigbtn {
     position: absolute;
