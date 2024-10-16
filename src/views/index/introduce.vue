@@ -1,94 +1,101 @@
 <template>
-<div class="contain">
-  <div class="banner">
-    <section>
+  <div class="contain">
+    <div class="banner">
+      <section>
         <h2 id="text"><img src="../../assets/imgs/bgdlogo.png" alt="" class="logo"></h2>
         <img src="../../assets/imgs/index1.png" alt="" id="sticker1">
         <img src="../../assets/imgs/index2.png" alt="" id="sticker2">
-    </section>
-    <div class="introduce">
-      <div class="left">
-      <img src="../../assets/imgs/qiaopiIntroduce.png" alt="" class="title">
-      <img src="../../assets/imgs/bell.png" alt="" class="bell">
-    <div class="imgLoader"></div>
-    <div class="container">
-        <div class="credit">
-        </div>
+      </section>
+      <div class="introduce">
+        <div class="left">
+          <img src="../../assets/imgs/qiaopiIntroduce.png" alt="" class="title">
+          <img src="../../assets/imgs/bell.png" alt="" class="bell">
+          <div class="imgLoader"></div>
+          <div class="container">
+            <div class="credit">
+            </div>
 
-        <div class="book">
-            <div class="gap"></div>
-            <div class="pages">
+            <div class="book">
+              <div class="gap"></div>
+              <div class="pages">
                 <div class="page"></div>
                 <div class="page"></div>
                 <div class="page"></div>
                 <div class="page"></div>
                 <div class="page"></div>
                 <div class="page"></div>
-            </div>
-            <div class="flips">
+              </div>
+              <div class="flips">
                 <div class="flip flip1">
-                    <div class="flip flip2">
-                        <div class="flip flip3">
-                            <div class="flip flip4">
-                                <div class="flip flip5">
-                                    <div class="flip flip6">
-                                        <div class="flip flip7"></div>
-                                    </div>
-                                </div>
-                            </div>
+                  <div class="flip flip2">
+                    <div class="flip flip3">
+                      <div class="flip flip4">
+                        <div class="flip flip5">
+                          <div class="flip flip6">
+                            <div class="flip flip7"></div>
+                          </div>
                         </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
-      </div>
-    <div class="right">
-      <p class="first">侨批，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的汇款和家书。这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重</p>
-        <p class="second">要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是华侨与家乡之间情感和经济联系的纽带。<br><span>侨批的传递往往依赖于专门的“水客”或“侨批局”，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。</span></p>
-    </div>
-  </div>
-    <div class="history">
-      <h1><img src="../../assets/imgs/title2.png" alt=""></h1>
-    <div class="banner">
-      <ul>
-        <li v-for="history in histories" :key="history.id"
-            :class="{ 'active': history.active }"
-            @mouseenter="toggleActive(history)"
-            @mouseleave="toggleInactive(history)">
-         <div class="pic" :style="{ backgroundImage: 'url(' + history.img + ')' }">
-            <span class="math">{{ history.math }}</span>
-            <span class="title">{{ history.title }}</span>
-            <p v-show="history.active">{{ history.description }}</p>
           </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div class="function">
-    <h1><img src="../../assets/imgs/functionbdg.png" alt=""></h1>
-      <div class="images-container">
-        <div class="top-row">
-          <router-link to="/drifting"><img src="../../assets/imgs/function1.png" alt="" class="function-img"   title="这是漂流瓶"></router-link>
-          <router-link to="/shop"><img src="../../assets/imgs/function2.png" alt="" class="function-img"  title="这是兑换商城"></router-link>
-          <router-link to=""><img src="../../assets/imgs/function3.png" alt="" class="function-img" title="这是故事线探索"></router-link>
         </div>
-        <div class="bottom-row">
-          <router-link to=""><img src="../../assets/imgs/function4.png" alt="" class="function-img" title="这是游戏翻翻乐"></router-link>
-          <router-link to="/write"><img src="../../assets/imgs/function5.png" alt="" class="function-img" title="这是写信"></router-link>
-          <router-link to="/receive"><img src="../../assets/imgs/function6.png" alt="" class="function-img" title="这是收信"></router-link>
-          <router-link to=""><img src="../../assets/imgs/function7.png" alt="" class="function-img" title="这是知识问答"></router-link>
+        <div class="right">
+          <p class="first">侨批，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的汇款和家书。这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重</p>
+          <p class="second">
+            要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是华侨与家乡之间情感和经济联系的纽带。<br><span>侨批的传递往往依赖于专门的“水客”或“侨批局”，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。</span>
+          </p>
         </div>
       </div>
+      <div class="history">
+        <h1><img src="../../assets/imgs/title2.png" alt=""></h1>
+        <div class="banner">
+          <ul>
+            <li v-for="history in histories" :key="history.id" :class="{ 'active': history.active }"
+              @mouseenter="toggleActive(history)" @mouseleave="toggleInactive(history)">
+              <div class="pic" :style="{ backgroundImage: 'url(' + history.img + ')' }">
+                <span class="math">{{ history.math }}</span>
+                <span class="title">{{ history.title }}</span>
+                <p v-show="history.active">{{ history.description }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="function">
+        <h1><img src="../../assets/imgs/functionbdg.png" alt=""></h1>
+        <div class="images-container">
+          <div class="top-row">
+            <router-link to="/drifting"><img src="../../assets/imgs/function1.png" alt="" class="function-img"
+                title="这是漂流瓶"></router-link>
+            <router-link to="/shop"><img src="../../assets/imgs/function2.png" alt="" class="function-img"
+                title="这是兑换商城"></router-link>
+            <router-link to=""><img src="../../assets/imgs/function3.png" alt="" class="function-img"
+                title="这是故事线探索"></router-link>
+          </div>
+          <div class="bottom-row">
+            <router-link to=""><img src="../../assets/imgs/function4.png" alt="" class="function-img"
+                title="这是游戏翻翻乐"></router-link>
+            <router-link to="/write"><img src="../../assets/imgs/function5.png" alt="" class="function-img"
+                title="这是写信"></router-link>
+            <router-link to="/receive"><img src="../../assets/imgs/function6.png" alt="" class="function-img"
+                title="这是收信"></router-link>
+            <router-link to=""><img src="../../assets/imgs/function7.png" alt="" class="function-img"
+                title="这是知识问答"></router-link>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <img src="../../assets/imgs/online.png" alt="" class="online">
+        <img src="../../assets/imgs/oversees.png" alt="" class="oversees">
+        <img src="../../assets/imgs/logo.png" alt="" class="logo1">
+        <p class="contact">联系我们：3348620049@qq.com</p>
+      </div>
     </div>
-    <div class="bottom">
-      <img src="../../assets/imgs/online.png" alt="" class="online">
-      <img src="../../assets/imgs/oversees.png" alt="" class="oversees">
-      <img src="../../assets/imgs/logo.png" alt="" class="logo1">
-      <p class="contact">联系我们：3348620049@qq.com</p>
-    </div>
-    </div>
-</div>
+  </div>
 </template>
 
 <script>
@@ -109,7 +116,7 @@ export default {
   },
   methods: {
     toggleActive(history) {
-      this.histories.forEach(function(h) {
+      this.histories.forEach(function (h) {
         h.active = false
       })
       history.active = true
@@ -127,6 +134,7 @@ export default {
   list-style: none;
   box-sizing: border-box;
 }
+
 .contain {
   width: 100%;
   height: 3000px;
@@ -135,12 +143,14 @@ export default {
   background-position: center center;
   background-size: cover;
 }
+
 .banner {
   position: relative;
   width: 1440px;
   height: 700px;
   margin: 0 auto;
 }
+
 /* 侨批简介 */
 .introduce h1 {
   position: relative;
@@ -148,17 +158,20 @@ export default {
   height: 100px;
   margin: 0 auto;
 }
+
 .introduce h1 img {
   width: 100%;
   height: 100%;
 }
+
 .introduce p {
   position: absolute;
   top: 28px;
   left: 125px;
   color: #924721;
 }
-section{
+
+section {
   position: relative;
   width: 100%;
   height: 800px;
@@ -167,150 +180,172 @@ section{
   align-items: center;
 }
 
-  section .logo {
-    position: absolute;
-    top: 220px;
-    left: 0;
-    width: 100%;
-  }
-  #sticker1 {
-    position: absolute;
-    top: 220px;
-    left: 0;
-    width: 50%;
-    animation: moveright 1.5s forwards;
+section .logo {
+  position: absolute;
+  top: 220px;
+  left: 0;
+  width: 100%;
 }
+
+#sticker1 {
+  position: absolute;
+  top: 220px;
+  left: 0;
+  width: 50%;
+  animation: moveright 1.5s forwards;
+}
+
 @keyframes moveright {
   0% {
     left: -800px;
     top: 500px;
   }
+
   100% {
     top: 220px;
     left: 0;
   }
 }
-  #sticker2 {
-    position: absolute;
-    top: 220px;
-    right: 0;
-    width: 50%;
-    animation: moveleft 1.5s forwards;
+
+#sticker2 {
+  position: absolute;
+  top: 220px;
+  right: 0;
+  width: 50%;
+  animation: moveleft 1.5s forwards;
 }
+
 @keyframes moveleft {
   0% {
     right: -800px;
     top: 500px;
   }
+
   100% {
     top: 220px;
     right: 0;
   }
 }
-  section #text {
-    position: absolute;
-    width: 750px;
-    height: 320px;
-    text-align: center;
-    top: -1000px;
-    animation: move 1.5s ease-in-out forwards;
-  }
-  @keyframes move {
-    0% {
-      width: 300px;
-      top: -1000px;
-    }
-    100% {
-      width: 750px;
-      top:-100px;
-    }
 
+section #text {
+  position: absolute;
+  width: 750px;
+  height: 320px;
+  text-align: center;
+  top: -1000px;
+  animation: move 1.5s ease-in-out forwards;
+}
+
+@keyframes move {
+  0% {
+    width: 300px;
+    top: -1000px;
   }
-  .left {
-    position: relative;
-    float: left;
-    width: 500px;
-    height: 800px;
-    padding-left:100px;
+
+  100% {
+    width: 750px;
+    top: -100px;
   }
-  .left .title {
-    width: 360px;
-    height: 110px;
-    margin-top: 150px ;
-  }
-  /* 定义swing动画 */
+
+}
+
+.left {
+  position: relative;
+  float: left;
+  width: 500px;
+  height: 800px;
+  padding-left: 100px;
+}
+
+.left .title {
+  width: 360px;
+  height: 110px;
+  margin-top: 150px;
+}
+
+/* 定义swing动画 */
 @keyframes swing {
-     0% {
-        transform: rotate(0deg);
-    }
-    25% {
-        transform: rotate(10deg);
-    }
-    50% {
-        transform: rotate(0deg);
-    }
-    75% {
-        transform: rotate(-10deg);
-    }
-    100% {
-        transform: rotate(0deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(10deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  75% {
+    transform: rotate(-10deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 /* 应用动画到.bell类 */
 .bell {
-    position: absolute;
-    top: -10px;
-    left: 0;
-    width: 200px;
-    height: 250px;
-    animation: swing 3s linear infinite;
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 200px;
+  height: 250px;
+  animation: swing 3s linear infinite;
 }
-  .left .introduce {
-    width: 450px;
-    height: 200px;
-    margin: 0px auto;
-    margin-top: 50px;
-    background-color: white;
-  }
-  .right {
-    position: relative;
-    float: left;
-    width: 900px;
-    height: 900px;
-    margin-top: 20px;
-    background-image: url(../../assets/imgs/right.png);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-  }
-  .right .first {
-    position: absolute;
-    top: 110px;
-    left: 540px;
-    right: 20px;
-    text-indent: 2em;
-    z-index: 1;
-    color: #000;
-    font-size: 27px;
-    font-family: "KaiTi", "楷体", serif;
-  }
-  .right .second {
-    position: absolute;
-    top: 330px;
-    left: 180px;
-    right: 15px;
-    z-index: 1;
-    color: #000;
-    font-size: 27px;
-    font-family: "KaiTi", "楷体", serif;
-    text-align: left;
-  }
-  .right .second span {
-    display: block;
-    text-indent: 2em;
-  }
-  /* .right .third {
+
+.left .introduce {
+  width: 450px;
+  height: 200px;
+  margin: 0px auto;
+  margin-top: 50px;
+  background-color: white;
+}
+
+.right {
+  position: relative;
+  float: left;
+  width: 900px;
+  height: 900px;
+  margin-top: 20px;
+  background-image: url(../../assets/imgs/right.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.right .first {
+  position: absolute;
+  top: 110px;
+  left: 540px;
+  right: 20px;
+  text-indent: 2em;
+  z-index: 1;
+  color: #000;
+  font-size: 27px;
+  font-family: "KaiTi", "楷体", serif;
+}
+
+.right .second {
+  position: absolute;
+  top: 330px;
+  left: 180px;
+  right: 15px;
+  z-index: 1;
+  color: #000;
+  font-size: 27px;
+  font-family: "KaiTi", "楷体", serif;
+  text-align: left;
+}
+
+.right .second span {
+  display: block;
+  text-indent: 2em;
+}
+
+/* .right .third {
     position: absolute;
     top: 620px;
     left: 180px;
@@ -322,13 +357,14 @@ section{
     text-align: left;
     text-indent: 2em;
   } */
-  .imgLoader {
+.imgLoader {
   position: fixed;
   -webkit-animation: preLoad 1s steps(1);
-          animation: preLoad 1s steps(1);
+  animation: preLoad 1s steps(1);
   width: 1px;
   height: 1px;
 }
+
 .credit {
   position: absolute;
   top: 100%;
@@ -359,29 +395,36 @@ section{
   transform-style: preserve-3d;
   transform: rotateX(60deg) rotateY(3deg);
 }
+
 .page:nth-child(1) {
   transform: rotateX(20deg) rotateY(3deg);
 }
+
 .page:nth-child(2) {
   transform: rotateX(20deg) rotateY(4.5deg);
 }
+
 .page:nth-child(3) {
   transform: rotateX(20deg) rotateY(6deg);
   -webkit-animation: nextPage 25s infinite -24s steps(1);
-          animation: nextPage 25s infinite -24s steps(1);
+  animation: nextPage 25s infinite -24s steps(1);
   background-size: 420px 300px;
   background-position: -2px -2px;
 }
+
 .page:nth-child(4) {
   transform: rotateX(20deg) rotateY(177deg);
 }
+
 .page:nth-child(5) {
   transform: rotateX(20deg) rotateY(175.5deg);
 }
+
 .page:nth-child(6) {
   transform: rotateX(20deg) rotateY(174deg);
   overflow: hidden;
 }
+
 .page:nth-child(6)::after {
   content: "";
   width: 210px;
@@ -392,7 +435,7 @@ section{
   transform-origin: center;
   transform: rotateY(180deg);
   -webkit-animation: nextPage 25s -20s infinite steps(1);
-          animation: nextPage 25s -20s infinite steps(1);
+  animation: nextPage 25s -20s infinite steps(1);
   background-size: 420px 300px;
   background-position: 100% -2px;
 }
@@ -407,6 +450,7 @@ section{
   top: 70px;
   left: calc(50% - 5px);
 }
+
 .gap::after {
   content: "";
   position: absolute;
@@ -438,6 +482,7 @@ section{
   transform-style: preserve-3d;
   background-size: 420px 300px;
 }
+
 .flip::after {
   content: "";
   position: absolute;
@@ -448,68 +493,87 @@ section{
   transform-origin: center;
   background-size: 420px 300px;
 }
+
 .flip.flip1 {
   right: 50%;
   -webkit-animation: flip1 5s infinite ease-in-out;
-          animation: flip1 5s infinite ease-in-out;
+  animation: flip1 5s infinite ease-in-out;
   border-width: 2px 2px 2px 0;
 }
+
 .flip.flip1::after {
   -webkit-animation: nextFlip1 20s -20s infinite steps(1);
-          animation: nextFlip1 20s -20s infinite steps(1);
+  animation: nextFlip1 20s -20s infinite steps(1);
 }
+
 .flip:not(.flip1) {
   right: calc(100% - 2px);
   top: -2px;
   transform-origin: right;
   -webkit-animation: flip2 5s ease-in-out infinite;
-          animation: flip2 5s ease-in-out infinite;
+  animation: flip2 5s ease-in-out infinite;
 }
+
 .flip.flip2::after {
   -webkit-animation: nextFlip2 20s -20s infinite steps(1);
-          animation: nextFlip2 20s -20s infinite steps(1);
+  animation: nextFlip2 20s -20s infinite steps(1);
 }
+
 .flip.flip3::after {
   -webkit-animation: nextFlip3 20s -20s infinite steps(1);
-          animation: nextFlip3 20s -20s infinite steps(1);
+  animation: nextFlip3 20s -20s infinite steps(1);
 }
+
 .flip.flip4::after {
   -webkit-animation: nextFlip4 20s -20s infinite steps(1);
-          animation: nextFlip4 20s -20s infinite steps(1);
+  animation: nextFlip4 20s -20s infinite steps(1);
 }
+
 .flip.flip5::after {
   -webkit-animation: nextFlip5 20s -20s infinite steps(1);
-          animation: nextFlip5 20s -20s infinite steps(1);
+  animation: nextFlip5 20s -20s infinite steps(1);
 }
+
 .flip.flip6::after {
   -webkit-animation: nextFlip6 20s -20s infinite steps(1);
-          animation: nextFlip6 20s -20s infinite steps(1);
+  animation: nextFlip6 20s -20s infinite steps(1);
 }
+
 .flip.flip7::after {
   -webkit-animation: nextFlip7 20s -20s infinite steps(1);
-          animation: nextFlip7 20s -20s infinite steps(1);
+  animation: nextFlip7 20s -20s infinite steps(1);
 }
+
 .flip.flip7 {
   width: 30px;
   border-width: 2px 0px 2px 2px;
 }
+
 .flip.flip7::after {
   -webkit-animation: nextFlip7 20s -20s infinite steps(1);
-          animation: nextFlip7 20s -20s infinite steps(1);
+  animation: nextFlip7 20s -20s infinite steps(1);
 }
+
 @keyframes flip1 {
-  0%, 20% {
+
+  0%,
+  20% {
     transform: rotateX(20deg) rotateY(6deg);
   }
-  80%, 100% {
+
+  80%,
+  100% {
     transform: rotateX(20deg) rotateY(174deg);
   }
 }
 
 @keyframes flip2 {
-  0%, 20% {
+
+  0%,
+  20% {
     transform: rotateY(0deg) translateY(0px);
   }
+
   50% {
     transform: rotateY(-15deg) translateY(0px);
   }
@@ -519,15 +583,19 @@ section{
   0% {
     background-image: url("../../assets/imgs/page1.png");
   }
+
   25% {
     background-image: url("../../assets/imgs/page2.png");
   }
+
   50% {
     background-image: url("../../assets/imgs/page3.png");
   }
+
   75% {
     background-image: url("../../assets/imgs/page4.png");
   }
+
   100% {
     display: none;
   }
@@ -537,15 +605,19 @@ section{
   0% {
     background-image: url("../../assets/imgs/page1.png");
   }
+
   20% {
     background-image: url("../../assets/imgs/page2.png");
   }
+
   40% {
     background-image: url("../../assets/imgs/page3.png");
   }
+
   60% {
     background-image: url("../../assets/imgs/page4.png");
   }
+
   80% {
     background-image: url("../../assets/imgs/page5.png");
   }
@@ -557,21 +629,25 @@ section{
     background-position: -178px -2px;
     transform: rotateY(0deg);
   }
+
   25% {
     background-image: url("../../assets/imgs/page2.png");
     background-position: -210px -2px;
     transform: rotateY(180deg);
   }
+
   50% {
     background-image: url("../../assets/imgs/page3.png");
     background-position: -178px -2px;
     transform: rotateY(0deg);
   }
+
   75% {
     background-image: url("../../assets/imgs/page4.png");
     background-position: -210px -2px;
     transform: rotateY(180deg);
   }
+
   100% {
     background-image: url("../../assets/imgs/page1.png");
     background-position: -178px -2px;
@@ -585,21 +661,25 @@ section{
     background-position: -148px -2px;
     transform: rotateY(0deg);
   }
+
   25% {
     background-image: url("../../assets/imgs/page2.png");
     background-position: -238px -2px;
     transform: rotateY(180deg);
   }
+
   50% {
     background-image: url("../../assets/imgs/page3.png");
     background-position: -148px -2px;
     transform: rotateY(0deg);
   }
+
   75% {
     background-image: url("../../assets/imgs/page4.png");
     background-position: -238px -2px;
     transform: rotateY(180deg);
   }
+
   100% {
     background-image: url("../../assets/imgs/page5.png");
     background-position: -148px -2px;
@@ -613,21 +693,25 @@ section{
     background-position: -118px -2px;
     transform: rotateY(0deg);
   }
+
   25% {
     background-image: url("../../assets/imgs/page2.png");
     background-position: -268px -2px;
     transform: rotateY(180deg);
   }
+
   50% {
     background-image: url("../../assets/imgs/page3.png");
     background-position: -118px -2px;
     transform: rotateY(0deg);
   }
+
   75% {
     background-image: url("../../assets/imgs/page4.png");
     background-position: -268px -2px;
     transform: rotateY(180deg);
   }
+
   100% {
     background-image: url("../../assets/imgs/page5.png");
     background-position: -118px -2px;
@@ -641,21 +725,25 @@ section{
     background-position: -88px -2px;
     transform: rotateY(0deg);
   }
+
   25% {
     background-image: url("../../assets/imgs/page2.png");
     background-position: -298px -2px;
     transform: rotateY(180deg);
   }
+
   50% {
     background-image: url("../../assets/imgs/page3.png");
     background-position: -88px -2px;
     transform: rotateY(0deg);
   }
+
   75% {
     background-image: url("../../assets/imgs/page4.png");
     background-position: -298px -2px;
     transform: rotateY(180deg);
   }
+
   100% {
     background-image: url("../../assets/imgs/page5.png");
     background-position: -88px -2px;
@@ -669,21 +757,25 @@ section{
     background-position: -58px -2px;
     transform: rotateY(0deg);
   }
+
   25% {
     background-image: url("../../assets/imgs/page2.png");
     background-position: -328px -2px;
     transform: rotateY(180deg);
   }
+
   50% {
     background-image: url("../../assets/imgs/page3.png");
     background-position: -58px -2px;
     transform: rotateY(0deg);
   }
+
   75% {
     background-image: url("../../assets/imgs/page4.png");
     background-position: -328px -2px;
     transform: rotateY(180deg);
   }
+
   100% {
     background-image: url("../../assets/imgs/page5.png");
     background-position: -58px -2px;
@@ -697,21 +789,25 @@ section{
     background-position: -28px -2px;
     transform: rotateY(0deg);
   }
+
   25% {
     background-image: url("../../assets/imgs/page2.png");
     background-position: -358px -2px;
     transform: rotateY(180deg);
   }
+
   50% {
     background-image: url("../../assets/imgs/page3.png");
     background-position: -28px -2px;
     transform: rotateY(0deg);
   }
+
   75% {
     background-image: url("../../assets/imgs/page4.png");
     background-position: -358px -2px;
     transform: rotateY(180deg);
   }
+
   100% {
     background-image: url("../../assets/imgs/page5.png");
     background-position: -28px -2px;
@@ -725,50 +821,60 @@ section{
     background-position: -2px -2px;
     transform: rotateY(0deg);
   }
+
   25% {
     background-image: url("../../assets/imgs/page2.png");
     background-position: -388px -2px;
     transform: rotateY(180deg);
   }
+
   50% {
     background-image: url("../../assets/imgs/page3.png");
     background-position: -2px -2px;
     transform: rotateY(0deg);
   }
+
   75% {
     background-image: url("../../assets/imgs/page4.png");
     background-position: -388px -2px;
     transform: rotateY(180deg);
   }
+
   100% {
     background-image: url("../../assets/imgs/page5.png");
     background-position: -2px -2px;
     transform: rotateY(0deg);
   }
 }
+
 .twitterLink {
   position: fixed;
   bottom: 0.5em;
   right: 0.5em;
 }
+
 .twitterLink img {
   width: 2em;
   filter: grayscale(100%);
   transition: filter 0.25s;
 }
+
 .twitterLink img:hover {
   filter: grayscale(0%);
 }
+
 /* 侨批历史 */
 .history {
   width: 100%;
   margin-top: 950px;
 }
-.history h1{
+
+.history h1 {
   width: 400px;
   height: 100px;
   margin: 0 auto;
 }
+
 .history h1 img {
   width: 100%;
   height: 100%;
@@ -824,6 +930,7 @@ section{
   background-position: center center;
   background-size: cover;
 }
+
 .history .banner ul li::after {
   content: "";
   position: absolute;
@@ -831,10 +938,13 @@ section{
   left: 0;
   right: 0;
   bottom: 0;
- background: linear-gradient(360deg, #b67c1095 0%, rgba(108, 63, 255, 0) 100%);
-  border-radius: 10px; /* 与 li 元素的 border-radius 一致 */
-  transition: opacity 0.5s; /* 平滑过渡效果 */
-  opacity: 1; /* 默认不显示 */
+  background: linear-gradient(360deg, #b67c1095 0%, rgba(108, 63, 255, 0) 100%);
+  border-radius: 10px;
+  /* 与 li 元素的 border-radius 一致 */
+  transition: opacity 0.5s;
+  /* 平滑过渡效果 */
+  opacity: 1;
+  /* 默认不显示 */
 }
 
 .history .banner ul li .pic .math {
@@ -889,22 +999,26 @@ section{
   justify-content: center;
   margin-top: 200px;
 }
+
 .function h1 {
   position: absolute;
   top: -140px;
   width: 400px;
   height: 100px;
 }
+
 .function h1 img {
   width: 100%;
   height: 100%;
 }
+
 .function a {
   display: inline-block;
   width: 200px;
   height: 200px;
   border-radius: 50%;
 }
+
 .images-container {
   display: flex;
   flex-wrap: wrap;
@@ -919,34 +1033,44 @@ section{
 }
 
 .function-img {
-  width: 200px; /* 初始宽度 */
-  height: 200px; /* 初始高度 */
+  width: 200px;
+  /* 初始宽度 */
+  height: 200px;
+  /* 初始高度 */
   border-radius: 50%;
   object-fit: cover;
-  transition: transform 0.3s ease; /* 添加一个平滑的变换效果 */
+  transition: transform 0.3s ease;
+  /* 添加一个平滑的变换效果 */
 }
 
 .function-img:hover {
-  transform: scale(1.2); /* 鼠标悬停时放大到原来的1.2倍 */
+  transform: scale(1.2);
+  /* 鼠标悬停时放大到原来的1.2倍 */
 }
+
 .tip {
   position: absolute;
-  bottom: -30px; /* 根据需要调整位置 */
+  bottom: -30px;
+  /* 根据需要调整位置 */
   left: 50%;
   transform: translateX(-50%);
   background-color: #333;
   color: #fff;
   padding: 5px 10px;
   border-radius: 4px;
-  visibility: hidden; /* 默认不可见 */
+  visibility: hidden;
+  /* 默认不可见 */
   opacity: 0;
-  transition: visibility 0.3s, opacity 0.3s; /* 平滑过渡效果 */
+  transition: visibility 0.3s, opacity 0.3s;
+  /* 平滑过渡效果 */
 }
 
 .function-img:hover p {
-  visibility: visible; /* 鼠标悬停时可见 */
+  visibility: visible;
+  /* 鼠标悬停时可见 */
   opacity: 1;
 }
+
 .bottom {
   position: relative;
   width: 100%;
@@ -957,24 +1081,28 @@ section{
   font-size: 0;
   line-height: 60px;
 }
+
 .online {
   position: absolute;
   top: 30px;
   left: 120px;
   width: 25%;
 }
+
 .oversees {
   position: absolute;
   width: 20%;
   top: 50px;
   left: 480px;
 }
+
 .logo1 {
   position: absolute;
   width: 5%;
   top: 35px;
   left: 800px;
 }
+
 .contact {
   position: absolute;
   top: 40px;
