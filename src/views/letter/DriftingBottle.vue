@@ -1,38 +1,38 @@
 <template>
   <div class="banner">
     <div class="pick" v-if="activeButton === 'smallbtn1'">
-        <button class="bigbtn" @click="getDriftBottle();select('smallbtn2')" >捡一个</button>
+      <button class="bigbtn" @click="getDriftBottle(); select('smallbtn2')">捡一个</button>
     </div>
- <div class="letter" v-if="activeButton === 'smallbtn2'" :style="'background-image: url(' + letter.url + ');'">
-    <div class="friend-modal" v-if="isFriendModalVisible">
-   <div class="modal-content">
-    <span class="close" @click="toggleFriendModal">&times;</span>
-    <h2>成为好友</h2>
-    <form @submit.prevent="sendFriendRequest">
-      <div class="form-group">
-        <label for="sender">写信人:</label>
-        <input type="text" id="sender" v-model="friendRequest.sender" required>
+    <div class="letter" v-if="activeButton === 'smallbtn2'" :style="'background-image: url(' + letter.url + ');'">
+      <div class="friend-modal" v-if="isFriendModalVisible">
+        <div class="modal-content">
+          <span class="close" @click="toggleFriendModal">&times;</span>
+          <h2>成为好友</h2>
+          <form @submit.prevent="sendFriendRequest">
+            <div class="form-group">
+              <label for="sender">写信人:</label>
+              <input type="text" id="sender" v-model="friendRequest.sender" required>
+            </div>
+            <div class="form-group">
+              <label for="friendAddress">个人地址:</label>
+              <input type="text" id="friendAddress" v-model="friendRequest.friendAddress" required>
+            </div>
+            <div class="form-group special">
+              <label for="friendContent" style="margin-bottom:20px">内容:</label>
+              <textarea id="friendContent" v-model="friendRequest.content"></textarea>
+            </div>
+            <button type="submit">发送</button>
+          </form>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="friendAddress">个人地址:</label>
-        <input type="text" id="friendAddress" v-model="friendRequest.friendAddress" required>
-      </div>
-      <div class="form-group special">
-        <label for="friendContent" style="margin-bottom:20px">内容:</label>
-        <textarea id="friendContent" v-model="friendRequest.content"></textarea>
-      </div>
-      <button type="submit">发送</button>
-    </form>
-  </div>
-</div>
-    <button class="bigbtn1" @click="getDriftBottle()">再捡一个</button>
-    <button class="bigbtn2" @click="toggleFriendModal">成为好友</button>
+      <button class="bigbtn1" @click="getDriftBottle()">再捡一个</button>
+      <button class="bigbtn2" @click="toggleFriendModal">成为好友</button>
     </div>
     <div class="write" v-if="activeButton === 'smallbtn3'">
-     <div class="left">
-          <h2>写漂流瓶</h2>
-          <form @submit.prevent="sendLetter">
-            <!-- <div class="form-group">
+      <div class="left">
+        <h2>写漂流瓶</h2>
+        <form @submit.prevent="sendLetter">
+          <!-- <div class="form-group">
               <label for="recipientUsername">收信人用户名:</label>
               <input type="text" id="recipientUsername" v-model="letter.recipientUsername" required>
             </div>
@@ -40,25 +40,22 @@
               <label for="recipientAddress">收信人地址:</label>
               <input type="text" id="recipientAddress" v-model="letter.recipientAddress" required>
             </div> -->
-               <avue-input-map :params="params" :autosize="{ minRows: 1, maxRows: 4 }" placeholder="请选择寄信地址"
-     v-model="senderAddress"></avue-input-map>
-            <div class="form-group special">
-              <label for="letterContent">信件内容：</label>
-              <textarea id="letterContent" v-model="letter.content" required style="margin-top:20px"></textarea>
-            </div>
-            <button type="submit" @click="generateDriftBottle">发送</button>
-          </form>
-        </div>
-        <div class="right"></div>
+          <avue-input-map :params="params" :autosize="{ minRows: 1, maxRows: 4 }" placeholder="请选择寄信地址"
+            v-model="letter.senderAddress"></avue-input-map>
+          <div class="form-group special">
+            <label for="letterContent">信件内容：</label>
+            <textarea id="letterContent" v-model="letter.content" required style="margin-top:20px"></textarea>
+          </div>
+          <button type="submit" @click="generateDriftBottle">发送</button>
+        </form>
       </div>
+      <div class="right"></div>
+    </div>
     <div class="friend" v-if="activeButton === 'smallbtn5'"></div>
-    <div class="smallbtn1" @click="select('smallbtn1')" :class="activeButtonClass('smallbtn1')"
->捡漂流瓶</div>
-    <div class="smallbtn2" @click="select('smallbtn4')" :class="activeButtonClass('smallbtn4')"
->新消息</div>
-    <div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')"
->写漂流瓶</div>
-</div>
+    <div class="smallbtn1" @click="select('smallbtn1')" :class="activeButtonClass('smallbtn1')">捡漂流瓶</div>
+    <div class="smallbtn2" @click="select('smallbtn4')" :class="activeButtonClass('smallbtn4')">新消息</div>
+    <div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')">写漂流瓶</div>
+  </div>
 </template>
 
 <script>
@@ -81,7 +78,7 @@ export default {
       letter: {
         recipientUsername: '',
         recipientAddress: '',
-        senderAddress: '',
+        senderAddress: [116.397455, 39.909187, '北京市东城区东华门街道天安门'],
         stationery: null,
         penFont: null,
         content: '',
@@ -128,7 +125,11 @@ export default {
         Message.error('请填写完整的发送者地址和内容')
         return
       }
-      const response = await generateDriftBottle(this.letter.senderAddress, this.letter.content)
+      const address = {}
+      address.longitude = this.letter.senderAddress[0]
+      address.latitude = this.letter.senderAddress[1]
+      address.formattedAddress = this.letter.senderAddress[2]
+      const response = await generateDriftBottle(address, this.letter.content)
       if (response.code === 200) {
         Message.success(response.msg)
         // this.letter.url = response.data.data
@@ -152,14 +153,16 @@ export default {
 </script>
 
 <style scoped>
- .banner {
+.banner {
   margin-top: 40px;
   width: 1200px;
   height: 730px;
   background-color: rgb(248, 235, 211);
-  display: flex; /* 使用 Flexbox 布局 */
+  display: flex;
+  /* 使用 Flexbox 布局 */
   align-items: flex-start;
 }
+
 .banner .pick {
   position: absolute;
   left: 20px;
@@ -170,6 +173,7 @@ export default {
   background-position: center center;
   background-size: cover;
 }
+
 .banner .letter {
   position: absolute;
   left: 20px;
@@ -177,72 +181,79 @@ export default {
   width: 950px;
   height: 600px;
   background-position: center center;
-  background-size:contain;
+  background-size: contain;
   background-repeat: no-repeat;
 }
+
 .banner .bigbtn {
-    position: absolute;
-    bottom: -90px;
-    left: 370px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 370px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .bigbtn1 {
-    position: absolute;
-    bottom: -90px;
-    left: 280px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 280px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .bigbtn2 {
-    position: absolute;
-    bottom: -90px;
-    left: 500px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 500px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn1 {
-    position: absolute;
-    top: 20px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 20px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn2 {
-    position: absolute;
-    top: 100px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 100px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn3 {
-    position: absolute;
-    top: 180px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 180px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .write {
   position: absolute;
   left: 20px;
@@ -270,9 +281,11 @@ export default {
   height: 650px;
   background-color: white;
 }
+
 h2 {
   height: 30px;
 }
+
 .form-group label {
   display: block;
   height: 35px;
@@ -302,6 +315,7 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
 .friend-modal {
   width: 100%;
   height: 400px;
@@ -327,6 +341,7 @@ button:hover {
 .form-group {
   height: 80px;
 }
+
 .form-group label {
   display: block;
   margin-bottom: 0px;
@@ -356,8 +371,12 @@ button {
 button:hover {
   background-color: #35471a;
 }
-.smallbtn1.active, .smallbtn2.active, .smallbtn3.active {
-  background-color: #73705d; /* 激活状态下的背景颜色 */
+
+.smallbtn1.active,
+.smallbtn2.active,
+.smallbtn3.active {
+  background-color: #73705d;
+  /* 激活状态下的背景颜色 */
   color: white;
 }
 </style>

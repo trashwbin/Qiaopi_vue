@@ -15,9 +15,10 @@ export function showDriftBottle() {
 }
 // 生成漂流瓶
 export function generateDriftBottle(senderAddress, content) {
+  const data = { senderAddress, content }
   return request({
     url: '/bottle/generateDriftBottle',
     method: 'post',
-    params: { senderAddress, content }
+    data: data
   })
 }

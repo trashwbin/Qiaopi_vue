@@ -3,15 +3,16 @@
     <div class="banner">
       <h1 class="profile"><img src="../../assets/imgs/profile.png" alt=""></h1>
       <div class="data">
-      <div class="pic"><img :src="user.avatar" alt=""><el-link icon="el-icon-edit" class="edit" @click="getAvatarList" style="position:absolute; top:160px;">编辑</el-link></div>
-                       <!-- 头像列表弹窗 -->
-   <el-dialog title="选择头像" :visible.sync="showAvatarModal" width="50%">
-    <div class="avatar-list">
-      <div class="avatar-item" v-for="avatar in avatars" :key="avatar.id" @click="selectAvatar(avatar)">
-        <img :src="avatar.url" alt="" style="width:100px;height:100px;">
-      </div>
-    </div>
-  </el-dialog>
+        <div class="pic"><img :src="user.avatar" alt=""><el-link icon="el-icon-edit" class="edit" @click="getAvatarList"
+            style="position:absolute; top:160px;">编辑</el-link></div>
+        <!-- 头像列表弹窗 -->
+        <el-dialog title="选择头像" :visible.sync="showAvatarModal" width="50%">
+          <div class="avatar-list">
+            <div class="avatar-item" v-for="avatar in avatars" :key="avatar.id" @click="selectAvatar(avatar)">
+              <img :src="avatar.url" alt="" style="width:100px;height:100px;">
+            </div>
+          </div>
+        </el-dialog>
         <div class="information">
           <div class="name">{{ user.nickname }}<el-link icon="el-icon-edit" class="edit" @click="showEditNicknameDialog"
               style="font-family:'华文中宋', sans-serif;">编辑</el-link></div>
@@ -173,22 +174,22 @@
         <a @click="toggleFriendsModal" class="friends">我的好友</a>
         <a class="code" @click="showEditPasswordDialog">修改密码</a>
         <el-dialog title="修改密码" :visible.sync="showPasswordModal" width="30%" @close="showPasswordModal = false">
-  <el-form ref="passwordForm" :model="passwordForm" label-width="80px">
-    <el-form-item label="原密码">
-      <el-input type="password" v-model="passwordForm.oldPassword" autocomplete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="新密码">
-      <el-input type="password" v-model="passwordForm.newPassword" autocomplete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="确认密码">
-      <el-input type="password" v-model="passwordForm.confirmPassword" autocomplete="off"></el-input>
-    </el-form-item>
-  </el-form>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="showPasswordModal = false" class="cancel">取消</el-button>
-    <el-button type="primary" @click="updatePassword" style="background-color:#888B69;">确定</el-button>
-  </span>
-</el-dialog>
+          <el-form ref="passwordForm" :model="passwordForm" label-width="80px">
+            <el-form-item label="原密码">
+              <el-input type="password" v-model="passwordForm.oldPassword" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="新密码">
+              <el-input type="password" v-model="passwordForm.newPassword" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码">
+              <el-input type="password" v-model="passwordForm.confirmPassword" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="showPasswordModal = false" class="cancel">取消</el-button>
+            <el-button type="primary" @click="updatePassword" style="background-color:#888B69;">确定</el-button>
+          </span>
+        </el-dialog>
       </div>
       <div class="store">
         <img src="../../assets/imgs/store.png" alt="仓库" class="bgd">
@@ -226,34 +227,33 @@
           <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
         </div>
       </div>
-        <div v-if="showInkImageModal" class="image-modal">
-          <div class="colorbox">
-            <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundColor: color.hexCode }">
-            </div>
+      <div v-if="showInkImageModal" class="image-modal">
+        <div class="colorbox">
+          <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundColor: color.hexCode }">
           </div>
-          <span class="close" @click="showInkImageModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
         </div>
-        <!-- 字体展示台 -->
-        <div v-if="showWordModal" class="image-modal">
-          <div class="penboxs">
-            <div class="penbox" v-for="font in wordFonts" :key="font.id">
-              {{ font.name }}
-            </div>
+        <span class="close" @click="showInkImageModal = false">&times;</span>
+        <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+      </div>
+      <!-- 字体展示台 -->
+      <div v-if="showWordModal" class="image-modal">
+        <div class="penboxs">
+          <div class="penbox" v-for="font in wordFonts" :key="font.id">
+            {{ font.name }}
           </div>
-          <span class="close" @click="showWordModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
         </div>
-        <!-- 信纸展示台 -->
-        <div v-if="showEnvelopeModal" class="image-modal">
-          <div class="penboxs">
-            <div class="envelopebox" v-for="paper in paperPreviews" :key="paper.id"
-              :style="{ backgroundImage: 'url(' + paper.previewImage + ')' }">
-            </div>
+        <span class="close" @click="showWordModal = false">&times;</span>
+        <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+      </div>
+      <!-- 信纸展示台 -->
+      <div v-if="showEnvelopeModal" class="image-modal">
+        <div class="penboxs">
+          <div class="envelopebox" v-for="paper in paperPreviews" :key="paper.id"
+            :style="{ backgroundImage: 'url(' + paper.previewImage + ')' }">
           </div>
-          <span class="close" @click="showEnvelopeModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
         </div>
+        <span class="close" @click="showEnvelopeModal = false">&times;</span>
+        <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
       </div>
     </div>
   </div>
@@ -305,7 +305,7 @@ export default {
       const token = userStore.token // 从 Pinia store 获取 token
 
       // 获取用户信息
-      const userResponse = await this.getUserInfo(token)
+      const userResponse = await this.getUserInfo()
       if (userResponse && userResponse.data.code === 200) {
         this.user = userResponse.data.data
       }
@@ -371,9 +371,9 @@ export default {
         console.error('获取好友列表错误:', error)
       }
     },
-    async getUserInfo(token) {
+    async getUserInfo() {
       const userStore = useUserStore()
-      userStore.getUserInfo(token).then(res => {
+      userStore.getUserInfo().then(res => {
         this.user = res.data
       })
       // const response = await axios.get('/api/user/getUserInfo', {
@@ -382,16 +382,7 @@ export default {
       //   }
       // })
       // return response
-      const userStore = useUserStore()
-      userStore.getUserInfo(token).then(res => {
-        this.user = res.data
-      })
-      // const response = await axios.get('/api/user/getUserInfo', {
-      //   headers: {
-      //     Authorization: token
-      //   }
-      // })
-      // return response
+      // const userStore = useUserStore()
     },
     async getUserMoney(token) {
       const response = await axios.get('/api/user/getUserMoney', {
@@ -422,7 +413,8 @@ export default {
       await updateNickname(this.user.nickname).then(res => {
         this.editNicknameDialogVisible = false
         Message.success('修改昵称成功')
-        this.user.nickname = res.data.nickname // 更新用户名
+        // this.user.nickname = res.data.nickname // 更新用户名
+        this.getUserInfo()
       })
     },
     async updateSex() {
@@ -430,6 +422,7 @@ export default {
         this.editSexDialogVisible = false
         Message.success('修改昵称成功')
         this.user.sex = res.data.sex // 更新用户名
+        this.getUserInfo()
       })
     },
     fetchAddresses() {
@@ -476,7 +469,8 @@ export default {
       await updateUsername(this.user.username).then(res => {
         this.editUsernameDialogVisible = false
         Message.success('修改用户名成功')
-        this.user.username = res.data.username // 更新用户名
+        // this.user.username = res.data.username // 更新用户名
+        this.getUserInfo()
       })
     },
     async getAvatarList() {
@@ -493,7 +487,8 @@ export default {
       // 关闭头像列表弹窗
       this.showAvatarModal = false
       // 立即更新页面上的头像显示
-      this.user.avatar = avatar.url
+      // this.user.avatar = avatar.url
+      this.getUserInfo()
     },
     async updateUserInfo() {
       try {
@@ -897,7 +892,6 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-
 .address-modal {
   position: fixed;
   /* 使用固定定位 */
@@ -956,7 +950,6 @@ li {
   /* 列表项之间的间距 */
 }
 
-
 .close {
   position: absolute;
   top: -40px;
@@ -981,7 +974,6 @@ li {
   border-radius: 4px;
 }
 
-
 .save {
   width: 100px;
   height: 50px;
@@ -995,7 +987,6 @@ li {
   border-radius: 25px;
 }
 
-
 .save:hover {
   color: white;
   background-color: #6f6f5e;
@@ -1004,7 +995,6 @@ li {
   ;
   cursor: pointer;
 }
-
 
 .image-modal {
   position: fixed;
@@ -1015,7 +1005,6 @@ li {
   transform: translate(-50%, -50%);
   z-index: 1000;
 }
-
 
 .image-modal span {
   position: absolute;
@@ -1028,13 +1017,11 @@ li {
   width: 100%;
 }
 
-
 .colorbox {
   position: absolute;
   top: 50px;
   left: 80px;
 }
-
 
 .box {
   display: inline-block;
@@ -1046,13 +1033,11 @@ li {
   /* 可选的边框样式 */
 }
 
-
 .penboxs {
   position: absolute;
   top: 50px;
   left: 50px;
 }
-
 
 .penbox {
   float: left;
@@ -1064,7 +1049,6 @@ li {
   /* 可选的边框样式 */
 }
 
-
 .envelopebox {
   float: left;
   width: 80px;
@@ -1074,7 +1058,6 @@ li {
   background-position: center center;
   background-size: cover;
 }
-
 
 .friends-modal {
   position: fixed;
@@ -1101,7 +1084,6 @@ li {
   cursor: pointer;
 }
 
-
 .friends {
   position: absolute;
   top: 500px;
@@ -1125,13 +1107,9 @@ li {
 .friendname,
 .friendsex,
 .friendemail {
-.friendname,
-.friendsex,
-.friendemail {
   font-size: 15px;
   margin-bottom: 5px;
 }
-
 
 .address {
   position: absolute;
@@ -1142,12 +1120,10 @@ li {
   color: #565648;
 }
 
-
 .data a {
   font-size: 15px;
   font-size: 15px;
 }
-
 
 .cancel:hover {
   border: #6f6f5e 1px solid;
@@ -1157,11 +1133,11 @@ li {
   color: #6f6f5e;
 }
 
-
 .el-link:hover {
   color: #6f6f5e;
   color: #6f6f5e;
 }
+
 .code {
   position: absolute;
   top: 500px;
