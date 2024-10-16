@@ -229,7 +229,9 @@
       </div>
       <div v-if="showInkImageModal" class="image-modal">
         <div class="colorbox">
-          <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundColor: color.hexCode }">
+          <div class="box" v-for="color in inkColors" :key="color.id"
+            :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
+
           </div>
         </div>
         <span class="close" @click="showInkImageModal = false">&times;</span>
@@ -238,8 +240,8 @@
       <!-- 字体展示台 -->
       <div v-if="showWordModal" class="image-modal">
         <div class="penboxs">
-          <div class="penbox" v-for="font in wordFonts" :key="font.id">
-            {{ font.name }}
+          <div class="penbox" v-for="font in wordFonts" :key="font.id"
+            :style="{ backgroundImage: 'url(' + font.previewImage + ')' }">
           </div>
         </div>
         <span class="close" @click="showWordModal = false">&times;</span>
@@ -1024,9 +1026,10 @@ li {
 }
 
 .box {
-  display: inline-block;
-  width: 50px;
+  float: left;
+  width: 105px;
   height: 50px;
+  background-size: cover;
   border: 1px solid #ccc;
   /* 可选的边框样式 */
   border: 1px solid #ccc;
@@ -1041,8 +1044,9 @@ li {
 
 .penbox {
   float: left;
-  width: 80px;
+  width: 130px;
   height: 60px;
+  background-size: cover;
   border: 1px solid #000000;
   /* 可选的边框样式 */
   border: 1px solid #000000;
@@ -1051,7 +1055,7 @@ li {
 
 .envelopebox {
   float: left;
-  width: 80px;
+  width: 185px;
   height: 120px;
   margin-right: 10px;
   border: 1px solid #000000;
