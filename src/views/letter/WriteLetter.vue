@@ -165,8 +165,7 @@
 
       <!-- 确认信件信息 -->
       <el-dialog title="确认信件信息" :visible.sync="showConfirmDialog" width="400px" append-to-body>
-        <el-form :model="letter" :inline="true" label-width="100px" :rules="rules" ref="letter"
-          hide-required-asterisk="true">
+        <el-form :model="letter" :inline="true" label-width="100px" :rules="rules" ref="letter" hide-required-asterisk>
           <el-form-item label="收信人邮箱" prop="recipientEmail">
             <el-input v-model="letter.recipientEmail" placeholder="请输入收信人邮箱"></el-input>
           </el-form-item>
@@ -197,6 +196,7 @@
           <el-switch v-model="loading" />
         </p> -->
         <el-row class="row-bg" justify="space-around">
+          <el-empty v-if="isEmpty" style="height: 100%;" description="没有写过侨批哦,快去写一封吧!"></el-empty>
           <el-col :span="6" v-for="item in mySendList" :key="item.id">
             <el-skeleton style="width: 250px ;margin:0 auto" :loading="loading" animated>
               <template slot="template">
@@ -436,6 +436,7 @@ export default {
       isFullscreen: false,
       // 信件图片列表
       mySendList: ['', '', '', '', '', '', '', ''],
+      isEmpty: false,
       myFunctionCards: {},
       // 图片加载状态
       loading: false,
@@ -838,6 +839,11 @@ export default {
         // setTimeout(() => {
         //   this.loading = false
         // }, 1000)
+        if (this.mySendList.length === 0) {
+          this.isEmpty = true
+        } else {
+          this.isEmpty = false
+        }
       })
     },
     getMyFunctionCard() {
