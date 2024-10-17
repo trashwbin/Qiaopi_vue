@@ -1,4 +1,4 @@
-import { getUserInfo, login, logout } from '@/api/user'
+import { getUserInfo, login } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import defAva from '@/assets/default-avatar.png'
 import { defineStore } from 'pinia'
@@ -57,15 +57,17 @@ const useUserStore = defineStore(
       },
       // 退出系统
       logOut() {
-        return new Promise((resolve, reject) => {
-          logout(this.token).then(() => {
-            this.token = ''
-            removeToken()
-            resolve()
-          }).catch(error => {
-            reject(error)
-          })
-        })
+        this.token = ''
+        removeToken()
+        // return new Promise((resolve, reject) => {
+        //   logout(this.token).then(() => {
+        //   this.token = ''
+        //   removeToken()
+        //   resolve()
+        //   }).catch(error => {
+        //     reject(error)
+        //   })
+        // })
       }
     }
   })

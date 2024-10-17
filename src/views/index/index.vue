@@ -10,12 +10,19 @@
         <div class="animation" :style="animationStyle"></div>
         <div class="money" v-if="isLoggedIn"><img src="../../assets/imgs/pigmoney.png" alt="猪仔钱"></div>
         <p class="pig" v-if="isLoggedIn">猪仔钱：{{ money }}</p>
-        <div v-if="isLoggedIn" class="avatar-container" @mouseover="showMenu = true" @mouseleave="showMenu = false">
-          <img :src="userAvatar" style="height: 30px; width: 30px;" alt="用户头像" class="avatar">
-          <div v-if="showMenu" class="dropdown">
+        <div v-if="isLoggedIn" class="avatar-container">
+          <el-dropdown style="height: 40px;" @command="handleCommand" placement="bottom">
+            <el-avatar :src="userAvatar" shape="square" fit="fill"></el-avatar>
+            <!-- <img :src="userAvatar" style="height: 30px; width: 30px;" alt="用户头像" class="avatar"> -->
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="profile">个人中心</el-dropdown-item>
+              <el-dropdown-item command="logout">切换账号</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- <div v-if="showMenu" class="dropdown">
             <router-link to="/profile" class="profile">个人中心</router-link>
             <router-link to="/login" class="logout">切换账号</router-link>
-          </div>
+          </div> -->
         </div>
         <div v-else>
           <router-link to="/login" class="login">登录</router-link>
@@ -67,6 +74,15 @@ export default {
     }
   },
   methods: {
+    handleCommand(command) {
+      if (command === 'logout') {
+        const userStore = useUserStore()
+        userStore.logOut()
+        this.$router.push('/login')
+      } else if (command === 'profile') {
+        this.$router.push('/profile')
+      }
+    },
     isLoggedInCheck() {
       const userStore = useUserStore()
       if (userStore.token) {
@@ -249,7 +265,7 @@ nav .slider:nth-child(4):hover~.animation {
   color: #ffffff;
 }
 
-.profile {
+/* .profile {
   font-size: 13px;
   color: #ffffff;
   text-decoration: none;
@@ -259,17 +275,21 @@ nav .slider:nth-child(4):hover~.animation {
   font-size: 13px;
   color: #ffffff;
   text-decoration: none;
-}
+} */
 
 .avatar-container {
-  position: relative;
+  width: 40px;
+  /* 头像容器的宽度 */
+  position: absolute;
+  top: 10px;
+  right: 30px;
   display: inline-block;
 }
 
 .avatar {
-  position: absolute;
+  /* position: absolute;
   top: -30px;
-  right: -360px;
+  right: -360px; */
   z-index: 10;
 }
 

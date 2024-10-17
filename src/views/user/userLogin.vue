@@ -108,6 +108,7 @@ body {
 .container {
   position: relative;
   height: 1000px;
+  /* height: 100%; */
   width: 100%;
   background-image: url(../../assets/imgs/loginbgd.jpg);
   background-position: center center;

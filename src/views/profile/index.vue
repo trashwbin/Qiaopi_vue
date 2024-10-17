@@ -3,19 +3,24 @@
     <div class="banner">
       <h1 class="profile"><img src="../../assets/imgs/profile.png" alt=""></h1>
       <div class="data">
-        <div class="pic"><img :src="user.avatar" alt=""><el-link icon="el-icon-edit" class="edit" @click="getAvatarList"
-            style="position:absolute; top:160px;">编辑</el-link></div>
+
+        <div class="pic" @click="getAvatarList">
+          <img :src="user.avatar" alt="">
+          <div class="change-text">
+            更换头像
+          </div>
+        </div>
         <!-- 头像列表弹窗 -->
         <el-dialog title="选择头像" :visible.sync="showAvatarModal" width="50%">
-          <div class="avatar-list">
+          <div class="avatar-list" style="height: 300px;">
             <div class="avatar-item" v-for="avatar in avatars" :key="avatar.id" @click="selectAvatar(avatar)">
               <img :src="avatar.url" alt="" style="width:100px;height:100px;">
             </div>
           </div>
         </el-dialog>
         <div class="information">
-          <div class="name">{{ user.nickname }}<el-link icon="el-icon-edit" class="edit" @click="showEditNicknameDialog"
-              style="font-family:'华文中宋', sans-serif;">编辑</el-link></div>
+          <div class="name">{{ user.nickname }}<el-link icon="el-icon-edit" class="edit"
+              @click="showEditNicknameDialog">编辑</el-link></div>
           <!-- 修改昵称弹窗 -->
           <el-dialog title="修改昵称" :visible.sync="editNicknameDialogVisible" width="30%"
             @close="editNicknameDialogVisible = false">
@@ -29,7 +34,7 @@
               <el-button type="primary" @click="updateNickname" style="background-color:#888B69;">确定</el-button>
             </span>
           </el-dialog>
-          <div class="userid">用户名：<span>{{ user.username }}</span><el-link icon="el-icon-edit" class="edit"
+          <div class="userid">用户名:<span>{{ user.username }}</span><el-link icon="el-icon-edit" class="edit"
               @click="showEditUsernameDialog">编辑</el-link></div>
           <el-dialog title="修改用户名" :visible.sync="editUsernameDialogVisible" width="30%"
             @close="editUsernameDialogVisible = false">
@@ -43,7 +48,7 @@
               <el-button type="primary" @click="updateUsername" style="background-color:#888B69;">确定</el-button>
             </span>
           </el-dialog>
-          <div class="sex">性别：<span>{{ user.sex }}</span><el-link icon="el-icon-edit" class="edit"
+          <div class="sex">性别:<span>{{ user.sex }}</span><el-link icon="el-icon-edit" class="edit"
               @click="showEditSexDialog">编辑</el-link></div>
           <!-- 修改性别弹窗 -->
           <el-dialog title="修改性别" :visible.sync="editSexDialogVisible" width="30%"
@@ -61,55 +66,7 @@
               <el-button type="primary" @click="updateSex" style="background-color:#888B69;">确定</el-button>
             </span>
           </el-dialog>
-          <div class="email">邮箱：<span>{{ user.email }}</span></div>
-          <div class="name">{{ user.nickname }}<el-link icon="el-icon-edit" class="edit" @click="showEditNicknameDialog"
-              style="font-family:'华文中宋', sans-serif;">编辑</el-link></div>
-          <!-- 修改昵称弹窗 -->
-          <el-dialog title="修改昵称" :visible.sync="editNicknameDialogVisible" width="30%"
-            @close="editNicknameDialogVisible = false">
-            <el-form ref="nicknameForm" :model="user" label-width="80px">
-              <el-form-item label="昵称">
-                <el-input v-model="user.nickname" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editNicknameDialogVisible = false" class="cancel">取消</el-button>
-              <el-button type="primary" @click="updateNickname" style="background-color:#888B69;">确定</el-button>
-            </span>
-          </el-dialog>
-          <div class="userid">用户名：<span>{{ user.username }}</span><el-link icon="el-icon-edit" class="edit"
-              @click="showEditUsernameDialog">编辑</el-link></div>
-          <el-dialog title="修改用户名" :visible.sync="editUsernameDialogVisible" width="30%"
-            @close="editUsernameDialogVisible = false">
-            <el-form ref="usernameForm" :model="user" label-width="80px">
-              <el-form-item label="用户名">
-                <el-input v-model="user.username" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editUsernameDialogVisible = false" class="cancel">取消</el-button>
-              <el-button type="primary" @click="updateUsername" style="background-color:#888B69;">确定</el-button>
-            </span>
-          </el-dialog>
-          <div class="sex">性别：<span>{{ user.sex }}</span><el-link icon="el-icon-edit" class="edit"
-              @click="showEditSexDialog">编辑</el-link></div>
-          <!-- 修改性别弹窗 -->
-          <el-dialog title="修改性别" :visible.sync="editSexDialogVisible" width="30%"
-            @close="editSexDialogVisible = false">
-            <el-form ref="sexForm" :model="user" label-width="80px">
-              <el-form-item label="性别">
-                <el-select v-model="user.sex" placeholder="请选择">
-                  <el-option label="男" value="男"></el-option>
-                  <el-option label="女" value="女"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editSexDialogVisible = false" class="cancel">取消</el-button>
-              <el-button type="primary" @click="updateSex" style="background-color:#888B69;">确定</el-button>
-            </span>
-          </el-dialog>
-          <div class="email">邮箱：<span>{{ user.email }}</span></div>
+          <div class="email">邮箱:<span>{{ user.email }}</span></div>
 
           <!-- 地址列表弹窗 -->
           <div v-if="showAddressesModal" class="address-modal">
@@ -123,23 +80,7 @@
               </ul>
             </div>
           </div>
-          <div class="friends-container">
-            <!-- 好友列表浮窗 -->
-            <div v-if="showFriendsModal" class="friends-modal">
-              <div class="modal-content">
-                <span class="close" @click="toggleFriendsModal">&times;</span>
-                <h2>我的好友</h2>
-                <div class="friends-container">
-                  <div class="friend" v-for="friend in friends" :key="friend.id">
-                    <div class="friendname">姓名：{{ friend.name }}</div>
-                    <div class="friendsex">性别：{{ friend.sex }}</div>
-                    <div class="friendemail">邮箱号：{{ friend.email }}</div>
-                    <div class="friendadress">地址：{{ friend.address }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
           <!-- 地址列表弹窗 -->
           <div v-if="showAddressesModal" class="address-modal">
             <div class="modal-content">
@@ -197,10 +138,11 @@
         <img src="../../assets/imgs/pen.png" alt="笔" class="pen" @click="showWordImage">
         <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
         <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
-        <!-- 墨水展示台 -->
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
-            <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundColor: color.hexCode }">
+            <div class="box" v-for="color in inkColors" :key="color.id"
+              :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
+
             </div>
           </div>
           <span class="close" @click="showInkImageModal = false">&times;</span>
@@ -209,8 +151,8 @@
         <!-- 字体展示台 -->
         <div v-if="showWordModal" class="image-modal">
           <div class="penboxs">
-            <div class="penbox" v-for="font in wordFonts" :key="font.id">
-              {{ font.name }}
+            <div class="penbox" v-for="font in wordFonts" :key="font.id"
+              :style="{ backgroundImage: 'url(' + font.previewImage + ')' }">
             </div>
           </div>
           <span class="close" @click="showWordModal = false">&times;</span>
@@ -226,36 +168,6 @@
           <span class="close" @click="showEnvelopeModal = false">&times;</span>
           <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
         </div>
-      </div>
-      <div v-if="showInkImageModal" class="image-modal">
-        <div class="colorbox">
-          <div class="box" v-for="color in inkColors" :key="color.id"
-            :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
-
-          </div>
-        </div>
-        <span class="close" @click="showInkImageModal = false">&times;</span>
-        <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
-      </div>
-      <!-- 字体展示台 -->
-      <div v-if="showWordModal" class="image-modal">
-        <div class="penboxs">
-          <div class="penbox" v-for="font in wordFonts" :key="font.id"
-            :style="{ backgroundImage: 'url(' + font.previewImage + ')' }">
-          </div>
-        </div>
-        <span class="close" @click="showWordModal = false">&times;</span>
-        <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
-      </div>
-      <!-- 信纸展示台 -->
-      <div v-if="showEnvelopeModal" class="image-modal">
-        <div class="penboxs">
-          <div class="envelopebox" v-for="paper in paperPreviews" :key="paper.id"
-            :style="{ backgroundImage: 'url(' + paper.previewImage + ')' }">
-          </div>
-        </div>
-        <span class="close" @click="showEnvelopeModal = false">&times;</span>
-        <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
       </div>
     </div>
   </div>
@@ -589,179 +501,38 @@ export default {
   position: absolute;
   top: 50px;
   left: 50%;
+  border-radius: 5px;
   transform: translate(-50%, 0);
   width: 250px;
   height: 200px;
-}
-
-.data .pic img {
-  width: 100%;
-  height: 100%;
-}
-
-.data .name {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  font-size: 42px;
-  font-weight: bold;
-  font-family: '华文新魏', sans-serif;
-}
-
-.data .userid {
-  position: absolute;
-  top: 70px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.userid span {
-  font-size: 16px;
-  font-weight: normal;
-  margin-left: 2px;
-  font-family: Arial, sans-serif;
-}
-
-.data .sex {
-  position: absolute;
-  top: 110px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.data .email {
-  position: absolute;
-  top: 150px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.email span {
-  position: absolute;
-  left: 65px;
-  top: 8px;
-  font-size: 16px;
-  font-weight: normal;
-  font-family: Arial, sans-serif;
-}
-
-.sex span {
-  font-size: 16px;
-  font-weight: normal;
-  font-family: Arial, sans-serif;
-}
-
-.store {
-  position: absolute;
-  left: 396px;
-  top: 60px;
-  width: 850px;
-  height: 640px;
-  background-image: url(../../assets/imgs/frame.png);
-  background-position: center center;
-  background-size: cover;
-}
-
-.store .bgd {
-  position: absolute;
-  top: 35px;
-  left: 40px;
-  width: 768px;
-  height: 578px;
-}
-
-.data .information {
-  position: relative;
-  top: 240px;
-  left: 25px;
-  width: 300px;
-  height: 300px;
-  background-color: #ADA587;
-}
-
-.ink {
-  position: absolute;
-  bottom: 180px;
-  left: 200px;
   cursor: pointer;
 }
 
-.pen {
+.pic:hover .change-text {
+  opacity: 1;
+}
+
+.change-text {
   position: absolute;
-  bottom: 180px;
-  left: 330px;
-  cursor: pointer;
-}
-
-.envelope {
-  position: absolute;
-  width: 100px;
-  height: 70px;
-  bottom: 180px;
-  left: 450px;
-  cursor: pointer;
-}
-
-.data .showEdit {
-  position: absolute;
-  bottom: 85px;
-  left: 50px;
-  cursor: pointer;
-}
-
-.edit-modal {
-  position: relative;
-  margin: 0 auto;
-  width: 1300px;
-  height: 800px;
-}
-
-.banner .profile {
-  position: absolute;
-  top: -20px;
-  left: 35%;
-  transform: translateY(-50%);
-  width: 400px;
-  height: 100px;
-}
-
-.banner h1 img {
-  width: 100%;
-  height: 100%;
-}
-
-.data {
-  position: relative;
-  top: 60px;
-  left: 50px;
-  width: 350px;
-  height: 640px;
-  padding-top: 30px;
-  box-sizing: border-box;
-  margin-top: 60px;
-  background-image: url(../../assets/imgs/profilebgd.png);
-  background-position: center center;
-  background-size: cover;
-}
-
-.data .pic {
-  position: absolute;
-  top: 50px;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, 0);
   width: 250px;
   height: 200px;
+  line-height: 200px;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
 }
 
 .data .pic img {
   width: 100%;
   height: 100%;
+  border-radius: 5px;
 }
 
 .data .name {
@@ -773,44 +544,60 @@ export default {
   font-family: '华文新魏', sans-serif;
 }
 
+.name:hover .edit {
+  display: inline-block;
+}
+
 .data .userid {
   position: absolute;
   top: 70px;
   left: 20px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   font-family: '华文中宋', sans-serif;
 }
 
 .userid span {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: normal;
   margin-left: 2px;
   font-family: Arial, sans-serif;
+}
+
+.userid:hover .edit {
+  display: inline-block;
+}
+
+.edit {
+  display: none;
 }
 
 .data .sex {
   position: absolute;
   top: 110px;
   left: 20px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   font-family: '华文中宋', sans-serif;
+}
+
+.sex:hover .edit {
+  display: inline-block;
 }
 
 .data .email {
   position: absolute;
   top: 150px;
   left: 20px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   font-family: '华文中宋', sans-serif;
 }
 
 .email span {
-  position: absolute;
+  /* position: absolute;
   left: 65px;
-  top: 8px;
+  top: 8px; */
   font-size: 16px;
   font-weight: normal;
   font-family: Arial, sans-serif;
@@ -1131,14 +918,11 @@ li {
 
 .cancel:hover {
   border: #6f6f5e 1px solid;
-  border: #6f6f5e 1px solid;
   background-color: #e2ddcb;
-  color: #6f6f5e;
   color: #6f6f5e;
 }
 
 .el-link:hover {
-  color: #6f6f5e;
   color: #6f6f5e;
 }
 
@@ -1149,5 +933,16 @@ li {
   font-size: 14px;
   cursor: pointer;
   color: #565648;
+}
+
+.avatar-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.avatar-item {
+  cursor: pointer;
 }
 </style>

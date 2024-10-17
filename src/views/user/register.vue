@@ -5,13 +5,17 @@
       <div class="form-wrapper">
         <input v-model="email" type="text" name="username" placeholder="邮箱号" class="input-item" autocomplete="off">
         <span class="alert" v-if="isMistake">请输入正确的邮箱号</span>
-        <input v-model="password" type="password" name="password" placeholder="密码" class="input-item">
+        <input v-model="password" type="password" name="password" placeholder="密码:长度必须为6-20个字符" class="input-item">
         <input v-model="confirmPassword" type="password" name="repassword" placeholder="再次确认密码" class="input-item">
         <span class="isSame" v-if="isSame">两次密码不一致请重新输入</span>
+        <span class="isSame" v-if="isEmpty">请输入长度为6-20个字符的密码</span>
         <input type="text" v-model="code" name="repassword" placeholder="邮箱验证码" class="email">
-        <button @click="sendCode" :disabled="second !== totalSecond" class="code">{{ second === totalSecond ? '获取验证码' :
+        <button @click="sendCode" v-if="!loading" :disabled="second !== totalSecond" class="code">{{ second ===
+          totalSecond ? '获取验证码' :
           second + '秒后重新发送' }}</button>
-        <button @click="register" class="btn" :disabled="isFormInvalid">注册</button>
+        <button @click="sendCode" v-else :disabled="second !== totalSecond" class="code"><i
+            class="el-icon-loading"></i></button>
+        <button @click="register" class="btn">注册</button>
         <p>已有账号？<router-link to="/login">去登录</router-link></p>
       </div>
     </div>
@@ -21,10 +25,13 @@
 <script>
 import { Message } from 'element-ui'
 import axios from 'axios'
+import { register } from '@/api/user'
 export default {
   name: 'IndexReg',
   data() {
     return {
+      isEmpty: false,
+      loading: false,
       isMistake: false,
       totalSecond: 60, // 总秒数
       second: 60, // 当前秒数
@@ -33,7 +40,6 @@ export default {
       password: '', // 密码
       confirmPassword: '', // 再次确认密码
       code: '',
-      uuid: ' ',
       responseMessage: null,
       isSame: false
     }
@@ -50,6 +56,14 @@ export default {
       }
     },
     validatePassword() {
+      if (!this.password || !this.confirmPassword) {
+        this.isEmpty = true
+        return false
+      }
+      if (this.password.length < 6 || this.password.length > 20) {
+        this.isEmpty = true
+        return false
+      }
       if (this.password !== this.confirmPassword) {
         this.isSame = true
         return false
@@ -75,7 +89,7 @@ export default {
         }, 1000)
       }
     },
-    // 获取短信验证码
+    // 获取邮箱验证码
     async sendCode() {
       if (!this.validFn()) {
         return
@@ -84,19 +98,21 @@ export default {
         return
       }
       try {
+        this.loading = true
         const response = await axios.get('/api/user/sendCode', { params: { email: this.email } })
         if (response.data.code === 200) {
           this.startCountdown()
-          // this.uuid = response.data.data.uuid
           this.responseMessage = response.data.msg
           Message.success(this.responseMessage)
         } else {
           this.responseMessage = response.data.msg
-          Message.success(this.responseMessage)
+          Message.error(this.responseMessage)
         }
+        this.loading = false
       } catch (error) {
         this.responseMessage = '发送验证码失败: ' + error
-        Message.success(this.responseMessage)
+        Message.error(this.responseMessage)
+        this.loading = false
       }
     },
     // 用户注册请求
@@ -104,28 +120,41 @@ export default {
       if (!this.validFn() || !this.validatePassword()) {
         return
       }
-      try {
-        const response = await axios.post('/api/user/register', {
-          username: this.email,
-          password: this.password,
-          code: this.code,
-          uuid: this.uuid,
-          confirmPassword: this.confirmPassword
-        })
-        this.responseMessage = response.data.msg || '注册成功'
-        Message.success(this.responseMessage)
-      } catch (error) {
-        this.responseMessage = '注册失败: ' + error.response.data.msg
-        Message.success(this.responseMessage)
+      const data = {
+        username: this.email,
+        password: this.password,
+        code: this.code,
+        confirmPassword: this.confirmPassword
       }
-    }
-  },
-  computed: {
-    // 计算属性，用于判断表单是否有效
-    isFormInvalid() {
-      return !this.validFn() || !this.validatePassword() || this.isMistake || this.isSame
+      register(data).then(res => {
+        if (res.code === 200) {
+          this.responseMessage = res.msg || '注册成功'
+          Message.success(this.responseMessage)
+          this.$router.push('/login')
+        }
+      })
+      // try {
+      //   const response = await axios.post('/api/user/register', {
+      //     username: this.email,
+      //     password: this.password,
+      //     code: this.code,
+      //     confirmPassword: this.confirmPassword
+      //   })
+      //   this.responseMessage = response.data.msg || '注册成功'
+      //   this.$router.push('/login')
+      //   Message.success(this.responseMessage)
+      // } catch (error) {
+      //   this.responseMessage = '注册失败: ' + error.response.data.msg
+      //   Message.success(this.responseMessage)
+      // }
     }
   }
+  // computed: {
+  // 计算属性，用于判断表单是否有效
+  // isFormInvalid() {
+  //   return !this.validFn() || !this.validatePassword() || this.isMistake || this.isSame
+  // }
+  // }
 }
 </script>
 
@@ -134,6 +163,7 @@ export default {
   margin: 0;
   padding: 0;
 }
+
 html {
   height: 100%;
 }
@@ -153,7 +183,7 @@ body {
 }
 
 .login-wrapper {
-  background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255, 255, 255, 0.6);
   width: 358px;
   height: 588px;
   border-radius: 80px;
@@ -199,13 +229,16 @@ body {
 
 .input-item::placeholder {
   text-transform: uppercase;
-  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-family: '方正姚体', sans-serif;
+  /* 设置 placeholder 的字体 */
   font-size: 20px;
   color: #000000;
 }
+
 .email::placeholder {
   text-transform: uppercase;
-  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-family: '方正姚体', sans-serif;
+  /* 设置 placeholder 的字体 */
   font-size: 20px;
   color: #000000;
 }
@@ -214,7 +247,7 @@ body {
   text-align: center;
   position: absolute;
   left: 50%;
-  transform: translate(-50%,0);
+  transform: translate(-50%, 0);
   text-align: center;
   width: 200px;
   margin-top: 20px;
@@ -235,16 +268,18 @@ body {
   text-align: center;
   line-height: 88px;
 }
-p{
+
+p {
   position: absolute;
   bottom: 30px;
   left: 150px;
-  font-family: '方正姚体', sans-serif; /* 设置 placeholder 的字体 */
+  font-family: '方正姚体', sans-serif;
+  /* 设置 placeholder 的字体 */
   font-size: 20px;
 }
 
 a {
-      text-decoration-line: none;
+  text-decoration-line: none;
   font-size: 18px;
 }
 
