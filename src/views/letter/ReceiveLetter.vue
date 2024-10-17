@@ -4,34 +4,37 @@
       <el-row class="row-bg" justify="space-around">
         <el-empty v-if="isEmpty" style="height: 100%;" description="没有收到侨批哦,快去结交新好友吧!"></el-empty>
         <el-col :span="6" v-for="item in myReceiveList" :key="item.id">
-          <el-skeleton style="width: 250px ;margin:0 auto" :loading="loading" animated>
-            <template slot="template">
-              <el-skeleton-item variant="image" style="width: 250px; height: 250px;" />
-              <div style="padding: 2px 10px 0">
-                <el-skeleton-item variant="text" style="margin-right: 16px; " />
-              </div>
-            </template>
-            <template>
-              <!-- 启用懒加载 -->
-              <el-image ref="firstImage" class="image-hover" v-if="item.coverLink !== undefined"
-                style="width: 250px; height: 250px; cursor: pointer;transition: transform .3s ease; " lazy
-                @click="openImageViewerPre($event, item)" :src="item.coverLink">
-                <div slot="placeholder" class="image-slot" style=" background:transparent">
-                  <i class="el-icon-loading" style="line-height: 250px; color: #A52328; font-size: 30px;"></i>
+          <el-badge value="未读" style="margin-right: 40px;" :hidden="item.readStatus === 1">
+            <el-skeleton style="width: 250px ;margin:0 auto" :loading="loading" animated>
+              <template slot="template">
+                <el-skeleton-item variant="image" style="width: 250px; height: 250px;" />
+                <div style="padding: 2px 10px 0">
+                  <el-skeleton-item variant="text" style="margin-right: 16px; " />
                 </div>
-                <div slot="error" class="image-slot" style="width: 100%; height: 100%; color: #A52328;">
-                  <i class="el-icon-picture-outline" style="line-height: 250px; "></i>
-                  加载失败
-                </div>
-              </el-image>
-              <p style="color: #A52328; margin: -15px 0 0; ">
-                {{ formatDate(item.createTime) }},
-                <span
-                  style="margin: -20px 0 -14px;max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">
-                  {{ item.senderName }}</span>记
-              </p>
-            </template>
-          </el-skeleton>
+              </template>
+              <template>
+                <!-- 启用懒加载 -->
+                <el-image ref="firstImage" class="image-hover" v-if="item.coverLink !== undefined"
+                  style="width: 250px; height: 250px; cursor: pointer;transition: transform .3s ease; " lazy
+                  @click="openImageViewerPre($event, item)" :src="item.coverLink">
+                  <div slot="placeholder" class="image-slot" style=" background:transparent">
+                    <i class="el-icon-loading" style="line-height: 250px; color: #A52328; font-size: 30px;"></i>
+                  </div>
+                  <div slot="error" class="image-slot" style="width: 100%; height: 100%; color: #A52328;">
+                    <i class="el-icon-picture-outline" style="line-height: 250px; "></i>
+                    加载失败
+                  </div>
+                </el-image>
+                <p style="color: #A52328; margin: -15px 0 0; ">
+                  {{ formatDate(item.createTime) }},
+                  <span
+                    style="margin: -20px 0 -14px;max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">
+                    {{ item.senderName }}</span>记
+                </p>
+              </template>
+            </el-skeleton>
+          </el-badge>
+
         </el-col>
       </el-row>
     </div>
