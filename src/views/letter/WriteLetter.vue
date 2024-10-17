@@ -229,7 +229,7 @@
           </el-col>
         </el-row>
       </div>
-      <transition name="zoom-in">
+      <transition name="el-zoom-in-center">
         <div v-if="isVisible" class="el-image-viewer__wrapper" :style="{ zIndex: 2002 }">
           <div class="el-image-viewer__mask" @click="closeImageViewer"></div>
           <span class="el-image-viewer__btn el-image-viewer__close" @click="closeImageViewer">
@@ -330,7 +330,7 @@
         </div>
       </transition>
       <!-- 使用transition组件来添加动画 -->
-      <transition name="fade">
+      <transition name="el-fade-in-linear">
         <div v-if="showMask" class="el-image-viewer__wrapper" :style="{ zIndex: 999 }">
           <div class="el-image-viewer__mask" @click="closeImageViewer"></div>
         </div>
@@ -822,6 +822,16 @@ export default {
       }
       if (this.scale > 3) {
         this.scale = 3
+      }
+      // 如果缩放比例在 1.4 到 1.5 之间，且显示详情，则触发隐藏详情
+      if (this.scale >= 1.4 && this.scale <= 1.5 && this.showLetterDetail) {
+        this.handleShowDetail()
+      }
+      if (this.scale >= 1.2 && this.showProgress) {
+        this.handleShowProgress()
+      }
+      if (this.scale <= 1.2 && !this.showProgress) {
+        this.handleShowProgress()
       }
     },
     handleChange() {

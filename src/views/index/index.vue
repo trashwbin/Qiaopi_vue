@@ -59,7 +59,9 @@ export default {
     },
     userAvatar() {
       const userStore = useUserStore()
-      userStore.getUserInfo()
+      if (!userStore.avatar) {
+        userStore.getUserInfo()
+      }
       return userStore.avatar || require('@/assets/default-avatar.png') // 使用默认头像
     },
     animationStyle() {

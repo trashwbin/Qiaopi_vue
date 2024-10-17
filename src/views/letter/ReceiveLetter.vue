@@ -38,7 +38,7 @@
         </el-col>
       </el-row>
     </div>
-    <transition name="zoom-in">
+    <transition name="el-zoom-in-center">
       <div v-if="isVisible" class="el-image-viewer__wrapper" :style="{ zIndex: 2002 }">
         <div class="el-image-viewer__mask" @click="closeImageViewer"></div>
         <span class="el-image-viewer__btn el-image-viewer__close" @click="closeImageViewer">
@@ -112,7 +112,7 @@
       </div>
     </transition>
     <!-- 使用transition组件来添加动画 -->
-    <transition name="fade">
+    <transition name="el-fade-in-linear">
       <div v-if="showMask" class="el-image-viewer__wrapper" :style="{ zIndex: 999 }">
         <div class="el-image-viewer__mask" @click="closeImageViewer"></div>
       </div>
@@ -178,6 +178,14 @@ export default {
 
       // 图片加载状态
       loading: false
+    }
+  },
+  computed: {
+    // 计算属性
+    showFirst() {
+      console.log(this.$route.params)
+      console.log(this.$route.params.showFirst)
+      return this.$route.params.showFirst
     }
   },
 
@@ -423,7 +431,60 @@ export default {
         if (this.myReceiveList.length === 0) {
           this.isEmpty = true
         }
+        console.log(this.showFirst)
+        if (this.showFirst) {
+          this.loadFirstImage(this.myReceiveList[0])
+        }
       })
+    },
+    loadFirstImage(item) {
+      setTimeout(() => {
+        this.showMask = true
+        const imageElement = document.createElement('img')
+        imageElement.setAttribute('style', 'width: 250px; height:250px; position: absolute; top: 0; left: 0; z-index: 1000; ')
+        imageElement.setAttribute('v-if', 'item.coverLink !== undefined')
+        imageElement.setAttribute('src', item.coverLink)
+
+        // 设置新元素的样式
+        imageElement.style.position = 'absolute'
+        imageElement.style.zIndex = '1000'
+        // 移到 .content 层中
+        const contentElement = document.querySelector('.content')
+        contentElement.appendChild(imageElement)
+
+        // 计算当前图片在 .content 层中的位置
+        // 设置新的位置
+        imageElement.style.left = '90.5px'
+        imageElement.style.top = '68.75px'
+
+        imageElement.style.setProperty('--pre-left', '90.5px')
+        imageElement.style.setProperty('--pre-top', '68.75px')
+        imageElement.style.setProperty('--pre-transform', 'translateY(0)')
+        // 设置目标位置
+        imageElement.style.setProperty('--target-left', '495px')
+        imageElement.style.setProperty('--target-top', '50%')
+        imageElement.style.setProperty('--target-transform', 'translateY(-50%)')
+
+        // 触发动画
+        imageElement.classList.add('animate-move-center')
+
+        // 动画结束后清除动画类
+        imageElement.addEventListener('animationend', () => {
+          this.openImageViewer(item)
+          // 监听 isVisible 变化
+          this.$watch('isVisible', (newValue, oldValue) => {
+            if (!newValue && imageElement.parentNode) {
+              imageElement.classList.add('animate-back-to-original')
+              imageElement.classList.remove('animate-move-center')
+              this.showMask = false
+              imageElement.addEventListener('animationend', () => {
+                imageElement.classList.remove('animate-back-to-original')
+                imageElement.parentNode.removeChild(imageElement)
+              }, { once: true })
+            }
+          })
+        }, { once: true })
+      }, 2500)
     }
   },
   mounted() {

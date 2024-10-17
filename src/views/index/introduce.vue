@@ -95,10 +95,43 @@
         <p class="contact">联系我们：3348620049@qq.com</p>
       </div>
     </div>
+
+    <transition name="el-fade-in-linear">
+      <div v-if="isVisible" class="el-image-viewer__wrapper" :style="{ zIndex: 2002 }">
+        <div class="el-image-viewer__mask" @click="closeImageViewer"></div>
+        <span class="el-image-viewer__btn el-image-viewer__close" @click="closeImageViewer">
+          <i class="el-icon-close"></i>
+        </span>
+        <div class="el-image-viewer__canvas">
+          <div class="floating">
+            <img :src="imageUrl" class="el-image-viewer__img" :style="{
+              transform: `scale(${scale}) rotate(${rotation}deg)`,
+              marginLeft: `${marginLeft}px`,
+              marginTop: `${marginTop}px`,
+            }" style="max-width:70%; max-height: 70%;  transition: transform 3s ease;">
+          </div>
+        </div>
+
+        <div class="foot-button">
+          <el-button type="warning" @click="closeImageViewer">暂不查看</el-button>
+          <el-button type="primary" @click="tumpReceive">立即查看</el-button>
+        </div>
+
+        <div class="letter-title">
+          <h1 class=" floating-title" style="max-width: 1000px;">好友来信</h1>
+        </div>
+
+        <div class="letter-text">
+          <div class="target animationClass">您的好友给您写了一封侨批哦,快来看看吧</div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import useUserStore from '@/store/modules/user'
+import { getMyNotReadLetter } from '@/api/letter'
 export default {
   name: 'IndexIntroduce',
   data() {
@@ -111,10 +144,43 @@ export default {
         { id: 5, math: '05', title: '转型阶段', description: '20世纪50年代至20世纪70年代，随着战后重建和通信技术的发展，电话、电报等现代通信方式逐渐普及，侨批的传统功能开始减弱。', img: require('@/assets/imgs/history5.png'), active: false },
         { id: 6, math: '06', title: '遗产化阶段', description: '20世纪未至今，随着现代通信技术的高度发展，侨批作为通信手段的功能已经消失，但它作为历史文化遗产的价值逐渐被认识和重视。', img: require('@/assets/imgs/history6.png'), active: false },
         { id: 7, math: '07', title: '保护阶段', description: '21世纪初至今，侨批作为珍贵的历史文献，受到了学术界的广泛关注，多国政府和国际组织开始采取措施保护和研究侨批。', img: require('@/assets/imgs/history7.jpg'), active: false }
-      ]
+      ],
+      imageUrl: 'http://110.41.58.26:9000/qiaopi/qiaopi-images/letter/7780d647-ac9a-4ac0-9342-ad35e9e709d1.png',
+      scale: 0.1,
+      rotation: 0,
+      marginLeft: 0,
+      marginTop: 0,
+      isVisible: false,
+      showFootButton: false,
+      myNotReadLetter: {}
     }
   },
   methods: {
+    tumpReceive() {
+      this.closeImageViewer()
+      setTimeout(() => {
+        const params = {
+          showFirst: true
+        }
+        this.$router.push({
+          name: 'ReceiveLetter',
+          params: params
+        })
+      }, 1001)
+    },
+    getMyNotReadLetter() {
+      const userStore = useUserStore()
+      if (userStore.token) {
+        getMyNotReadLetter().then(res => {
+          if (res.data) {
+            setTimeout(() => {
+              this.myNotReadLetter = res.data
+              this.openImageViewer(this.myNotReadLetter)
+            }, 3000)
+          }
+        })
+      }
+    },
     toggleActive(history) {
       this.histories.forEach(function (h) {
         h.active = false
@@ -123,7 +189,30 @@ export default {
     },
     toggleInactive(history) {
       history.active = false
+    },
+    openImageViewer(item) {
+      this.isVisible = true
+
+      this.imageUrl = item.coverLink
+
+      setTimeout(() => {
+        this.scale = 0.9
+      }, 300)
+      setTimeout(() => {
+        this.showFootButton = true
+      }, 3000)
+    },
+    closeImageViewer() {
+      this.scale = 0
+      setTimeout(() => {
+        this.isVisible = false
+      }, 301) // 假设动画持续时间为300ms
+      this.marginLeft = 0
+      this.marginTop = 0
     }
+  },
+  mounted() {
+    this.getMyNotReadLetter()
   }
 }
 </script>
@@ -133,6 +222,154 @@ export default {
   padding: 0;
   list-style: none;
   box-sizing: border-box;
+}
+
+.target {
+  /* background: #666; */
+  /* width: 108px; */
+  height: 60px;
+  border-radius: 60px;
+  color: aliceblue;
+  font-weight: bolder;
+  line-height: 60px;
+  text-align: center;
+}
+
+.animationClass {
+  animation: 5s ease 0s infinite backwards bounce;
+}
+
+/* 主要是通过控制translateY的值来操作y轴的距离实现弹跳效果 */
+@keyframes bounce {
+  0% {
+    transform: translateY(-64px);
+    animation-timing-function: ease-in;
+    opacity: 1;
+  }
+
+  24% {
+    opacity: 1;
+  }
+
+  40% {
+    transform: translateY(-32px);
+    animation-timing-function: ease-in;
+  }
+
+  62% {
+    transform: translateY(-16px);
+    animation-timing-function: ease-in;
+  }
+
+  82% {
+    transform: translateY(-8px);
+    animation-timing-function: ease-in;
+  }
+
+  92% {
+    transform: translateY(-4px);
+    animation-timing-function: ease-in;
+  }
+
+  25%,
+  55%,
+  75%,
+  90% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+    opacity: 1;
+  }
+}
+
+.foot-button {
+  position: fixed;
+  right: 10%;
+  bottom: 8%;
+  transform: translate(50%, 50%);
+  width: 300px;
+  height: 100px;
+  /* background: rgba(0, 0, 0, .4); */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeIn 3s ease-in-out forwards;
+}
+
+.letter-text {
+  position: fixed;
+  left: 20%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 100px;
+  font-family: '华文中宋', sans-serif;
+  font-size: 2em;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeIn 3s ease-in-out forwards;
+}
+
+.letter-title {
+  position: fixed;
+  right: 20%;
+  top: 25%;
+  font-family: '华文中宋', sans-serif;
+  font-size: 2em;
+  transform: translate(50%, -50%);
+  width: 300px;
+  height: 100px;
+  /* background: rgba(0, 0, 0, .4); */
+  color: #FFA000;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeIn 3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.floating {
+  max-width: 50%;
+  max-height: 600px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.floating-title {
+  max-width: 50%;
+  max-height: 600px;
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .contain {
