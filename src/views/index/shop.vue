@@ -6,57 +6,65 @@
     <div class="tag4" @click="showDetails('card')"><img src="../../assets/imgss/tag4.webp" alt=""><span>功能卡</span></div>
     <div class="details" v-if="showDetailsArea">
       <!-- 根据当前选中的类别显示不同的内容 -->
-      <div v-if="selectedCategory === 'paper'">
-        <h2>信纸商城</h2>
-        <div v-for="paper in paperList" :key="paper.id" class="paper-item">
-          <div class="paperGoods">
-            <img :src="paper.previewImage" alt="" style="width:200px;height:140px;">
-            <h3>{{ paper.name }}</h3>
-            <p><img src="../../assets/imgss/pigmoney.webp" alt=""
-                style="width:30px;height:20px;vertical-align: middle;"> {{ paper.price }}</p>
-            <button v-if="paper.own" @click="buyPaper(paper.id)" disabled="true">已拥有</button>
-            <button v-if="!paper.own" @click="buyPaper(paper.id)">兑换</button>
+      <el-collapse-transition>
+        <div v-if="selectedCategory === 'paper'">
+          <h2>信纸商城</h2>
+          <div v-for="paper in paperList" :key="paper.id" class="paper-item">
+            <div class="paperGoods">
+              <img :src="paper.previewImage" alt="" style="width:200px;height:140px;">
+              <h3>{{ paper.name }}</h3>
+              <p><img src="../../assets/imgss/pigmoney.webp" alt=""
+                  style="width:30px;height:20px;vertical-align: middle;"> {{ paper.price }}</p>
+              <button v-if="paper.own" @click="buyPaper(paper.id)" disabled="true">已拥有</button>
+              <button v-if="!paper.own" @click="buyPaper(paper.id)">兑换</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-if="selectedCategory === 'ink'">
-        <h2>墨水商城</h2>
-        <div v-for="color in colorList" :key="color.id" class="paper-item">
-          <div class="colorGoods">
-            <img :src="color.previewImage" alt="" style="width:200px;height:140px;">
-            <h3>{{ color.description }}</h3>
-            <p><img src="../../assets/imgss/pigmoney.webp" alt=""
-                style="width:30px;height:20px;vertical-align: middle;"> {{ color.price }}</p>
-            <button v-if="color.own" @click="buyFontColor(color.id)" disabled="true">已拥有</button>
-            <button v-if="!color.own" @click="buyFontColor(color.id)">兑换</button>
+      </el-collapse-transition>
+      <el-collapse-transition>
+        <div v-if="selectedCategory === 'ink'">
+          <h2>墨水商城</h2>
+          <div v-for="color in colorList" :key="color.id" class="paper-item">
+            <div class="colorGoods">
+              <img :src="color.previewImage" alt="" style="width:200px;height:140px;">
+              <h3>{{ color.description }}</h3>
+              <p><img src="../../assets/imgss/pigmoney.webp" alt=""
+                  style="width:30px;height:20px;vertical-align: middle;"> {{ color.price }}</p>
+              <button v-if="color.own" @click="buyFontColor(color.id)" disabled="true">已拥有</button>
+              <button v-if="!color.own" @click="buyFontColor(color.id)">兑换</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-if="selectedCategory === 'font'">
-        <h2>字体商城</h2>
-        <div v-for="font in fontList" :key="font.id" class="paper-item">
-          <div class="fontsGoods">
-            <img :src="font.previewImage" alt="" style="width:100px;height:70px;">
-            <h3>{{ font.name }}</h3>
-            <p><img src="../../assets/imgss/pigmoney.webp" alt=""
-                style="width:30px;height:20px;vertical-align: middle;"> {{ font.price }}</p>
-            <button v-if="font.own" @click="buyFont(font.id)" disabled="true">已拥有</button>
-            <button v-if="!font.own" @click="buyFont(font.id)">兑换</button>
+      </el-collapse-transition>
+      <el-collapse-transition>
+        <div v-if="selectedCategory === 'font'">
+          <h2>字体商城</h2>
+          <div v-for="font in fontList" :key="font.id" class="paper-item">
+            <div class="fontsGoods">
+              <img :src="font.previewImage" alt="" style="width:100px;height:70px;">
+              <h3>{{ font.name }}</h3>
+              <p><img src="../../assets/imgss/pigmoney.webp" alt=""
+                  style="width:30px;height:20px;vertical-align: middle;"> {{ font.price }}</p>
+              <button v-if="font.own" @click="buyFont(font.id)" disabled="true">已拥有</button>
+              <button v-if="!font.own" @click="buyFont(font.id)">兑换</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-if="selectedCategory === 'card'">
-        <h2>功能卡商城</h2>
-        <div v-for="card in cardList" :key="card.id" class="card-item">
-          <div class="cardGoods">
-            <img :src="card.cardPreviewLink" alt="" style="width:100px;height:100px;">
-            <h3>{{ card.cardName }}</h3>
-            <p><img src="../../assets/imgss/pigmoney.webp" alt=""
-                style="width:30px;height:20px;vertical-align: middle;"> {{ card.price }}</p>
-            <p class="number">{{ card.number }}</p><button v-if="!card.own" @click="buyCard(card.id)">+</button>
+      </el-collapse-transition>
+      <el-collapse-transition>
+        <div v-if="selectedCategory === 'card'">
+          <h2>功能卡商城</h2>
+          <div v-for="card in cardList" :key="card.id" class="card-item">
+            <div class="cardGoods">
+              <img :src="card.cardPreviewLink" alt="" style="width:100px;height:100px;">
+              <h3>{{ card.cardName }}</h3>
+              <p><img src="../../assets/imgss/pigmoney.webp" alt=""
+                  style="width:30px;height:20px;vertical-align: middle;"> {{ card.price }}</p>
+              <p class="number">{{ card.number }}</p><button v-if="!card.own" @click="buyCard(card.id)">+</button>
+            </div>
           </div>
         </div>
-      </div>
+      </el-collapse-transition>
     </div>
   </div>
 </template>
