@@ -1,14 +1,213 @@
 <template>
   <div class="banner">
-    <div class="tag1"><img src="../../assets/imgs/tag1.png" alt=""><span>信纸</span></div>
-    <div class="tag2"><img src="../../assets/imgs/tag2.png" alt=""><span>墨水</span></div>
-    <div class="tag3"><img src="../../assets/imgs/tag3.png" alt=""><span>字体</span></div>
+    <div class="tag1" @click="showDetails('paper')"><img src="../../assets/imgs/tag1.png" alt=""><span>信纸</span></div>
+    <div class="tag2"  @click="showDetails('ink')"><img src="../../assets/imgs/tag2.png" alt=""><span>墨水</span></div>
+    <div class="tag3" @click="showDetails('font')"><img src="../../assets/imgs/tag3.png" alt=""><span>字体</span></div>
+    <div class="tag4" @click="showDetails('card')"><img src="../../assets/imgs/tag4.png" alt=""><span>功能卡</span></div>
+  <div class="details" v-if="showDetailsArea">
+      <!-- 根据当前选中的类别显示不同的内容 -->
+      <div v-if="selectedCategory === 'paper'">
+        <h2>信纸商城</h2>
+        <div v-for="paper in paperList" :key="paper.id" class="paper-item">
+          <div class="paperGoods">
+           <img :src="paper.previewImage" alt="" style="width:200px;height:140px;">
+            <h3>{{ paper.name }}</h3>
+            <p><img src="../../assets/imgs/pigmoney.png" alt="" style="width:30px;height:20px;vertical-align: middle;"> {{ paper.price }}</p>
+            <button v-if="paper.own" @click="buyPaper(paper.id)">已拥有</button>
+            <button v-if="!paper.own" @click="buyPaper(paper.id)">兑换</button>
+            </div>
+        </div>
+      </div>
+ <div v-if="selectedCategory === 'ink'">
+        <h2>墨水商城</h2>
+        <div v-for="color in colorList" :key="color.id" class="paper-item">
+          <div class="colorGoods">
+            <img :src="color.previewImage" alt="" style="width:200px;height:140px;">
+            <h3>{{ color.description }}</h3>
+            <p><img src="../../assets/imgs/pigmoney.png" alt="" style="width:30px;height:20px;vertical-align: middle;"> {{ color.price }}</p>
+            <button v-if="color.own" @click="buyFontColor(color.id)">已拥有</button>
+            <button v-if="!color.own" @click="buyFontColor(color.id)">兑换</button>
+          </div>
+        </div>
+      </div>
+      <div v-if="selectedCategory === 'font'">
+        <h2>字体商城</h2>
+        <div v-for="font in fontList" :key="font.id" class="paper-item">
+          <div class="fontsGoods">
+            <img :src="font.previewImage" alt="" style="width:100px;height:70px;">
+            <h3>{{ font.name }}</h3>
+            <p><img src="../../assets/imgs/pigmoney.png" alt="" style="width:30px;height:20px;vertical-align: middle;"> {{ font.price }}</p>
+            <button v-if="font.own" @click="buyFont(font.id)">已拥有</button>
+            <button v-if="!font.own" @click="buyFont(font.id)">兑换</button>
+          </div>
+        </div>
+    </div>
+     <div v-if="selectedCategory === 'card'">
+        <h2>功能卡商城</h2>
+        <div v-for="card in cardList" :key="card.id" class="card-item">
+      <div class="cardGoods">
+        <img :src="card.cardPreviewLink" alt="" style="width:100px;height:70px;">
+        <h3>{{ card.cardName }}</h3>
+        <p><img src="../../assets/imgs/pigmoney.png" alt="" style="width:30px;height:20px;vertical-align: middle;"> {{ card.price }}</p>
+        <p class="number">{{card.number}}</p><button v-if="!card.own" @click="buyCard(card.id)">+</button>
+      </div>
+    </div>
+      </div>
   </div>
+</div>
 </template>
 
 <script>
+import { fetchPaperList, fetchFontList, fetchColorList, buyPaper, buyFont, buyFontColor, fetchCardList, buyCard } from '@/api/shop'
+// import axios from 'axios'
 export default {
-  name: 'QiaopiShop'
+  name: 'QiaopiShop',
+  data() {
+    return {
+      selectedCategory: 'paper',
+      showDetailsArea: true,
+      paperList: [],
+      fontList: [],
+      colorList: [],
+      cardList: [], // 新增功能卡列表
+      ownedItems: {}
+    }
+  },
+  methods: {
+    showDetails(category) {
+      this.selectedCategory = category
+      this.showDetailsArea = true
+      if (category === 'paper') {
+        this.fetchPaperList()
+      } else if (category === 'font') {
+        this.fetchFontList()
+      } else if (category === 'ink') {
+        this.fetchColorList() // 新增获取字体颜色列表的方法
+      } else if (category === 'card') {
+        this.fetchCardList() // 新增获取功能卡列表的方法
+      }
+    },
+    async fetchPaperList() {
+      try {
+        const response = await fetchPaperList()
+        this.paperList = response.data
+        console.log(this.paperList) // 检查数据是否正确加载
+      } catch (error) {
+        console.error('获取纸张商城列表失败:', error)
+      }
+    },
+    async fetchFontList() {
+      try {
+        const response = await fetchFontList()
+        this.fontList = response.data
+      } catch (error) {
+        console.error('获取纸张商城列表失败:', error)
+      }
+    },
+    async fetchColorList() {
+      try {
+        const response = await fetchColorList()
+        this.colorList = response.data
+      } catch (error) {
+        console.error('获取纸张商城列表失败:', error)
+      }
+    },
+    async fetchCardList() {
+      try {
+        const response = await fetchCardList()
+        this.cardList = response.data
+      } catch (error) {
+        console.error('获取纸张商城列表失败:', error)
+      }
+    },
+    async buyPaper(paperId) {
+      try {
+        const response = await buyPaper(paperId)
+        const data = response
+        if (data.code === 200) {
+          this.$message({
+            message: data.msg,
+            type: 'success'
+          })
+          // 重新加载纸张列表
+          this.fetchPaperList()
+        } else {
+          this.$message({
+            message: data.msg,
+            type: 'error'
+          })
+        }
+      } catch (error) {
+        console.error('购买纸张失败:', error)
+      }
+    },
+    async buyFont(fontId) {
+      try {
+        const response = await buyFont(fontId)
+        const data = response
+        if (data.code === 200) {
+          this.$message({
+            message: data.msg,
+            type: 'success'
+          })
+          // 重新加载字体列表
+          this.fetchFontList()
+        } else {
+          this.$message({
+            message: data.msg,
+            type: 'error'
+          })
+        }
+      } catch (error) {
+        console.error('购买字体失败:', error)
+      }
+    },
+    async buyFontColor(fontColorId) {
+      try {
+        const response = await buyFontColor(fontColorId)
+        const data = response
+        if (data.code === 200) {
+          this.$message({
+            message: data.msg,
+            type: 'success'
+          })
+          // 重新加载字体颜色列表
+          this.fetchColorList()
+        } else {
+          this.$message({
+            message: data.msg,
+            type: 'error'
+          })
+        }
+      } catch (error) {
+        console.error('购买字体颜色失败:', error)
+      }
+    },
+    async buyCard(CardId) {
+      try {
+        const response = await buyCard(CardId)
+        const data = response
+        if (data.code === 200) {
+          this.$message({
+            message: data.msg,
+            type: 'success'
+          })
+          // 重新加载功能卡列表
+          this.fetchCardList()
+        } else {
+          this.$message({
+            message: data.msg,
+            type: 'error'
+          })
+        }
+      } catch (error) {
+        console.error('购买功能卡失败:', error)
+      }
+    }
+  },
+  mounted() {
+    this.fetchPaperList()
+  }
 }
 </script>
 
@@ -22,7 +221,7 @@ export default {
   background-position: center center;
   background-size: cover;
 }
-.tag1,.tag2,.tag3 {
+.tag1,.tag2,.tag3,.tag4 {
   position: absolute;
   left: -100px;
   width: 100px;
@@ -37,15 +236,165 @@ export default {
 .tag3 {
   top: 220px;
 }
-.tag1 img,.tag2 img,.tag3 img {
+.tag4 {
+  top: 320px;
+}
+.tag1 img,.tag2 img,.tag3 img,.tag4 img {
   width: 100%;
   height: 100%;
 }
-.tag1 span,.tag2 span,.tag3 span {
+.tag1 span,.tag2 span,.tag3 span,.tag4 span {
   position: absolute;
   top: 20px;
   left: 50px;
   z-index: 100;
   color: white;
+}
+.details {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1200px;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.details h2 {
+  color: rgba(103, 12, 12, 0.255);
+}
+.paperGoods h3 {
+  position: absolute;
+  top: 110px;
+  left: 60px;
+  font-size: 16px;
+}
+.paperGoods p {
+  margin-top: -10px;
+  /* vertical-align: top; */
+}
+.paperGoods{
+  position: relative;
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  float: left;
+  width: 200px;
+  margin-left: 50px;
+}
+.paperGoods button {
+  position: absolute;
+  width: 70px;
+  height: 30px;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #956b3c;
+  border: 0;
+  color: rgb(235, 221, 190);
+}
+.fontsGoods {
+  position: relative;
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  float: left;
+  width: 200px;
+  margin-left: 25px;
+  margin-bottom:20px;
+}
+.fontsGoods h3 {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+}
+.fontsGoods p {
+  margin-top: -10px;
+  /* vertical-align: top; */
+}
+.fontsGoods button {
+  position: absolute;
+  width: 70px;
+  height: 30px;
+  top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #956b3c;
+  border: 0;
+  color: rgb(235, 221, 190);
+}
+.colorGoods {
+  position: relative;
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  float: left;
+  width: 200px;
+  margin-left: 40px;
+  margin-bottom:20px;
+}
+.colorGoods h3 {
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+}
+.colorGoods p {
+  margin-top: -10px;
+  /* vertical-align: top; */
+}
+.colorGoods button {
+  position: absolute;
+  width: 70px;
+  height: 30px;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #956b3c;
+  border: 0;
+  color: rgb(235, 221, 190);
+}
+.cardGoods {
+  position: relative;
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  float: left;
+  width: 200px;
+  height: 170px;
+  margin-left: 25px;
+  margin-bottom:5px;
+}
+.cardGoods h3 {
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+}
+.cardGoods p {
+  margin-top: -10px;
+}
+/* .cardGoods .number {
+
+} */
+.cardGoods .number {
+  position: relative;
+  top: -35px;
+  left: -20px;
+}
+.cardGoods button {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 130px;
+  left: 60%;
+  transform: translateX(-50%);
+  background-color: #956b3c;
+  border: 0;
+  color: rgb(235, 221, 190);
 }
 </style>

@@ -96,7 +96,7 @@ export default {
         }
       } catch (error) {
         this.responseMessage = '发送验证码失败: ' + error
-        Message.success(this.responseMessage)
+        Message.error(this.responseMessage)
       }
     },
     // 用户注册请求

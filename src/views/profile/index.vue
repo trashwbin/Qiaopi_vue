@@ -199,46 +199,18 @@
         <!-- 墨水展示台 -->
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
-            <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundColor: color.hexCode }">
+            <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
             </div>
           </div>
           <span class="close" @click="showInkImageModal = false">&times;</span>
           <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
         </div>
-        <!-- 字体展示台 -->
-        <div v-if="showWordModal" class="image-modal">
-          <div class="penboxs">
-            <div class="penbox" v-for="font in wordFonts" :key="font.id">
-              {{ font.name }}
-            </div>
-          </div>
-          <span class="close" @click="showWordModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
-        </div>
-        <!-- 信纸展示台 -->
-        <div v-if="showEnvelopeModal" class="image-modal">
-          <div class="penboxs">
-            <div class="envelopebox" v-for="paper in paperPreviews" :key="paper.id"
-              :style="{ backgroundImage: 'url(' + paper.previewImage + ')' }">
-            </div>
-          </div>
-          <span class="close" @click="showEnvelopeModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
-        </div>
-      </div>
-        <div v-if="showInkImageModal" class="image-modal">
-          <div class="colorbox">
-            <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundColor: color.hexCode }">
-            </div>
-          </div>
-          <span class="close" @click="showInkImageModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
         </div>
         <!-- 字体展示台 -->
         <div v-if="showWordModal" class="image-modal">
           <div class="penboxs">
-            <div class="penbox" v-for="font in wordFonts" :key="font.id">
-              {{ font.name }}
+            <div class="penbox" v-for="font in wordFonts" :key="font.id" :style="{ backgroundImage: 'url(' + font.previewImage + ')' }">
+              <!-- {{ font.previewImage}} -->
             </div>
           </div>
           <span class="close" @click="showWordModal = false">&times;</span>
@@ -256,7 +228,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -382,16 +353,6 @@ export default {
       //   }
       // })
       // return response
-      const userStore = useUserStore()
-      userStore.getUserInfo(token).then(res => {
-        this.user = res.data
-      })
-      // const response = await axios.get('/api/user/getUserInfo', {
-      //   headers: {
-      //     Authorization: token
-      //   }
-      // })
-      // return response
     },
     async getUserMoney(token) {
       const response = await axios.get('/api/user/getUserMoney', {
@@ -476,7 +437,7 @@ export default {
       await updateUsername(this.user.username).then(res => {
         this.editUsernameDialogVisible = false
         Message.success('修改用户名成功')
-        this.user.username = res.data.username // 更新用户名
+        this.getUserInfo()
       })
     },
     async getAvatarList() {
@@ -897,7 +858,6 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-
 .address-modal {
   position: fixed;
   /* 使用固定定位 */
@@ -956,7 +916,6 @@ li {
   /* 列表项之间的间距 */
 }
 
-
 .close {
   position: absolute;
   top: -40px;
@@ -981,7 +940,6 @@ li {
   border-radius: 4px;
 }
 
-
 .save {
   width: 100px;
   height: 50px;
@@ -995,7 +953,6 @@ li {
   border-radius: 25px;
 }
 
-
 .save:hover {
   color: white;
   background-color: #6f6f5e;
@@ -1004,7 +961,6 @@ li {
   ;
   cursor: pointer;
 }
-
 
 .image-modal {
   position: fixed;
@@ -1015,7 +971,6 @@ li {
   transform: translate(-50%, -50%);
   z-index: 1000;
 }
-
 
 .image-modal span {
   position: absolute;
@@ -1028,53 +983,49 @@ li {
   width: 100%;
 }
 
-
 .colorbox {
   position: absolute;
   top: 50px;
   left: 80px;
 }
 
-
 .box {
   display: inline-block;
-  width: 50px;
-  height: 50px;
-  border: 1px solid #ccc;
-  /* 可选的边框样式 */
-  border: 1px solid #ccc;
-  /* 可选的边框样式 */
+  width: 150px;
+  height: 80px;
+  margin-right: 60px;
+  background-position: center center;
+  background-size:cover;
 }
-
 
 .penboxs {
   position: absolute;
-  top: 50px;
+  top: 30px;
   left: 50px;
 }
 
-
 .penbox {
   float: left;
-  width: 80px;
+  width: 100px;
   height: 60px;
-  border: 1px solid #000000;
+  /* border: 1px solid #000000;
   /* 可选的边框样式 */
-  border: 1px solid #000000;
-  /* 可选的边框样式 */
+  margin-right: 30px;
+  margin-bottom: 5px;
+  background-size: cover;
+  background-position: center center;
 }
-
 
 .envelopebox {
   float: left;
-  width: 80px;
-  height: 120px;
+  width: 120px;
+  height: 80px;
   margin-right: 10px;
+  margin-top: 50px;
   border: 1px solid #000000;
   background-position: center center;
   background-size: cover;
 }
-
 
 .friends-modal {
   position: fixed;
@@ -1101,7 +1052,6 @@ li {
   cursor: pointer;
 }
 
-
 .friends {
   position: absolute;
   top: 500px;
@@ -1112,7 +1062,7 @@ li {
 
 .friend {
   width: 80%;
-  height: 90px;
+  /* height: 130px; */
   text-align: left;
   margin-left: 30px;
   margin-bottom: 10px;
@@ -1125,13 +1075,9 @@ li {
 .friendname,
 .friendsex,
 .friendemail {
-.friendname,
-.friendsex,
-.friendemail {
   font-size: 15px;
   margin-bottom: 5px;
 }
-
 
 .address {
   position: absolute;
@@ -1142,12 +1088,10 @@ li {
   color: #565648;
 }
 
-
 .data a {
   font-size: 15px;
   font-size: 15px;
 }
-
 
 .cancel:hover {
   border: #6f6f5e 1px solid;
@@ -1156,7 +1100,6 @@ li {
   color: #6f6f5e;
   color: #6f6f5e;
 }
-
 
 .el-link:hover {
   color: #6f6f5e;
