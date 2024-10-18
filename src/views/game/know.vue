@@ -1,17 +1,21 @@
 <template>
     <div class="banner">
         <img src="../../assets/imgs/answer.png" alt="" class="bgd" v-show="showImage">
-    <p v-show="showImage">{{ paragraphs[currentParagraph] }}</p>
-    <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showImage">继续</a>
-     <el-carousel :interval="4000" type="card" height="400px" v-show="!showImage">
-    <el-carousel-item v-for="item in 10" :key="item" autoplay="false" :style="{ height: '400px',width:'300px'}">
+    <p v-show="showWord">{{ paragraphs[currentParagraph] }}</p>
+    <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showWord">继续</a>
+<el-carousel :interval="4000" type="card" height="400px" v-show="showCarousel">
+  <el-carousel-item v-for="item in 10" :key="item" :style="{ height: '400px', width: '300px' }" style="margin-left: 130px;">
+    <div @click="openpage(item)" style="height: 100%; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
       <h3 class="medium">{{ item }}</h3>
-    </el-carousel-item>
-  </el-carousel>
+    </div>
+  </el-carousel-item>
+</el-carousel>
     </div>
 </template>
 
 <script>
+import { Message } from 'element-ui'
+import { userLoginPage } from '@/api/know'
 export default {
   name: 'GameKnow',
   data() {
@@ -23,7 +27,9 @@ export default {
         '为了帮助你更好地完成这次任务，我会问你一些关于侨批文化的问题，每答对一个问题，你将获得一个猪仔钱积分这些积分将作为你旅程中的储备。'
       ],
       currentParagraph: 0,
-      showImage: true // 新增一个数据属性来控制图片的显示
+      showImage: true,
+      showWord: true,
+      showCarousel: false // 控制轮播图的显示
     }
   },
   methods: {
@@ -33,7 +39,20 @@ export default {
       } else {
         this.currentParagraph = 0 // 重置段落索引
         this.showImage = false // 隐藏图片
+        this.showWord = false
+        this.showCarousel = true // 点击后隐藏轮播图
+        this.userLoginPage()
       }
+    },
+    async userLoginPage() {
+      await userLoginPage().then(res => {
+        Message.success('欢迎进入答题界面')
+      })
+    },
+    openpage() {
+      this.showCarousel = false
+      this.showImage = true
+      this.showWord = false
     }
   }
 }
@@ -79,12 +98,10 @@ p {
     cursor: pointer;
     z-index: 10;
 }
-.el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 200px;
-    margin: 0;
+.el-carousel__item {
+  background-image: url(../../assets/imgs/war.jpg);
+  background-position: center center;
+  background-size: cover;
   }
 
   .el-carousel__item:nth-child(2n) {

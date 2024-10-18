@@ -46,7 +46,7 @@
         <h2>功能卡商城</h2>
         <div v-for="card in cardList" :key="card.id" class="card-item">
       <div class="cardGoods">
-        <img :src="card.cardPreviewLink" alt="" style="width:100px;height:70px;">
+        <img :src="card.cardPreviewLink" alt="" style="width:100px;height:100px;">
         <h3>{{ card.cardName }}</h3>
         <p><img src="../../assets/imgs/pigmoney.png" alt="" style="width:30px;height:20px;vertical-align: middle;"> {{ card.price }}</p>
         <p class="number">{{card.number}}</p><button v-if="!card.own" @click="buyCard(card.id)">+</button>
@@ -366,31 +366,31 @@ export default {
   width: 200px;
   height: 170px;
   margin-left: 25px;
-  margin-bottom:5px;
+  margin-bottom:10px;
 }
 .cardGoods h3 {
   position: absolute;
-  top: 45px;
+  top: 70px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 14px;
 }
 .cardGoods p {
-  margin-top: -10px;
+  margin-top: -20px;
 }
 /* .cardGoods .number {
 
 } */
 .cardGoods .number {
   position: relative;
-  top: -35px;
+  top: -30px;
   left: -20px;
 }
 .cardGoods button {
   position: absolute;
   width: 30px;
   height: 30px;
-  top: 130px;
+  top: 145px;
   left: 60%;
   transform: translateX(-50%);
   background-color: #956b3c;

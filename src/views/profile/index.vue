@@ -502,7 +502,7 @@ export default {
   left: 50%;
   border-radius: 5px;
   transform: translate(-50%, 0);
-  width: 250px;
+  width: 200px;
   height: 200px;
   cursor: pointer;
 }
@@ -515,7 +515,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 250px;
+  width: 200px;
   height: 200px;
   line-height: 200px;
   transform: translate(-50%, -50%);

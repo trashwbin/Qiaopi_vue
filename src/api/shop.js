@@ -2,7 +2,7 @@ import request from '@/utils/request'
 // 获取纸张商城列表
 export function fetchPaperList() {
   return request({
-    url: '/card/List',
+    url: '/card/list',
     method: 'put'
   })
 }

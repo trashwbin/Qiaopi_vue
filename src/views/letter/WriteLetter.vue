@@ -322,8 +322,7 @@
           </div>
 
           <div class="progress">
-            // TODO
-            <el-progress :text-inside="true" :stroke-width="24" :percentage="letterVo.deliveryProgress"
+            <el-progress :text-inside="true" :stroke-width="24" :percentage="letterVo.deliveryProgress/100"
               style="height: 100px; width: 80%; line-height: 100px;"></el-progress>
           </div>
 
@@ -733,7 +732,7 @@ export default {
       this.imageUrl = item.letterLink
       // 设置 letterVo
       this.letterVo = item
-      this.letterVo.deliveryProgress = (parseInt(item.deliveryProgress) / 100)
+      this.letterVo.deliveryProgress = (parseInt(item.deliveryProgress))
       // console.log(this.letterVo)
 
       setTimeout(() => {
