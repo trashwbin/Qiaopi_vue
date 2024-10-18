@@ -140,7 +140,8 @@
         <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
-            <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
+            <div class="box" v-for="color in inkColors" :key="color.id"
+              :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
             </div>
           </div>
           <span class="close" @click="showInkImageModal = false">&times;</span>
@@ -168,6 +169,7 @@
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
