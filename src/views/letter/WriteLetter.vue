@@ -1115,7 +1115,7 @@ export default {
   height: 680px;
   /* height: 1200px; */
   background-color: blanchedalmond;
-  background-image: url(../../assets/imgs/writebgd3.jpg);
+  background-image: url(../../assets/imgss/writebgd3.webp);
   display: flex;
   /* 使用 Flexbox 布局 */
   align-items: flex-start;

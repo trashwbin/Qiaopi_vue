@@ -1,6 +1,6 @@
 <template>
-    <div class="banner">
-        <img src="../../assets/imgs/answer.png" alt="" class="bgd" v-show="showImage">
+  <div class="banner">
+    <img src="../../assets/imgss/answer.webp" alt="" class="bgd" v-show="showImage">
     <p v-show="showImage">{{ paragraphs[currentParagraph] }}</p>
     <!-- <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showImage">继续</a>
      <el-carousel :interval="4000" type="card" height="400px" v-show="!showImage">
@@ -8,7 +8,7 @@
       <h3 class="medium">{{ item }}</h3>
     </el-carousel-item>
   </el-carousel> -->
-    </div>
+  </div>
 </template>
 
 <script>
@@ -55,12 +55,13 @@ export default {
 
 <style scoped>
 .banner {
-    position: relative;
-    width: 1200px;
-    height: 650px;
-    margin-top: 55px;
-    background: url(../../assets/imgs/sea.jpg) no-repeat;
+  position: relative;
+  width: 1200px;
+  height: 650px;
+  margin-top: 55px;
+  background: url(../../assets/imgss/sea.webp) no-repeat;
 }
+
 .banner::after {
   content: "";
   position: absolute;
@@ -70,13 +71,15 @@ export default {
   bottom: 0;
   background: linear-gradient(0deg, rgba(0, 0, 0, .7), rgba(0, 0, 0, 0));
 }
+
 .bgd {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 80%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
 }
+
 /* p {
     position: absolute;
     top: 200px;
@@ -94,7 +97,7 @@ export default {
     z-index: 10;
 }
 .el-carousel__item {
-  background-image: url(../../assets/imgs/war.jpg);
+  background-image: url(../../assets/imgss/war.webp);
   background-position: center center;
   background-size: cover;
   }

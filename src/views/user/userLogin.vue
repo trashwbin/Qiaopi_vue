@@ -4,7 +4,7 @@
       <!-- 登录表单 -->
       <div class="header">登录</div>
       <div class="form-wrapper">
-        <input type="text" v-model="loginForm.username" name="username" placeholder="用户名" class="input-item"
+        <input type="text" v-model="loginForm.username" name="username" placeholder="邮箱/用户名" class="input-item"
           autocomplete="off">
         <input type="password" v-model="loginForm.password" name="password" placeholder="密码" class="input-item">
         <router-link to="/forget" class="forget">忘记密码</router-link>
@@ -39,8 +39,8 @@ export default {
       codeOpen: false,
       captchaImg: '',
       loginForm: {
-        username: 'admin',
-        password: '123456',
+        username: '',
+        password: '',
         code: '',
         uuid: ''
       }
@@ -110,7 +110,7 @@ body {
   height: 1000px;
   /* height: 100%; */
   width: 100%;
-  background-image: url(../../assets/imgs/loginbgd.jpg);
+  background-image: url(../../assets/imgss/loginbgd.webp);
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;

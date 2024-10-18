@@ -1,16 +1,18 @@
 <template>
-    <div class="banner">
-        <img src="../../assets/imgs/answer.png" alt="" class="bgd" v-show="showImage">
+  <div class="banner">
+    <img src="../../assets/imgss/answer.webp" alt="" class="bgd" v-show="showImage">
     <p v-show="showWord">{{ paragraphs[currentParagraph] }}</p>
     <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showWord">继续</a>
-<el-carousel :interval="4000" type="card" height="400px" v-show="showCarousel">
-  <el-carousel-item v-for="item in 10" :key="item" :style="{ height: '400px', width: '300px' }" style="margin-left: 130px;">
-    <div @click="openpage(item)" style="height: 100%; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-      <h3 class="medium">{{ item }}</h3>
-    </div>
-  </el-carousel-item>
-</el-carousel>
-    </div>
+    <el-carousel :interval="4000" type="card" height="400px" v-show="showCarousel">
+      <el-carousel-item v-for="item in 10" :key="item" :style="{ height: '400px', width: '300px' }"
+        style="margin-left: 130px;">
+        <div @click="openpage(item)"
+          style="height: 100%; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <h3 class="medium">{{ item }}</h3>
+        </div>
+      </el-carousel-item>
+    </el-carousel>
+  </div>
 </template>
 
 <script>
@@ -60,12 +62,13 @@ export default {
 
 <style scoped>
 .banner {
-    position: relative;
-    width: 1200px;
-    height: 650px;
-    margin-top: 55px;
-    background: url(../../assets/imgs/sea.jpg) no-repeat;
+  position: relative;
+  width: 1200px;
+  height: 650px;
+  margin-top: 55px;
+  background: url(../../assets/imgss/sea.webp) no-repeat;
 }
+
 .banner::after {
   content: "";
   position: absolute;
@@ -75,43 +78,48 @@ export default {
   bottom: 0;
   background: linear-gradient(0deg, rgba(0, 0, 0, .7), rgba(0, 0, 0, 0));
 }
+
 .bgd {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 80%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
 }
+
 p {
-    position: absolute;
-    top: 200px;
-    left: 180px;
-    right: 180px;
-    font-size: 25px;
+  position: absolute;
+  top: 200px;
+  left: 180px;
+  right: 180px;
+  font-size: 25px;
 }
+
 .nexttick {
-    position: absolute;
-    bottom: 150px;
-    right: 300px;
-    text-decoration: none;
-    color: #331316;
-    cursor: pointer;
-    z-index: 10;
+  position: absolute;
+  bottom: 150px;
+  right: 300px;
+  text-decoration: none;
+  color: #331316;
+  cursor: pointer;
+  z-index: 10;
 }
+
 .el-carousel__item {
-  background-image: url(../../assets/imgs/war.jpg);
+  background-image: url(../../assets/imgss/war.webp);
   background-position: center center;
   background-size: cover;
-  }
+}
 
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
 
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
-  }
-  .el-carousel {
-    margin-top: 100px;
-  }
+.el-carousel__item:nth-child(2n+1) {
+  background-color: #d3dce6;
+}
+
+.el-carousel {
+  margin-top: 100px;
+}
 </style>
