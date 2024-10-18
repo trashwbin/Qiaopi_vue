@@ -1,68 +1,66 @@
 <template>
   <div class="banner">
     <div class="pick" v-if="activeButton === 'smallbtn1'">
-        <button class="bigbtn" @click="showDriftBottle();select('smallbtn2')" >捡一个</button>
+      <button class="bigbtn" @click="showDriftBottle(); select('smallbtn2')">捡一个</button>
     </div>
- <div class="letter" v-if="activeButton === 'smallbtn2'" :style="'background-image: url(' + letter.url + ');'">
-    <div class="friend-modal" v-if="isFriendModalVisible">
-   <div class="modal-content">
-    <span class="close" @click="toggleFriendModal">&times;</span>
-    <h2>成为好友</h2>
-    <form @submit.prevent="sendFriend">
-         <div class="map">
-               <avue-input-map  :autosize="{ minRows: 1, maxRows: 4 }" placeholder="我的地址"
-     v-model="friendRequest.giveAddresss" style="width:80%;margin:0 auto;" ></avue-input-map>
-     </div>
-      <div class="form-group special">
-        <label for="friendContent" style="margin-bottom:20px">内容:</label>
-        <textarea id="friendContent" v-model="friendRequest.context"></textarea>
-      </div>
-      <button type="submit" @click="sendFriendRequest">发送</button>
-    </form>
-  </div>
-</div>
-    <button class="bigbtn1" @click="throwBackBottle">扔回海里再捡一个</button>
-    <button class="bigbtn2" @click="toggleFriendModal">成为好友</button>
-    </div>
-    <div class="write" v-if="activeButton === 'smallbtn3'">
-     <div class="left">
-          <h2>写漂流瓶</h2>
-          <form @submit.prevent="sendLetter">
+    <div class="letter" v-if="activeButton === 'smallbtn2'" :style="'background-image: url(' + letter.url + ');'">
+      <div class="friend-modal" v-if="isFriendModalVisible">
+        <div class="modal-content">
+          <span class="close" @click="toggleFriendModal">&times;</span>
+          <h2>成为好友</h2>
+          <form @submit.prevent="sendFriend">
             <div class="map">
-               <avue-input-map :autosize="{ minRows: 1, maxRows: 4 }" placeholder="请选择寄信地址"
-     v-model="letter.senderAddress"  style="width:80%;margin:0 auto;"></avue-input-map>
-     </div>
-            <div class="form-group special">
-              <label for="letterContent">信件内容：</label>
-              <textarea id="letterContent" v-model="letter.content" required style="margin-top:20px"></textarea>
+              <avue-input-map :autosize="{ minRows: 1, maxRows: 4 }" placeholder="我的地址"
+                v-model="friendRequest.giveAddresss" style="width:80%;margin:0 auto;"></avue-input-map>
             </div>
-            <button type="submit" @click="generateDriftBottle">发送</button>
+            <div class="form-group special">
+              <label for="friendContent" style="margin-bottom:20px">内容:</label>
+              <textarea id="friendContent" v-model="friendRequest.context"></textarea>
+            </div>
+            <button type="submit" @click="sendFriendRequest">发送</button>
           </form>
         </div>
-         <div class="right" :style="{ 'background-image': `url(${bottleImageUrl})` }"></div>
       </div>
-    <div class="friend" v-if="activeButton === 'smallbtn5'"></div>
-    <div class="smallbtn1" @click="select('smallbtn1')" :class="activeButtonClass('smallbtn1')"
->捡漂流瓶</div>
-    <div class="smallbtn2" @click="select('smallbtn4');" :class="activeButtonClass('smallbtn4')">
-  新消息
-  <div v-if="hasUnreadRequests" class="red-dot"></div>
-</div>
-    <div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')"
->写漂流瓶</div>
-<div class="friend" v-if="activeButton === 'smallbtn4'">
-  <div v-for="request in friendRequests" :key="request.id" class="request-content">
-    <div class="content">
-      <img :src="request.senderAvatar" alt="Avatar" class="avatar" />
-      <div class="username">{{ request.senderName }}：</div>
-      <div class="context">{{ request.content }}</div>
-      <div class="time">{{ new Date(request.createTime).toLocaleString() }}</div>
+      <button class="bigbtn1" @click="throwBackBottle">扔回海里再捡一个</button>
+      <button class="bigbtn2" @click="toggleFriendModal">成为好友</button>
     </div>
-    <button @click="acceptFriendRequest(request.id)" class="button1">接受</button>
-    <button @click="rejectFriendRequest(request.id)" class="button2">拒绝</button>
+    <div class="write" v-if="activeButton === 'smallbtn3'">
+      <div class="left">
+        <h2>写漂流瓶</h2>
+        <form @submit.prevent="sendLetter">
+          <div class="map">
+            <avue-input-map :autosize="{ minRows: 1, maxRows: 4 }" placeholder="请选择寄信地址" v-model="letter.senderAddress"
+              style="width:80%;margin:0 auto;"></avue-input-map>
+          </div>
+          <div class="form-group special">
+            <label for="letterContent">信件内容：</label>
+            <textarea id="letterContent" v-model="letter.content" required style="margin-top:20px"></textarea>
+          </div>
+          <button type="submit" @click="generateDriftBottle">发送</button>
+        </form>
+      </div>
+      <div class="right" :style="{ 'background-image': `url(${bottleImageUrl})` }"></div>
+    </div>
+    <div class="friend" v-if="activeButton === 'smallbtn5'"></div>
+    <div class="smallbtn1" @click="select('smallbtn1')" :class="activeButtonClass('smallbtn1')">捡漂流瓶</div>
+    <div class="smallbtn2" @click="select('smallbtn4');" :class="activeButtonClass('smallbtn4')">
+      新消息
+      <div v-if="hasUnreadRequests" class="red-dot"></div>
+    </div>
+    <div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')">写漂流瓶</div>
+    <div class="friend" v-if="activeButton === 'smallbtn4'">
+      <div v-for="request in friendRequests" :key="request.id" class="request-content">
+        <div class="content">
+          <img :src="request.senderAvatar" alt="Avatar" class="avatar" />
+          <div class="username">{{ request.senderName }}：</div>
+          <div class="context">{{ request.content }}</div>
+          <div class="time">{{ new Date(request.createTime).toLocaleString() }}</div>
+        </div>
+        <button @click="acceptFriendRequest(request.id)" class="button1">接受</button>
+        <button @click="rejectFriendRequest(request.id)" class="button2">拒绝</button>
+      </div>
+    </div>
   </div>
-</div>
-</div>
 </template>
 
 <script>
@@ -252,16 +250,16 @@ export default {
       }
     }
 
-  // try {
-  //   const response = await axios.get(url, { headers });
-  //   if (response.data.code === 200) {
-  //     this.friendRequests = response.data.data;
-  //   } else {
-  //     console.error(response.data.msg);
-  //   }
-  // } catch (error) {
-  //   console.error('获取好友申请列表失败:', error);
-  // }
+    // try {
+    //   const response = await axios.get(url, { headers });
+    //   if (response.data.code === 200) {
+    //     this.friendRequests = response.data.data;
+    //   } else {
+    //     console.error(response.data.msg);
+    //   }
+    // } catch (error) {
+    //   console.error('获取好友申请列表失败:', error);
+    // }
   },
   computed: {
     activeButtonClass() {
@@ -299,14 +297,16 @@ export default {
 </script>
 
 <style scoped>
- .banner {
+.banner {
   margin-top: 40px;
   width: 1200px;
   height: 730px;
   background-color: rgb(248, 235, 211);
-  display: flex; /* 使用 Flexbox 布局 */
+  display: flex;
+  /* 使用 Flexbox 布局 */
   align-items: flex-start;
 }
+
 .banner .pick {
   position: absolute;
   left: 20px;
@@ -317,6 +317,7 @@ export default {
   background-position: center center;
   background-size: cover;
 }
+
 .banner .letter {
   position: absolute;
   left: 20px;
@@ -324,72 +325,79 @@ export default {
   width: 950px;
   height: 600px;
   background-position: center center;
-  background-size:contain;
+  background-size: contain;
   background-repeat: no-repeat;
 }
+
 .banner .bigbtn {
-    position: absolute;
-    bottom: -90px;
-    left: 370px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 370px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .bigbtn1 {
-    position: absolute;
-    bottom: -90px;
-    left: 280px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 280px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .bigbtn2 {
-    position: absolute;
-    bottom: -90px;
-    left: 500px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 500px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn1 {
-    position: absolute;
-    top: 20px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 20px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn2 {
-    position: absolute;
-    top: 100px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 100px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn3 {
-    position: absolute;
-    top: 180px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 180px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .write {
   position: absolute;
   left: 20px;
@@ -418,9 +426,11 @@ export default {
   background-position: center center;
   background-size: cover;
 }
+
 h2 {
   height: 30px;
 }
+
 .form-group label {
   display: block;
   height: 35px;
@@ -450,6 +460,7 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
 .friend-modal {
   width: 100%;
   height: 400px;
@@ -477,6 +488,7 @@ button:hover {
 .form-group {
   height: 80px;
 }
+
 .form-group label {
   display: block;
   margin-bottom: 0px;
@@ -506,10 +518,15 @@ button {
 button:hover {
   background-color: #35471a;
 }
-.smallbtn1.active, .smallbtn2.active, .smallbtn3.active {
-  background-color: #73705d; /* 激活状态下的背景颜色 */
+
+.smallbtn1.active,
+.smallbtn2.active,
+.smallbtn3.active {
+  background-color: #73705d;
+  /* 激活状态下的背景颜色 */
   color: white;
 }
+
 .red-dot {
   position: absolute;
   top: 0;
@@ -519,10 +536,12 @@ button:hover {
   background-color: red;
   border-radius: 50%;
 }
+
 .request-content {
   /* display: inline-block; */
   position: relative;
 }
+
 .content {
   width: 280px;
   height: 70px;
@@ -531,37 +550,43 @@ button:hover {
   text-align: center;
   margin-bottom: 30px;
 }
+
 .time {
   position: absolute;
   top: 50px;
   right: 0;
   font-size: 14px;
 }
+
 .button1 {
   position: absolute;
   top: -45px;
   left: 290px;
 }
+
 .request-content .button2 {
   position: absolute;
   top: -45px;
-  left:350px;
+  left: 350px;
 }
+
 .avatar {
   position: absolute;
   top: 50%;
   left: 20px;
-  transform:translateY(-50%) ;
+  transform: translateY(-50%);
   width: 35px;
   height: 35px;
 }
+
 .username {
   position: absolute;
   top: 50%;
   left: 80px;
-  transform:translateY(-50%) ;
+  transform: translateY(-50%);
 }
- .context{
+
+.context {
   position: absolute;
   top: 50%;
   left: 120px;

@@ -142,7 +142,6 @@
           <div class="colorbox">
             <div class="box" v-for="color in inkColors" :key="color.id"
               :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
-
             </div>
           </div>
           <span class="close" @click="showInkImageModal = false">&times;</span>
@@ -833,6 +832,13 @@ li {
   float: left;
   width: 130px;
   height: 60px;
+  background-size: cover;
+  border: 1px solid #000000;
+  /* 可选的边框样式 */
+  border: 1px solid #000000;
+  /* 可选的边框样式 */
+  margin-right: 30px;
+  margin-bottom: 5px;
   background-size: cover;
   border: 1px solid #000000;
   /* 可选的边框样式 */
