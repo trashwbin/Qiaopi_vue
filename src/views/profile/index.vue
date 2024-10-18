@@ -140,9 +140,7 @@
         <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
-            <div class="box" v-for="color in inkColors" :key="color.id"
-              :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
-
+            <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
             </div>
           </div>
           <span class="close" @click="showInkImageModal = false">&times;</span>
@@ -170,7 +168,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -825,7 +822,7 @@ li {
 
 .penboxs {
   position: absolute;
-  top: 50px;
+  top: 30px;
   left: 50px;
 }
 
@@ -838,6 +835,10 @@ li {
   /* 可选的边框样式 */
   border: 1px solid #000000;
   /* 可选的边框样式 */
+  margin-right: 30px;
+  margin-bottom: 5px;
+  background-size: cover;
+  background-position: center center;
 }
 
 .envelopebox {
@@ -845,6 +846,7 @@ li {
   width: 185px;
   height: 120px;
   margin-right: 10px;
+  margin-top: 50px;
   border: 1px solid #000000;
   background-position: center center;
   background-size: cover;
@@ -885,7 +887,7 @@ li {
 
 .friend {
   width: 80%;
-  height: 90px;
+  /* height: 130px; */
   text-align: left;
   margin-left: 30px;
   margin-bottom: 10px;
