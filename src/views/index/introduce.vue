@@ -160,7 +160,8 @@ export default {
       this.closeImageViewer()
       setTimeout(() => {
         const params = {
-          showFirst: true
+          showFirst: true,
+          myNotReadLetter: this.myNotReadLetter
         }
         this.$router.push({
           name: 'ReceiveLetter',

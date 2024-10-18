@@ -14,7 +14,7 @@ const service = axios.create({
   method: 'get',
   baseURL: process.env.VUE_APP_API, // .env中的VUE_APP_API参数
   headers: { 'Content-Type': 'application/json;charset=utf-8' },
-  timeout: 10000 // 超时时间
+  timeout: 30000 // 超时时间
 })
 
 // 请求拦截器

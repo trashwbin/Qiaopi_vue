@@ -1,5 +1,6 @@
 <template>
   <div class="banner">
+
     <div class="content">
       <el-row class="row-bg" justify="space-around">
         <el-empty v-if="isEmpty" style="height: 100%;" description="没有收到侨批哦,快去结交新好友吧!"></el-empty>
@@ -38,6 +39,7 @@
         </el-col>
       </el-row>
     </div>
+
     <transition name="el-zoom-in-center">
       <div v-if="isVisible" class="el-image-viewer__wrapper" :style="{ zIndex: 2002 }">
         <div class="el-image-viewer__mask" @click="closeImageViewer"></div>
@@ -180,20 +182,11 @@ export default {
       loading: false
     }
   },
-  computed: {
-    // 计算属性
-    showFirst() {
-      console.log(this.$route.params)
-      console.log(this.$route.params.showFirst)
-      return this.$route.params.showFirst
-    }
-  },
-
   methods: {
     writeMore() {
       this.closeImageViewer()
       setTimeout(() => {
-        this.currentView = 'write'
+        this.$router.push('/write')
       }, 2300)
     },
     handleShowDetail() {
@@ -431,37 +424,61 @@ export default {
         if (this.myReceiveList.length === 0) {
           this.isEmpty = true
         }
-        console.log(this.showFirst)
-        if (this.showFirst) {
-          this.loadFirstImage(this.myReceiveList[0])
+        // 从路由获取
+        if (this.$route.params.showFirst) {
+          console.log(this.$route.params)
+          this.loadFirstImage(this.$route.params.myNotReadLetter)
+          this.$route.params.showFirst = false
         }
       })
     },
     loadFirstImage(item) {
       setTimeout(() => {
+        console.log(item)
         this.showMask = true
         const imageElement = document.createElement('img')
-        imageElement.setAttribute('style', 'width: 250px; height:250px; position: absolute; top: 0; left: 0; z-index: 1000; ')
-        imageElement.setAttribute('v-if', 'item.coverLink !== undefined')
+        imageElement.setAttribute('style', 'width: 250px; height: 250px; position: absolute; top: 0; left: 0; z-index: 1000')
         imageElement.setAttribute('src', item.coverLink)
 
-        // 设置新元素的样式
-        imageElement.style.position = 'absolute'
-        imageElement.style.zIndex = '1000'
-        // 移到 .content 层中
+        // 获取第一个图片元素
+        const firstImageElement = document.querySelector('.content .row-bg .el-col .el-image')
+        if (!firstImageElement) {
+          console.error('No image element found')
+          this.showMask = false
+          return
+        }
+
+        // 将新元素插入到 .content 层中
         const contentElement = document.querySelector('.content')
         contentElement.appendChild(imageElement)
 
-        // 计算当前图片在 .content 层中的位置
-        // 设置新的位置
-        imageElement.style.left = '90.5px'
-        imageElement.style.top = '68.75px'
+        // 获取第一个图片元素的位置
+        const currentImageRect = firstImageElement.getBoundingClientRect()
 
-        imageElement.style.setProperty('--pre-left', '90.5px')
-        imageElement.style.setProperty('--pre-top', '68.75px')
+        // 设置新元素的样式
+        imageElement.style.position = 'absolute'
+        imageElement.style.top = '0'
+        imageElement.style.left = '0'
+        imageElement.style.zIndex = '1000'
+
+        // 计算当前图片在 .content 层中的位置
+        const contentRect = contentElement.getBoundingClientRect()
+        const newTop = currentImageRect.top - contentRect.top + 10
+        const newLeft = currentImageRect.left - contentRect.left + 10
+
+        // 设置新的位置
+        imageElement.style.left = `${newLeft}px`
+        imageElement.style.top = `${newTop}px`
+
+        // 计算居中的位置
+        const contentWidth = contentElement.offsetWidth
+        const imageWidth = imageElement.offsetWidth
+        const leftPosition = (contentWidth - imageWidth) / 2
+        imageElement.style.setProperty('--pre-left', `${newLeft}px`)
+        imageElement.style.setProperty('--pre-top', `${newTop}px`)
         imageElement.style.setProperty('--pre-transform', 'translateY(0)')
         // 设置目标位置
-        imageElement.style.setProperty('--target-left', '495px')
+        imageElement.style.setProperty('--target-left', `${leftPosition}px`)
         imageElement.style.setProperty('--target-top', '50%')
         imageElement.style.setProperty('--target-transform', 'translateY(-50%)')
 
@@ -471,6 +488,7 @@ export default {
         // 动画结束后清除动画类
         imageElement.addEventListener('animationend', () => {
           this.openImageViewer(item)
+
           // 监听 isVisible 变化
           this.$watch('isVisible', (newValue, oldValue) => {
             if (!newValue && imageElement.parentNode) {
@@ -484,7 +502,7 @@ export default {
             }
           })
         }, { once: true })
-      }, 2500)
+      }, 1500)
     }
   },
   mounted() {
