@@ -3,18 +3,24 @@
     <div class="banner">
       <h1 class="profile"><img src="../../assets/imgs/profile.png" alt=""></h1>
       <div class="data">
-      <div class="pic"><img :src="user.avatar" alt=""><el-link icon="el-icon-edit" class="edit" @click="getAvatarList" style="position:absolute; top:160px;">编辑</el-link></div>
-                       <!-- 头像列表弹窗 -->
-   <el-dialog title="选择头像" :visible.sync="showAvatarModal" width="50%">
-    <div class="avatar-list">
-      <div class="avatar-item" v-for="avatar in avatars" :key="avatar.id" @click="selectAvatar(avatar)">
-        <img :src="avatar.url" alt="" style="width:100px;height:100px;">
-      </div>
-    </div>
-  </el-dialog>
+
+        <div class="pic" @click="getAvatarList">
+          <img :src="user.avatar" alt="">
+          <div class="change-text">
+            更换头像
+          </div>
+        </div>
+        <!-- 头像列表弹窗 -->
+        <el-dialog title="选择头像" :visible.sync="showAvatarModal" width="50%">
+          <div class="avatar-list" style="height: 300px;">
+            <div class="avatar-item" v-for="avatar in avatars" :key="avatar.id" @click="selectAvatar(avatar)">
+              <img :src="avatar.url" alt="" style="width:100px;height:100px;">
+            </div>
+          </div>
+        </el-dialog>
         <div class="information">
-          <div class="name">{{ user.nickname }}<el-link icon="el-icon-edit" class="edit" @click="showEditNicknameDialog"
-              style="font-family:'华文中宋', sans-serif;">编辑</el-link></div>
+          <div class="name">{{ user.nickname }}<el-link icon="el-icon-edit" class="edit"
+              @click="showEditNicknameDialog">编辑</el-link></div>
           <!-- 修改昵称弹窗 -->
           <el-dialog title="修改昵称" :visible.sync="editNicknameDialogVisible" width="30%"
             @close="editNicknameDialogVisible = false">
@@ -28,7 +34,7 @@
               <el-button type="primary" @click="updateNickname" style="background-color:#888B69;">确定</el-button>
             </span>
           </el-dialog>
-          <div class="userid">用户名：<span>{{ user.username }}</span><el-link icon="el-icon-edit" class="edit"
+          <div class="userid">用户名:<span>{{ user.username }}</span><el-link icon="el-icon-edit" class="edit"
               @click="showEditUsernameDialog">编辑</el-link></div>
           <el-dialog title="修改用户名" :visible.sync="editUsernameDialogVisible" width="30%"
             @close="editUsernameDialogVisible = false">
@@ -42,7 +48,7 @@
               <el-button type="primary" @click="updateUsername" style="background-color:#888B69;">确定</el-button>
             </span>
           </el-dialog>
-          <div class="sex">性别：<span>{{ user.sex }}</span><el-link icon="el-icon-edit" class="edit"
+          <div class="sex">性别:<span>{{ user.sex }}</span><el-link icon="el-icon-edit" class="edit"
               @click="showEditSexDialog">编辑</el-link></div>
           <!-- 修改性别弹窗 -->
           <el-dialog title="修改性别" :visible.sync="editSexDialogVisible" width="30%"
@@ -60,55 +66,7 @@
               <el-button type="primary" @click="updateSex" style="background-color:#888B69;">确定</el-button>
             </span>
           </el-dialog>
-          <div class="email">邮箱：<span>{{ user.email }}</span></div>
-          <div class="name">{{ user.nickname }}<el-link icon="el-icon-edit" class="edit" @click="showEditNicknameDialog"
-              style="font-family:'华文中宋', sans-serif;">编辑</el-link></div>
-          <!-- 修改昵称弹窗 -->
-          <el-dialog title="修改昵称" :visible.sync="editNicknameDialogVisible" width="30%"
-            @close="editNicknameDialogVisible = false">
-            <el-form ref="nicknameForm" :model="user" label-width="80px">
-              <el-form-item label="昵称">
-                <el-input v-model="user.nickname" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editNicknameDialogVisible = false" class="cancel">取消</el-button>
-              <el-button type="primary" @click="updateNickname" style="background-color:#888B69;">确定</el-button>
-            </span>
-          </el-dialog>
-          <div class="userid">用户名：<span>{{ user.username }}</span><el-link icon="el-icon-edit" class="edit"
-              @click="showEditUsernameDialog">编辑</el-link></div>
-          <el-dialog title="修改用户名" :visible.sync="editUsernameDialogVisible" width="30%"
-            @close="editUsernameDialogVisible = false">
-            <el-form ref="usernameForm" :model="user" label-width="80px">
-              <el-form-item label="用户名">
-                <el-input v-model="user.username" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editUsernameDialogVisible = false" class="cancel">取消</el-button>
-              <el-button type="primary" @click="updateUsername" style="background-color:#888B69;">确定</el-button>
-            </span>
-          </el-dialog>
-          <div class="sex">性别：<span>{{ user.sex }}</span><el-link icon="el-icon-edit" class="edit"
-              @click="showEditSexDialog">编辑</el-link></div>
-          <!-- 修改性别弹窗 -->
-          <el-dialog title="修改性别" :visible.sync="editSexDialogVisible" width="30%"
-            @close="editSexDialogVisible = false">
-            <el-form ref="sexForm" :model="user" label-width="80px">
-              <el-form-item label="性别">
-                <el-select v-model="user.sex" placeholder="请选择">
-                  <el-option label="男" value="男"></el-option>
-                  <el-option label="女" value="女"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editSexDialogVisible = false" class="cancel">取消</el-button>
-              <el-button type="primary" @click="updateSex" style="background-color:#888B69;">确定</el-button>
-            </span>
-          </el-dialog>
-          <div class="email">邮箱：<span>{{ user.email }}</span></div>
+          <div class="email">邮箱:<span>{{ user.email }}</span></div>
 
           <!-- 地址列表弹窗 -->
           <div v-if="showAddressesModal" class="address-modal">
@@ -122,23 +80,7 @@
               </ul>
             </div>
           </div>
-          <div class="friends-container">
-            <!-- 好友列表浮窗 -->
-            <div v-if="showFriendsModal" class="friends-modal">
-              <div class="modal-content">
-                <span class="close" @click="toggleFriendsModal">&times;</span>
-                <h2>我的好友</h2>
-                <div class="friends-container">
-                  <div class="friend" v-for="friend in friends" :key="friend.id">
-                    <div class="friendname">姓名：{{ friend.name }}</div>
-                    <div class="friendsex">性别：{{ friend.sex }}</div>
-                    <div class="friendemail">邮箱号：{{ friend.email }}</div>
-                    <div class="friendadress">地址：{{ friend.address }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
           <!-- 地址列表弹窗 -->
           <div v-if="showAddressesModal" class="address-modal">
             <div class="modal-content">
@@ -173,22 +115,22 @@
         <a @click="toggleFriendsModal" class="friends">我的好友</a>
         <a class="code" @click="showEditPasswordDialog">修改密码</a>
         <el-dialog title="修改密码" :visible.sync="showPasswordModal" width="30%" @close="showPasswordModal = false">
-  <el-form ref="passwordForm" :model="passwordForm" label-width="80px">
-    <el-form-item label="原密码">
-      <el-input type="password" v-model="passwordForm.oldPassword" autocomplete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="新密码">
-      <el-input type="password" v-model="passwordForm.newPassword" autocomplete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="确认密码">
-      <el-input type="password" v-model="passwordForm.confirmPassword" autocomplete="off"></el-input>
-    </el-form-item>
-  </el-form>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="showPasswordModal = false" class="cancel">取消</el-button>
-    <el-button type="primary" @click="updatePassword" style="background-color:#888B69;">确定</el-button>
-  </span>
-</el-dialog>
+          <el-form ref="passwordForm" :model="passwordForm" label-width="80px">
+            <el-form-item label="原密码">
+              <el-input type="password" v-model="passwordForm.oldPassword" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="新密码">
+              <el-input type="password" v-model="passwordForm.newPassword" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码">
+              <el-input type="password" v-model="passwordForm.confirmPassword" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="showPasswordModal = false" class="cancel">取消</el-button>
+            <el-button type="primary" @click="updatePassword" style="background-color:#888B69;">确定</el-button>
+          </span>
+        </el-dialog>
       </div>
       <div class="store">
         <img src="../../assets/imgs/store.png" alt="仓库" class="bgd">
@@ -196,21 +138,21 @@
         <img src="../../assets/imgs/pen.png" alt="笔" class="pen" @click="showWordImage">
         <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
         <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
-        <!-- 墨水展示台 -->
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
-            <div class="box" v-for="color in inkColors" :key="color.id" :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
+            <div class="box" v-for="color in inkColors" :key="color.id"
+              :style="{ backgroundImage: 'url(' + color.previewImage + ')' }">
+
             </div>
           </div>
           <span class="close" @click="showInkImageModal = false">&times;</span>
           <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
         </div>
-        </div>
         <!-- 字体展示台 -->
         <div v-if="showWordModal" class="image-modal">
           <div class="penboxs">
-            <div class="penbox" v-for="font in wordFonts" :key="font.id" :style="{ backgroundImage: 'url(' + font.previewImage + ')' }">
-              <!-- {{ font.previewImage}} -->
+            <div class="penbox" v-for="font in wordFonts" :key="font.id"
+              :style="{ backgroundImage: 'url(' + font.previewImage + ')' }">
             </div>
           </div>
           <span class="close" @click="showWordModal = false">&times;</span>
@@ -228,6 +170,7 @@
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -276,7 +219,7 @@ export default {
       const token = userStore.token // 从 Pinia store 获取 token
 
       // 获取用户信息
-      const userResponse = await this.getUserInfo(token)
+      const userResponse = await this.getUserInfo()
       if (userResponse && userResponse.data.code === 200) {
         this.user = userResponse.data.data
       }
@@ -342,9 +285,9 @@ export default {
         console.error('获取好友列表错误:', error)
       }
     },
-    async getUserInfo(token) {
+    async getUserInfo() {
       const userStore = useUserStore()
-      userStore.getUserInfo(token).then(res => {
+      userStore.getUserInfo().then(res => {
         this.user = res.data
       })
       // const response = await axios.get('/api/user/getUserInfo', {
@@ -353,6 +296,7 @@ export default {
       //   }
       // })
       // return response
+      // const userStore = useUserStore()
     },
     async getUserMoney(token) {
       const response = await axios.get('/api/user/getUserMoney', {
@@ -383,7 +327,8 @@ export default {
       await updateNickname(this.user.nickname).then(res => {
         this.editNicknameDialogVisible = false
         Message.success('修改昵称成功')
-        this.user.nickname = res.data.nickname // 更新用户名
+        // this.user.nickname = res.data.nickname // 更新用户名
+        this.getUserInfo()
       })
     },
     async updateSex() {
@@ -391,6 +336,7 @@ export default {
         this.editSexDialogVisible = false
         Message.success('修改昵称成功')
         this.user.sex = res.data.sex // 更新用户名
+        this.getUserInfo()
       })
     },
     fetchAddresses() {
@@ -437,6 +383,7 @@ export default {
       await updateUsername(this.user.username).then(res => {
         this.editUsernameDialogVisible = false
         Message.success('修改用户名成功')
+        // this.user.username = res.data.username // 更新用户名
         this.getUserInfo()
       })
     },
@@ -454,7 +401,8 @@ export default {
       // 关闭头像列表弹窗
       this.showAvatarModal = false
       // 立即更新页面上的头像显示
-      this.user.avatar = avatar.url
+      // this.user.avatar = avatar.url
+      this.getUserInfo()
     },
     async updateUserInfo() {
       try {
@@ -553,179 +501,38 @@ export default {
   position: absolute;
   top: 50px;
   left: 50%;
+  border-radius: 5px;
   transform: translate(-50%, 0);
   width: 250px;
   height: 200px;
-}
-
-.data .pic img {
-  width: 100%;
-  height: 100%;
-}
-
-.data .name {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  font-size: 42px;
-  font-weight: bold;
-  font-family: '华文新魏', sans-serif;
-}
-
-.data .userid {
-  position: absolute;
-  top: 70px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.userid span {
-  font-size: 16px;
-  font-weight: normal;
-  margin-left: 2px;
-  font-family: Arial, sans-serif;
-}
-
-.data .sex {
-  position: absolute;
-  top: 110px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.data .email {
-  position: absolute;
-  top: 150px;
-  left: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  font-family: '华文中宋', sans-serif;
-}
-
-.email span {
-  position: absolute;
-  left: 65px;
-  top: 8px;
-  font-size: 16px;
-  font-weight: normal;
-  font-family: Arial, sans-serif;
-}
-
-.sex span {
-  font-size: 16px;
-  font-weight: normal;
-  font-family: Arial, sans-serif;
-}
-
-.store {
-  position: absolute;
-  left: 396px;
-  top: 60px;
-  width: 850px;
-  height: 640px;
-  background-image: url(../../assets/imgs/frame.png);
-  background-position: center center;
-  background-size: cover;
-}
-
-.store .bgd {
-  position: absolute;
-  top: 35px;
-  left: 40px;
-  width: 768px;
-  height: 578px;
-}
-
-.data .information {
-  position: relative;
-  top: 240px;
-  left: 25px;
-  width: 300px;
-  height: 300px;
-  background-color: #ADA587;
-}
-
-.ink {
-  position: absolute;
-  bottom: 180px;
-  left: 200px;
   cursor: pointer;
 }
 
-.pen {
+.pic:hover .change-text {
+  opacity: 1;
+}
+
+.change-text {
   position: absolute;
-  bottom: 180px;
-  left: 330px;
-  cursor: pointer;
-}
-
-.envelope {
-  position: absolute;
-  width: 100px;
-  height: 70px;
-  bottom: 180px;
-  left: 450px;
-  cursor: pointer;
-}
-
-.data .showEdit {
-  position: absolute;
-  bottom: 85px;
-  left: 50px;
-  cursor: pointer;
-}
-
-.edit-modal {
-  position: relative;
-  margin: 0 auto;
-  width: 1300px;
-  height: 800px;
-}
-
-.banner .profile {
-  position: absolute;
-  top: -20px;
-  left: 35%;
-  transform: translateY(-50%);
-  width: 400px;
-  height: 100px;
-}
-
-.banner h1 img {
-  width: 100%;
-  height: 100%;
-}
-
-.data {
-  position: relative;
-  top: 60px;
-  left: 50px;
-  width: 350px;
-  height: 640px;
-  padding-top: 30px;
-  box-sizing: border-box;
-  margin-top: 60px;
-  background-image: url(../../assets/imgs/profilebgd.png);
-  background-position: center center;
-  background-size: cover;
-}
-
-.data .pic {
-  position: absolute;
-  top: 50px;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, 0);
   width: 250px;
   height: 200px;
+  line-height: 200px;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
 }
 
 .data .pic img {
   width: 100%;
   height: 100%;
+  border-radius: 5px;
 }
 
 .data .name {
@@ -737,44 +544,60 @@ export default {
   font-family: '华文新魏', sans-serif;
 }
 
+.name:hover .edit {
+  display: inline-block;
+}
+
 .data .userid {
   position: absolute;
   top: 70px;
   left: 20px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   font-family: '华文中宋', sans-serif;
 }
 
 .userid span {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: normal;
   margin-left: 2px;
   font-family: Arial, sans-serif;
+}
+
+.userid:hover .edit {
+  display: inline-block;
+}
+
+.edit {
+  display: none;
 }
 
 .data .sex {
   position: absolute;
   top: 110px;
   left: 20px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   font-family: '华文中宋', sans-serif;
+}
+
+.sex:hover .edit {
+  display: inline-block;
 }
 
 .data .email {
   position: absolute;
   top: 150px;
   left: 20px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   font-family: '华文中宋', sans-serif;
 }
 
 .email span {
-  position: absolute;
+  /* position: absolute;
   left: 65px;
-  top: 8px;
+  top: 8px; */
   font-size: 16px;
   font-weight: normal;
   font-family: Arial, sans-serif;
@@ -990,38 +813,38 @@ li {
 }
 
 .box {
-  display: inline-block;
-  width: 150px;
-  height: 80px;
-  margin-right: 60px;
-  background-position: center center;
-  background-size:cover;
+  float: left;
+  width: 105px;
+  height: 50px;
+  background-size: cover;
+  border: 1px solid #ccc;
+  /* 可选的边框样式 */
+  border: 1px solid #ccc;
+  /* 可选的边框样式 */
 }
 
 .penboxs {
   position: absolute;
-  top: 30px;
+  top: 50px;
   left: 50px;
 }
 
 .penbox {
   float: left;
-  width: 100px;
+  width: 130px;
   height: 60px;
-  /* border: 1px solid #000000;
-  /* 可选的边框样式 */
-  margin-right: 30px;
-  margin-bottom: 5px;
   background-size: cover;
-  background-position: center center;
+  border: 1px solid #000000;
+  /* 可选的边框样式 */
+  border: 1px solid #000000;
+  /* 可选的边框样式 */
 }
 
 .envelopebox {
   float: left;
-  width: 120px;
-  height: 80px;
+  width: 185px;
+  height: 120px;
   margin-right: 10px;
-  margin-top: 50px;
   border: 1px solid #000000;
   background-position: center center;
   background-size: cover;
@@ -1062,7 +885,7 @@ li {
 
 .friend {
   width: 80%;
-  /* height: 130px; */
+  height: 90px;
   text-align: left;
   margin-left: 30px;
   margin-bottom: 10px;
@@ -1095,16 +918,14 @@ li {
 
 .cancel:hover {
   border: #6f6f5e 1px solid;
-  border: #6f6f5e 1px solid;
   background-color: #e2ddcb;
-  color: #6f6f5e;
   color: #6f6f5e;
 }
 
 .el-link:hover {
   color: #6f6f5e;
-  color: #6f6f5e;
 }
+
 .code {
   position: absolute;
   top: 500px;
@@ -1112,5 +933,16 @@ li {
   font-size: 14px;
   cursor: pointer;
   color: #565648;
+}
+
+.avatar-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.avatar-item {
+  cursor: pointer;
 }
 </style>

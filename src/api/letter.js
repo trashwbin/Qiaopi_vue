@@ -35,3 +35,10 @@ export function getMySendLetter() {
     method: 'get'
   })
 }
+
+export function readLetter(letterId) {
+  return request({
+    url: '/letter/readLetter/' + letterId,
+    method: 'put'
+  })
+}

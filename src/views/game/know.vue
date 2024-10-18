@@ -4,7 +4,7 @@
     <p v-show="showImage">{{ paragraphs[currentParagraph] }}</p>
     <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showImage">继续</a>
      <el-carousel :interval="4000" type="card" height="400px" v-show="!showImage">
-    <el-carousel-item v-for="item in 3" :key="item">
+    <el-carousel-item v-for="item in 10" :key="item" autoplay="false" :style="{ height: '400px',width:'300px'}">
       <h3 class="medium">{{ item }}</h3>
     </el-carousel-item>
   </el-carousel>
