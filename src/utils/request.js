@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import { getToken } from '@/utils/auth'
 import cache from '@/plugins/cache'
 import { tansParams } from '@/utils/qiaopi'
@@ -14,7 +14,7 @@ const service = axios.create({
   method: 'get',
   baseURL: process.env.VUE_APP_API, // .env中的VUE_APP_API参数
   headers: { 'Content-Type': 'application/json;charset=utf-8' },
-  timeout: 10000 // 超时时间
+  timeout: 30000 // 超时时间
 })
 
 // 请求拦截器
@@ -82,10 +82,19 @@ service.interceptors.response.use(res => {
   if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
     return res.data
   }
+
   if (code === 401) {
-    useUserStore().logOut().then(() => {
-      location.href = '/login'
-    })
+    if (!isRelogin.show) {
+      isRelogin.show = true
+      MessageBox.confirm('登录状态已过期,要先登录才可以体验完整功能哦~🥳', '侨缘信使', { confirmButtonText: '登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
+        isRelogin.show = false
+        useUserStore().logOut().then(() => {
+          location.href = '/login'
+        })
+      }).catch(() => {
+        isRelogin.show = false
+      })
+    }
     // eslint-disable-next-line
     return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
   } else if (code === 500) {
@@ -103,15 +112,25 @@ service.interceptors.response.use(res => {
     return Promise.resolve(res.data)
   }
 }, error => {
-  console.log(111)
+  // console.log(111)
   console.log('err' + error)
   let { message } = error
 
   if (error && error.response) {
     switch (error.response.status) {
       case 401:
+        if (!isRelogin.show) {
+          isRelogin.show = true
+          MessageBox.confirm('登录状态已过期,要先登录才可以体验完整功能哦~🥳', '侨缘信使', { confirmButtonText: '登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
+            isRelogin.show = false
+            useUserStore().logOut()
+            location.href = '/login'
+          }).catch(() => {
+            isRelogin.show = false
+          })
+        }
         // router.push('/login')
-        location.href = '/login'
+        // location.href = '/login'
         message = error.response.data.msg || '未授权的访问'
         break
       case 405:

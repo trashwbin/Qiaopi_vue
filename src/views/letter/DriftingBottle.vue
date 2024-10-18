@@ -41,6 +41,8 @@
         </div>
          <div class="right" :style="{ 'background-image': `url(${bottleImageUrl})` }"></div>
       </div>
+      <div class="right"></div>
+    </div>
     <div class="friend" v-if="activeButton === 'smallbtn5'"></div>
     <div class="smallbtn1" @click="select('smallbtn1')" :class="activeButtonClass('smallbtn1')"
 >捡漂流瓶</div>
@@ -299,14 +301,16 @@ export default {
 </script>
 
 <style scoped>
- .banner {
+.banner {
   margin-top: 40px;
   width: 1200px;
   height: 730px;
   background-color: rgb(248, 235, 211);
-  display: flex; /* 使用 Flexbox 布局 */
+  display: flex;
+  /* 使用 Flexbox 布局 */
   align-items: flex-start;
 }
+
 .banner .pick {
   position: absolute;
   left: 20px;
@@ -317,6 +321,7 @@ export default {
   background-position: center center;
   background-size: cover;
 }
+
 .banner .letter {
   position: absolute;
   left: 20px;
@@ -324,72 +329,79 @@ export default {
   width: 950px;
   height: 600px;
   background-position: center center;
-  background-size:contain;
+  background-size: contain;
   background-repeat: no-repeat;
 }
+
 .banner .bigbtn {
-    position: absolute;
-    bottom: -90px;
-    left: 370px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 370px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .bigbtn1 {
-    position: absolute;
-    bottom: -90px;
-    left: 280px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 280px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .bigbtn2 {
-    position: absolute;
-    bottom: -90px;
-    left: 500px;
-    width: 180px;
-    height: 70px;
-    background-color: brown;
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  bottom: -90px;
+  left: 500px;
+  width: 180px;
+  height: 70px;
+  background-color: brown;
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn1 {
-    position: absolute;
-    top: 20px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 20px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn2 {
-    position: absolute;
-    top: 100px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 100px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .smallbtn3 {
-    position: absolute;
-    top: 180px;
-    right: 62px;
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(220, 212, 204);
-    border: 0;
-    border-radius: 25px;
+  position: absolute;
+  top: 180px;
+  right: 62px;
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background-color: rgb(220, 212, 204);
+  border: 0;
+  border-radius: 25px;
 }
+
 .banner .write {
   position: absolute;
   left: 20px;
@@ -418,9 +430,11 @@ export default {
   background-position: center center;
   background-size: cover;
 }
+
 h2 {
   height: 30px;
 }
+
 .form-group label {
   display: block;
   height: 35px;
@@ -450,6 +464,7 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
 .friend-modal {
   width: 100%;
   height: 400px;
@@ -477,6 +492,7 @@ button:hover {
 .form-group {
   height: 80px;
 }
+
 .form-group label {
   display: block;
   margin-bottom: 0px;
@@ -506,8 +522,12 @@ button {
 button:hover {
   background-color: #35471a;
 }
-.smallbtn1.active, .smallbtn2.active, .smallbtn3.active {
-  background-color: #73705d; /* 激活状态下的背景颜色 */
+
+.smallbtn1.active,
+.smallbtn2.active,
+.smallbtn3.active {
+  background-color: #73705d;
+  /* 激活状态下的背景颜色 */
   color: white;
 }
 .red-dot {
