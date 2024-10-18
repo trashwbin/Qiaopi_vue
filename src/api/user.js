@@ -88,13 +88,6 @@ export function register(data) {
   })
 }
 
-// 退出方法
-export function logout() {
-  return request({
-    url: '/user/logout',
-    method: 'post'
-  })
-}
 // 修改用户名
 export function updateUsername(username) {
   return request({

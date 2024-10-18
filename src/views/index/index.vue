@@ -3,19 +3,25 @@
     <nav>
       <div class="banner">
         <router-link to="/introduce"><img src="../../assets/imgs/logo.png" alt="侨缘信使" class="logo"></router-link>
-        <router-link to="/introduce" class="slider" @click.native="navigateAndSetActive('/introduce')">首页</router-link>
-        <router-link to="/letter" class="slider" @click.native="navigateAndSetActive('/letter')">信海归舟</router-link>
-        <router-link to="/game" class="slider" @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
-        <router-link to="/shop" class="slider" @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
+        <router-link to="/introduce" class="slider" :class="{ active: isActive('/introduce') }"
+          @click.native="navigateAndSetActive('/introduce')">首页</router-link>
+        <router-link to="/letter" class="slider" :class="{ active: isActive('/letter') }"
+          @click.native="navigateAndSetActive('/letter')">信海归舟</router-link>
+        <router-link to="/game" class="slider" :class="{ active: isActive('/game') }"
+          @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
+        <router-link to="/shop" class="slider" :class="{ active: isActive('/shop') }"
+          @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
         <div class="animation" :style="animationStyle"></div>
         <div class="money" v-if="isLoggedIn"><img src="../../assets/imgs/pigmoney.png" alt="猪仔钱"></div>
         <p class="pig" v-if="isLoggedIn">猪仔钱：{{ money }}</p>
-        <div v-if="isLoggedIn" class="avatar-container" @mouseover="showMenu = true" @mouseleave="showMenu = false">
-          <img :src="userAvatar" style="height: 30px; width: 30px;" alt="用户头像" class="avatar">
-          <div v-if="showMenu" class="dropdown">
-            <router-link to="/profile" class="profile">个人中心</router-link>
-            <router-link to="/login" class="logout">切换账号</router-link>
-          </div>
+        <div v-if="isLoggedIn" class="avatar-container">
+          <el-dropdown style="height: 40px;" @command="handleCommand" placement="bottom">
+            <el-avatar :src="userAvatar" shape="square" fit="fill"></el-avatar>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="profile">个人中心</el-dropdown-item>
+              <el-dropdown-item command="logout">切换账号</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
         <div v-else>
           <router-link to="/login" class="login">登录</router-link>
@@ -35,6 +41,7 @@ export default {
   name: 'QiaopiIndex',
   data() {
     return {
+      currentRoute: this.$route.path,
       money: 0,
       showMenu: false,
       activeIndex: 0,
@@ -42,7 +49,6 @@ export default {
     }
   },
   computed: {
-
     // 通过计算属性获取用户的登录状态和信息
     isLoggedIn() {
       return this.isLoggedInCheck() // 如果 token 存在，则表示已登录
@@ -53,6 +59,9 @@ export default {
     },
     userAvatar() {
       const userStore = useUserStore()
+      if (!userStore.avatar) {
+        userStore.getUserInfo()
+      }
       return userStore.avatar || require('@/assets/default-avatar.png') // 使用默认头像
     },
     animationStyle() {
@@ -67,6 +76,15 @@ export default {
     }
   },
   methods: {
+    handleCommand(command) {
+      if (command === 'logout') {
+        const userStore = useUserStore()
+        userStore.logOut()
+        this.$router.push('/login')
+      } else if (command === 'profile') {
+        this.$router.push('/profile')
+      }
+    },
     isLoggedInCheck() {
       const userStore = useUserStore()
       if (userStore.token) {
@@ -84,27 +102,49 @@ export default {
       this.activeIndex = index
     },
     navigateAndSetActive(path) {
-      if (this.$route.path !== path) {
-        this.$router.push(path)
+      if (this.currentRoute !== path) {
+        this.currentRoute = path
+        this.$router.push(path).catch(err => {
+          // 忽略 NavigationDuplicated 错误
+          if (err.name !== 'NavigationDuplicated') {
+            throw err
+          }
+        })
+      }
+    },
+    isActive(path) {
+      return this.currentRoute === path
+    },
+    updateActiveIndex() {
+      const paths = {
+        '/introduce': 0,
+        '/letter': 1,
+        '/game': 2,
+        '/shop': 3,
+        '/write': 1,
+        '/drifting': 1,
+        '/receive': 1,
+        '/profile': -1,
+        '/know': 2
+      }
+      const index = paths[this.$route.path]
+      if (index !== undefined) {
+        this.setActive(index)
       }
     }
   },
+  watch: {
+    $route(to) {
+      this.currentRoute = to.path
+      this.updateActiveIndex()
+    }
+  },
+  created() {
+    this.currentRoute = this.$route.path
+    this.updateActiveIndex()
+  },
   beforeRouteUpdate(to, from, next) {
-    const paths = {
-      '/introduce': 0,
-      '/letter': 1,
-      '/game': 2,
-      '/shop': 3,
-      '/write': 1,
-      '/drifting': 1,
-      '/receive': 1,
-      '/profile': -1,
-      '/know': 2
-    }
-    const index = paths[to.path]
-    if (index !== undefined) {
-      this.setActive(index)
-    }
+    this.updateActiveIndex()
     next()
   }
 }
@@ -249,7 +289,7 @@ nav .slider:nth-child(4):hover~.animation {
   color: #ffffff;
 }
 
-.profile {
+/* .profile {
   font-size: 13px;
   color: #ffffff;
   text-decoration: none;
@@ -259,17 +299,21 @@ nav .slider:nth-child(4):hover~.animation {
   font-size: 13px;
   color: #ffffff;
   text-decoration: none;
-}
+} */
 
 .avatar-container {
-  position: relative;
+  width: 40px;
+  /* 头像容器的宽度 */
+  position: absolute;
+  top: 10px;
+  right: 30px;
   display: inline-block;
 }
 
 .avatar {
-  position: absolute;
+  /* position: absolute;
   top: -30px;
-  right: -360px;
+  right: -360px; */
   z-index: 10;
 }
 
