@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       pigMoney: 0,
-      explanation: true, // 是否显示问题解析
+      explanation: false, // 是否显示问题解析
       questions: [],
       currentQuestionIndex: 0, // 当前问题的索引
       selectedOptions: [] // 存储每个问题选择的答案
