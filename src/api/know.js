@@ -13,10 +13,10 @@ export function startAnswer(setId) {
     params: { setId }
   })
 }
-export function submitAnswers(questionId, questionContent, selectedOption) {
+export function submitAnswers(data) {
   return request({
     url: '/question/submitAnswers',
     method: 'post',
-    params: { questionId, questionContent, selectedOption }
+    data: data
   })
 }

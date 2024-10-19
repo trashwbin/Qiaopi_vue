@@ -1,26 +1,38 @@
 <template>
   <div class="banner">
     <img src="../../assets/imgs/thinking.png" alt="" class="bgd">
-    <!-- 显示当前问题 -->
-    <div v-if="currentQuestionIndex < questions.length" class="question">
-      <h2>{{ questions[currentQuestionIndex].content }}</h2>
-      <!-- 显示问题选项 -->
-<!-- 显示问题选项 -->
-<div v-for="(option, index) in getOptions(currentQuestionIndex)" :key="index" class="option">
-  <label>
-    <input type="radio" :value="getOptionLabel(index)" :name="'question-' + questions[currentQuestionIndex].id" v-model="selectedOptions[currentQuestionIndex]">
-    {{ getOptionLabel(index) }}、{{ option }}
-  </label>
-</div>
-      <!-- 上一题按钮 -->
-      <button @click="priorQuestion" class="button1">上一题</button>
-      <!-- 下一题按钮 -->
-      <button @click="nextQuestion" class="button2">下一题</button>
+    <div v-if="!explanation">
+      <!-- 显示当前问题 -->
+      <div v-if="currentQuestionIndex < questions.length" class="question">
+        <h2>{{ questions[currentQuestionIndex].content }}</h2>
+        <!-- 显示问题选项 -->
+        <!-- 显示问题选项 -->
+        <div v-for="(option, index) in getOptions(currentQuestionIndex)" :key="index" class="option">
+          <label>
+            <input type="radio" :value="getOptionLabel(index)" :name="'question-' + questions[currentQuestionIndex].id"
+              v-model="selectedOptions[currentQuestionIndex]">
+            {{ getOptionLabel(index) }}、{{ option }}
+          </label>
+        </div>
+        <!-- 上一题按钮 -->
+        <button @click="priorQuestion" class="button1">上一题</button>
+        <!-- 下一题按钮 -->
+        <button @click="nextQuestion" class="button2">下一题</button>
+      </div>
+      <!-- 没有更多问题时显示的信息 -->
+      <div v-else class="end">
+        <h2>没有更多问题了</h2>
+        <button @click="submitAnswers" class="submit-button">提交答案</button>
+      </div>
     </div>
-    <!-- 没有更多问题时显示的信息 -->
-    <div v-else class="end">
-      <h2>没有更多问题了</h2>
-      <button @click="submitAnswers" class="submit-button">提交答案</button>
+    <!-- 显示问题解析 -->
+    <div v-else class="question">
+      <h1>答题情况</h1>
+      <h2>答对题数：{{ pigMoney / 5 }}</h2>
+      <h2>获得猪仔钱：{{ pigMoney }}</h2>
+      <button class="submit-button">查看解析</button>
+      <span>&nbsp;</span>
+      <button class="submit-button">再答一次</button>
     </div>
   </div>
 </template>
@@ -34,6 +46,8 @@ export default {
   name: 'questionPage',
   data() {
     return {
+      pigMoney: 0,
+      explanation: true, // 是否显示问题解析
       questions: [],
       currentQuestionIndex: 0, // 当前问题的索引
       selectedOptions: [] // 存储每个问题选择的答案
@@ -123,6 +137,8 @@ export default {
         question.correct = answerVO.correct
       })
       // 可以在这里添加更多的逻辑来显示结果
+      this.pigMoney = data.pigMoney
+      this.explanation = true
     }
   }
 }
@@ -136,6 +152,7 @@ export default {
   margin-top: 55px;
   background: url(../../assets/imgs/sea.jpg) no-repeat;
 }
+
 .bgd {
   position: absolute;
   top: 50%;
@@ -143,6 +160,7 @@ export default {
   transform: translate(-50%, -50%);
   width: 80%;
 }
+
 .question {
   position: absolute;
   top: 50%;
@@ -152,9 +170,11 @@ export default {
   font-size: 14px;
   margin-bottom: 0px;
 }
+
 .question h2 {
-  margin:0px;
+  margin: 0px;
 }
+
 .button1 {
   position: absolute;
   top: 300px;
@@ -166,6 +186,7 @@ export default {
   margin-left: 10px;
   background-color: #aa8b73;
 }
+
 .button2 {
   position: absolute;
   top: 300px;
@@ -177,9 +198,11 @@ export default {
   margin-left: 10px;
   background-color: #aa8b73;
 }
+
 .end {
   text-align: center;
 }
+
 .submit-button {
   width: 120px;
   height: 40px;
@@ -188,10 +211,12 @@ export default {
   border: 0;
   background-color: #aa8b73;
 }
+
 .option {
   font-size: 18px;
   margin-bottom: 2px;
 }
+
 .option label {
   display: block;
   text-align: left;
