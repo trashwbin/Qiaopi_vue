@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <button>开始探索</button>
+            <button>敬请期待</button>
         </div>
          <div class="card">
             <div class="box">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <button>开始探索</button>
+            <button>敬请期待</button>
         </div>
     </section>
 </template>

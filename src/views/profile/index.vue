@@ -134,10 +134,9 @@
       </div>
       <div class="store">
         <img src="../../assets/imgs/store.png" alt="仓库" class="bgd">
-        <img src="../../assets/imgs/color.png" alt="墨水" class="ink" @click="showInkImage">
-        <img src="../../assets/imgs/pen.png" alt="笔" class="pen" @click="showWordImage">
-        <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
-        <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
+        <img src="../../assets/imgs/color.png" title="墨水" class="ink" @click="showInkImage">
+        <img src="../../assets/imgs/pen.png" title="笔" class="pen" @click="showWordImage">
+        <img src="../../assets/imgs/envelope.png" title="信纸" class="envelope" @click="showEnvelopeImage">
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
             <div class="box" v-for="color in inkColors" :key="color.id"

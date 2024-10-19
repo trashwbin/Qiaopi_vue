@@ -216,7 +216,9 @@ export default {
       const response = await ProcessingFriendRequests()
       if (response.code === 200) {
         this.friendRequests = response.data
-        Message.success('您有新的好友申请')
+        if (this.friendRequest.length > 0) {
+          Message.success('您有新的好友申请')
+        }
       } else {
         Message.error(response.msg)
       }
