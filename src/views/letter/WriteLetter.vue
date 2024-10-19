@@ -72,7 +72,7 @@
           </div>
         </el-form>
         <el-row style="margin: 20px auto 0; text-align: center;">
-          <el-button type="warning" :disabled="disabled" @click="generateLetter('letterGen')">生成</el-button>
+          <el-button type="warning" :loading="disabled" @click="generateLetter('letterGen')">生成</el-button>
           <el-tooltip content="请生成后再确认" placement="bottom" effect="light" :disabled="!showTip">
             <el-button type="primary" @click="handleShowConfirmDialog" :disabled="showTip">确认</el-button>
           </el-tooltip>
@@ -181,7 +181,7 @@
 
         <template #footer>
           <div class="dialog-footer">
-            <el-button type="primary" @click="submitPre">发 送</el-button>
+            <el-button type="primary" @click="submitPre" :loading="sendLoading">发 送</el-button>
             <el-button @click="cancel">取 消</el-button>
           </div>
         </template>
@@ -322,7 +322,7 @@
           </div>
 
           <div class="progress">
-            <el-progress :text-inside="true" :stroke-width="24" :percentage="letterVo.deliveryProgress/100"
+            <el-progress :text-inside="true" :stroke-width="24" :percentage="letterVo.deliveryProgress / 100"
               style="height: 100px; width: 80%; line-height: 100px;"></el-progress>
           </div>
 
@@ -383,6 +383,7 @@ export default {
       callback()
     }
     return {
+      sendLoading: false,
       isUseCard: false,
       useCardDto: {
         cardId: '',
@@ -938,6 +939,7 @@ export default {
       })
     },
     submitPre() {
+      this.sendLoading = true
       this.letter.recipientAddress.longitude = this.recipientAddress[0]
       this.letter.recipientAddress.latitude = this.recipientAddress[1]
       this.letter.recipientAddress.formattedAddress = this.recipientAddress[2]
@@ -965,10 +967,12 @@ export default {
               type: 'success',
               offset: 100
             })
+            this.sendLoading = false
             this.showConfirmDialog = false
             this.loadFirstImage(res.data)
           })
         } else {
+          this.sendLoading = false
           return false
         }
       })
