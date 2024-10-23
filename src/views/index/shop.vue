@@ -1,10 +1,11 @@
 <template>
   <div class="banner">
-    <div class="tag1" @click="showDetails('paper')"><img src="../../assets/imgss/tag1.webp" alt=""><span>信纸</span></div>
-    <div class="tag2" @click="showDetails('ink')"><img src="../../assets/imgss/tag2.webp" alt=""><span>墨水</span></div>
-    <div class="tag3" @click="showDetails('font')"><img src="../../assets/imgss/tag3.webp" alt=""><span>字体</span></div>
-    <div class="tag4" @click="showDetails('card')"><img src="../../assets/imgss/tag4.webp" alt=""><span>功能卡</span></div>
-    <div class="details" v-if="showDetailsArea">
+    <img src="../../assets/imgss/storebgd.webp" alt="">
+   <div class="tag1" :class="{'tag-active': activeTag === 'paper'}" @click="showDetails('paper')"><img src="../../assets/imgss/tag1.webp" alt=""><span>信纸</span></div>
+<div class="tag2" :class="{'tag-active': activeTag === 'ink'}" @click="showDetails('ink')"><img src="../../assets/imgss/tag2.webp" alt=""><span>墨水</span></div>
+<div class="tag3" :class="{'tag-active': activeTag === 'font'}" @click="showDetails('font')"><img src="../../assets/imgss/tag3.webp" alt=""><span>字体</span></div>
+<div class="tag4" :class="{'tag-active': activeTag === 'card'}" @click="showDetails('card')"><img src="../../assets/imgss/tag4.webp" alt=""><span>功能卡</span></div>
+  <div class="details" v-if="showDetailsArea">
       <!-- 根据当前选中的类别显示不同的内容 -->
       <el-collapse-transition>
         <div v-if="selectedCategory === 'paper'">
@@ -83,7 +84,8 @@ export default {
       fontList: [],
       colorList: [],
       cardList: [], // 新增功能卡列表
-      ownedItems: {}
+      ownedItems: {},
+      activeTag: null // 控制动画的变量
     }
   },
   methods: {
@@ -99,6 +101,7 @@ export default {
       } else if (category === 'card') {
         this.fetchCardList() // 新增获取功能卡列表的方法
       }
+      this.activeTag = category // 更新 activeTag 来控制动画
     },
     async fetchPaperList() {
       try {
@@ -234,9 +237,14 @@ export default {
   margin-top: 40px;
   width: 1200px;
   height: 700px;
-  background-image: url(../../assets/imgss/storebgd.webp);
+  /* background-image: url(../../assets/imgs/storebgd.png); */
   background-position: center center;
   background-size: cover;
+  z-index: 1;
+}
+.banner img {
+  width: 100%;
+  height: 100%;
 }
 
 .tag1,
@@ -244,9 +252,23 @@ export default {
 .tag3,
 .tag4 {
   position: absolute;
-  left: -100px;
+  left: -30px;
+  /* transform: translateX(50%); */
   width: 100px;
   height: 80px;
+  cursor: pointer;
+  z-index: -1;
+}
+@keyframes move {
+  0%{
+    left: -30px;
+  }
+  100%{
+    left: -89px;
+  }
+}
+.tag-active {
+  animation: move 0.5s forwards;
 }
 
 .tag1 {
@@ -317,7 +339,7 @@ export default {
   left: 0; */
   float: left;
   width: 200px;
-  margin-left: 50px;
+  margin-left: 70px;
 }
 
 .paperGoods button {
@@ -375,8 +397,8 @@ export default {
   left: 0; */
   float: left;
   width: 200px;
-  margin-left: 40px;
-  margin-bottom: 20px;
+  margin-left: 70px;
+  margin-bottom:20px;
 }
 
 .colorGoods h3 {

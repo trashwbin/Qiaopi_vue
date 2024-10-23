@@ -1,56 +1,147 @@
 <template>
   <div class="banner">
-    <img src="../../assets/imgss/answer.webp" alt="" class="bgd" v-show="showImage">
-    <p v-show="showImage">{{ paragraphs[currentParagraph] }}</p>
-    <!-- <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showImage">继续</a>
-     <el-carousel :interval="4000" type="card" height="400px" v-show="!showImage">
-    <el-carousel-item v-for="item in 10" :key="item" autoplay="false" :style="{ height: '400px',width:'300px'}" style="margin-left:130px;" @click="openpage()">
-      <h3 class="medium">{{ item }}</h3>
-    </el-carousel-item>
-  </el-carousel> -->
+    <img src="../../assets/imgs/thinking.png" alt="" class="bgd">
+    <div v-if="!explanation">
+      <!-- 显示当前问题 -->
+      <div v-if="currentQuestionIndex < questions.length" class="question">
+        <h2>{{ questions[currentQuestionIndex].content }}</h2>
+        <!-- 显示问题选项 -->
+        <!-- 显示问题选项 -->
+        <div v-for="(option, index) in getOptions(currentQuestionIndex)" :key="index" class="option">
+          <label>
+            <input type="radio" :value="getOptionLabel(index)" :name="'question-' + questions[currentQuestionIndex].id"
+              v-model="selectedOptions[currentQuestionIndex]">
+            {{ getOptionLabel(index) }}、{{ option }}
+          </label>
+        </div>
+        <!-- 上一题按钮 -->
+        <button @click="priorQuestion" class="button1">上一题</button>
+        <!-- 下一题按钮 -->
+        <button @click="nextQuestion" class="button2">下一题</button>
+      </div>
+      <!-- 没有更多问题时显示的信息 -->
+      <div v-else class="end">
+        <h2>没有更多问题了</h2>
+        <button @click="submitAnswers" class="submit-button">提交答案</button>
+      </div>
+    </div>
+    <!-- 显示问题解析 -->
+    <div v-else class="question">
+      <h1>答题情况</h1>
+      <h2>答对题数：{{ pigMoney / 5 }}</h2>
+      <h2>获得猪仔钱：{{ pigMoney }}</h2>
+      <button class="submit-button">查看解析</button>
+      <span>&nbsp;</span>
+      <button class="submit-button">再答一次</button>
+    </div>
   </div>
 </template>
 
 <script>
+// import axios from 'axios'
+import { Message, MessageBox } from 'element-ui'
+import { submitAnswers } from '@/api/know'
+// import useUserStore from '@/store/modules/user'
 export default {
-  name: 'questionPage'
+  name: 'questionPage',
+  data() {
+    return {
+      pigMoney: 0,
+      explanation: false, // 是否显示问题解析
+      questions: [],
+      currentQuestionIndex: 0, // 当前问题的索引
+      selectedOptions: [] // 存储每个问题选择的答案
+    }
+  },
+  created() {
+    this.fetchQuestions()
+  },
+  methods: {
+    fetchQuestions() {
+      // 获取传递的问题数据
+      const questionsJson = this.$route.query.questions
+      if (questionsJson) {
+        // 将字符串转换回 JSON 对象
+        this.questions = JSON.parse(questionsJson)
+        this.selectedOptions = new Array(this.questions.length).fill(null)
+      }
+    },
+    nextQuestion() {
+      if (this.currentQuestionIndex < this.questions.length - 1) {
+        this.currentQuestionIndex += 1
+      } else {
+        MessageBox.confirm('这是最后一题，是否提交答案？', '确认提交', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.submitAnswers()
+        }).catch(() => {
+          // 用户点击取消按钮
+          console.log('用户取消了提交答案')
+        })
+      }
+    },
+    priorQuestion() {
+      if (this.currentQuestionIndex > 0) {
+        this.currentQuestionIndex -= 1
+      } else {
+        Message.warning('这是第一题哦！')
+      }
+    },
+    getOptions(index) {
+      const question = this.questions[index]
+      const options = {
+        A: question.optionA,
+        B: question.optionB,
+        C: question.optionC,
+        D: question.optionD
+      }
+      return Object.values(options)
+    },
+    getOptionLabel(index) {
+      const labels = ['A', 'B', 'C', 'D']
+      return labels[index]
+    },
+    async submitAnswers() {
+      // 验证是否有未选择的选项
+      const hasUnselected = this.selectedOptions.some(option => option === null)
+      if (hasUnselected) {
+        Message.warning('请确保所有问题都已选择答案！')
+        return
+      }
+      // const userStore = useUserStore()
+      // const token = userStore.token // 从 Pinia store 获取 token
+      // 构建提交的数据
+      const answers = this.questions.map((question, index) => ({
+        questionId: question.id,
+        questionContent: question.content,
+        selectedOption: this.selectedOptions[index] || '未选择'
+      }))
+      try {
+        const response = await submitAnswers(answers)
+        Message.success('答案提交成功！')
+        this.handleResponse(response.data)
+      } catch (error) {
+        console.error('提交答案失败:', error)
+        Message.error('提交答案失败')
+      }
+    },
+    handleResponse(data) {
+      // 处理返回的数据，显示每题是否选对以及正确的答案和解析
+      this.questions.forEach((question, index) => {
+        const answerVO = data.questionAnswerVOs[index]
+        question.correctAnswer = answerVO.correctAnswer
+        question.userAnswer = answerVO.userAnswer
+        question.explanation = answerVO.explanation
+        question.correct = answerVO.correct
+      })
+      // 可以在这里添加更多的逻辑来显示结果
+      this.pigMoney = data.pigMoney
+      this.explanation = true
+    }
+  }
 }
-// import { Message } from 'element-ui'
-// import { userLoginPage } from '@/api/know'
-// export default {
-//   name: 'GameKnow',
-//   data() {
-//     return {
-//       paragraphs: [
-//         '在20世纪初，中国东南沿海的许多家庭依靠海外华侨寄回的侨批来维持生计。侨批不仅承载着金钱，更承载着远方亲人的思念和期望。在这个信息传递不易的时代，水客成为了连接海内外的重要纽带。',
-//         '你出生在一个有着悠久水客传统的家族。你的祖父和父亲都曾是水客，他们的故事和经历让你对这份工作充满了敬意和向往。今天，你将踏上你的第一次水客之旅，从马来西亚携带一批侨批返回广东潮汕。',
-//         '在出发前，你的祖父把你叫到一边，递给你一个装满侨批的旧皮箱，并对你说：‘这些侨批比黄金还要珍贵，它们是家人之间的桥梁。你必须确保每一份侨批都能安全送达。’',
-//         '为了帮助你更好地完成这次任务，我会问你一些关于侨批文化的问题，每答对一个问题，你将获得一个猪仔钱积分这些积分将作为你旅程中的储备。'
-//       ],
-//       currentParagraph: 0,
-//       showImage: true // 新增一个数据属性来控制图片的显示
-//     }
-//   },
-//   methods: {
-//     nextTick() {
-//       if (this.currentParagraph < this.paragraphs.length - 1) {
-//         this.currentParagraph += 1 // 移动到下一个段落
-//       } else {
-//         this.currentParagraph = 0 // 重置段落索引
-//         this.showImage = false // 隐藏图片
-//         this.userLoginPage()
-//       }
-//     },
-//     async userLoginPage() {
-//       await userLoginPage().then(res => {
-//         Message.success('欢迎进入答题界面')
-//       })
-//     },
-//     openpage() {
-//       this.showImage = true
-//     }
-//   }
-// }
 </script>
 
 <style scoped>
@@ -59,17 +150,7 @@ export default {
   width: 1200px;
   height: 650px;
   margin-top: 55px;
-  background: url(../../assets/imgss/sea.webp) no-repeat;
-}
-
-.banner::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(0deg, rgba(0, 0, 0, .7), rgba(0, 0, 0, 0));
+  background: url(../../assets/imgs/sea.jpg) no-repeat;
 }
 
 .bgd {
@@ -80,36 +161,65 @@ export default {
   width: 80%;
 }
 
-/* p {
-    position: absolute;
-    top: 200px;
-    left: 180px;
-    right: 180px;
-    font-size: 25px;
+.question {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  font-size: 14px;
+  margin-bottom: 0px;
 }
-.nexttick {
-    position: absolute;
-    bottom: 150px;
-    right: 300px;
-    text-decoration: none;
-    color: #331316;
-    cursor: pointer;
-    z-index: 10;
+
+.question h2 {
+  margin: 0px;
 }
-.el-carousel__item {
-  background-image: url(../../assets/imgss/war.webp);
-  background-position: center center;
-  background-size: cover;
-  }
 
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
+.button1 {
+  position: absolute;
+  top: 300px;
+  left: 0;
+  width: 80px;
+  height: 30px;
+  border-radius: 25px;
+  border: 0;
+  margin-left: 10px;
+  background-color: #aa8b73;
+}
 
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
-  }
-  .el-carousel {
-    margin-top: 100px;
-  } */
+.button2 {
+  position: absolute;
+  top: 300px;
+  left: 120px;
+  width: 80px;
+  height: 30px;
+  border-radius: 25px;
+  border: 0;
+  margin-left: 10px;
+  background-color: #aa8b73;
+}
+
+.end {
+  text-align: center;
+}
+
+.submit-button {
+  width: 120px;
+  height: 40px;
+  margin-top: 20px;
+  border-radius: 25px;
+  border: 0;
+  background-color: #aa8b73;
+}
+
+.option {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+.option label {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+}
 </style>

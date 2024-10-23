@@ -137,7 +137,6 @@
         <img src="../../assets/imgss/color.webp" alt="墨水" class="ink" @click="showInkImage">
         <img src="../../assets/imgss/pen.webp" alt="笔" class="pen" @click="showWordImage">
         <img src="../../assets/imgss/envelope.webp" alt="信纸" class="envelope" @click="showEnvelopeImage">
-        <img src="../../assets/imgss/envelope.webp" alt="信纸" class="envelope" @click="showEnvelopeImage">
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
             <div class="box" v-for="color in inkColors" :key="color.id"
