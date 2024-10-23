@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="banner">
-      <h1 class="profile"><img src="../../assets/imgs/profile.png" alt=""></h1>
+      <h1 class="profile"><img src="../../assets/imgss/profile.webp" alt=""></h1>
       <div class="data">
 
         <div class="pic" @click="getAvatarList">
@@ -133,11 +133,10 @@
         </el-dialog>
       </div>
       <div class="store">
-        <img src="../../assets/imgs/store.png" alt="仓库" class="bgd">
-        <img src="../../assets/imgs/color.png" alt="墨水" class="ink" @click="showInkImage">
-        <img src="../../assets/imgs/pen.png" alt="笔" class="pen" @click="showWordImage">
-        <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
-        <img src="../../assets/imgs/envelope.png" alt="信纸" class="envelope" @click="showEnvelopeImage">
+        <img src="../../assets/imgss/store.webp" alt="仓库" class="bgd">
+        <img src="../../assets/imgss/color.webp" alt="墨水" class="ink" @click="showInkImage">
+        <img src="../../assets/imgss/pen.webp" alt="笔" class="pen" @click="showWordImage">
+        <img src="../../assets/imgss/envelope.webp" alt="信纸" class="envelope" @click="showEnvelopeImage">
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
             <div class="box" v-for="color in inkColors" :key="color.id"
@@ -145,7 +144,7 @@
             </div>
           </div>
           <span class="close" @click="showInkImageModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+          <img src="../../assets/imgss/mood.webp" alt="墨水图片" class="modal-image" />
         </div>
         <!-- 字体展示台 -->
         <div v-if="showWordModal" class="image-modal">
@@ -155,7 +154,7 @@
             </div>
           </div>
           <span class="close" @click="showWordModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+          <img src="../../assets/imgss/mood.webp" alt="墨水图片" class="modal-image" />
         </div>
         <!-- 信纸展示台 -->
         <div v-if="showEnvelopeModal" class="image-modal">
@@ -165,7 +164,7 @@
             </div>
           </div>
           <span class="close" @click="showEnvelopeModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+          <img src="../../assets/imgss/mood.webp" alt="墨水图片" class="modal-image" />
         </div>
       </div>
     </div>
@@ -457,7 +456,7 @@ export default {
   box-sizing: border-box;
   min-height: 100vh;
   width: 100%;
-  background-image: url(../../assets/imgs/background.jpg);
+  background-image: url(../../assets/imgss/background.jpg);
   background-size: 100% 100%;
   background-position: top center;
 } */
@@ -491,7 +490,7 @@ export default {
   padding-top: 30px;
   box-sizing: border-box;
   margin-top: 60px;
-  background-image: url(../../assets/imgs/profilebgd.png);
+  background-image: url(../../assets/imgss/profilebgd.webp);
   background-position: center center;
   background-size: cover;
 }
@@ -502,7 +501,7 @@ export default {
   left: 50%;
   border-radius: 5px;
   transform: translate(-50%, 0);
-  width: 250px;
+  width: 200px;
   height: 200px;
   cursor: pointer;
 }
@@ -515,7 +514,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 250px;
+  width: 200px;
   height: 200px;
   line-height: 200px;
   transform: translate(-50%, -50%);
@@ -614,7 +613,7 @@ export default {
   top: 60px;
   width: 850px;
   height: 640px;
-  background-image: url(../../assets/imgs/frame.png);
+  background-image: url(../../assets/imgss/frame.webp);
   background-position: center center;
   background-size: cover;
 }
@@ -673,7 +672,7 @@ export default {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 400px;
-  background-image: url(../../assets/imgs/profilebgd.png);
+  background-image: url(../../assets/imgss/profilebgd.webp);
   border-radius: 25px;
   z-index: 1000;
   padding: 20px;
@@ -701,7 +700,7 @@ export default {
   /* 使弹窗正好位于中心 */
   width: 300px;
   /* 弹窗的宽度 */
-  background-image: url(../../assets/imgs/profilebgd.png);
+  background-image: url(../../assets/imgss/profilebgd.webp);
   border-radius: 8px;
   /* 弹窗的边框圆角 */
   z-index: 1000;
@@ -824,7 +823,7 @@ li {
 
 .penboxs {
   position: absolute;
-  top: 30px;
+  top: 50px;
   left: 50px;
 }
 
@@ -840,7 +839,10 @@ li {
   margin-right: 30px;
   margin-bottom: 5px;
   background-size: cover;
-  background-position: center center;
+  border: 1px solid #000000;
+  /* 可选的边框样式 */
+  border: 1px solid #000000;
+  /* 可选的边框样式 */
 }
 
 .envelopebox {
@@ -848,7 +850,6 @@ li {
   width: 185px;
   height: 120px;
   margin-right: 10px;
-  margin-top: 50px;
   border: 1px solid #000000;
   background-position: center center;
   background-size: cover;
@@ -861,7 +862,7 @@ li {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 400px;
-  background-image: url(../../assets/imgs/profilebgd.png);
+  background-image: url(../../assets/imgss/profilebgd.webp);
   border-radius: 25px;
   z-index: 1000;
   padding: 20px;
@@ -889,7 +890,7 @@ li {
 
 .friend {
   width: 80%;
-  /* height: 130px; */
+  height: 90px;
   text-align: left;
   margin-left: 30px;
   margin-bottom: 10px;

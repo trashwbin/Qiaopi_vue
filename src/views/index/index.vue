@@ -2,7 +2,7 @@
   <div class="container">
     <nav>
       <div class="banner">
-        <router-link to="/introduce"><img src="../../assets/imgs/logo.png" alt="侨缘信使" class="logo"></router-link>
+        <router-link to="/introduce"><img src="../../assets/imgss/logo.webp" alt="侨缘信使" class="logo"></router-link>
         <router-link to="/introduce" class="slider" :class="{ active: isActive('/introduce') }"
           @click.native="navigateAndSetActive('/introduce')">首页</router-link>
         <router-link to="/letter" class="slider" :class="{ active: isActive('/letter') }"
@@ -12,7 +12,7 @@
         <router-link to="/shop" class="slider" :class="{ active: isActive('/shop') }"
           @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
         <div class="animation" :style="animationStyle"></div>
-        <div class="money" v-if="isLoggedIn"><img src="../../assets/imgs/pigmoney.png" alt="猪仔钱"></div>
+        <div class="money" v-if="isLoggedIn"><img src="../../assets/imgss/pigmoney.webp" alt="猪仔钱"></div>
         <p class="pig" v-if="isLoggedIn">猪仔钱：{{ money }}</p>
         <div v-if="isLoggedIn" class="avatar-container">
           <el-dropdown style="height: 40px;" @command="handleCommand" placement="bottom">
@@ -62,7 +62,7 @@ export default {
       if (!userStore.avatar) {
         userStore.getUserInfo()
       }
-      return userStore.avatar || require('@/assets/default-avatar.png') // 使用默认头像
+      return userStore.avatar || require('@/assets/default-avatar.webp') // 使用默认头像
     },
     animationStyle() {
       return {
@@ -168,7 +168,7 @@ body {
   position: relative;
   min-height: 100vh;
   width: 100%;
-  background-image: url(../../assets/imgs/background.jpg);
+  background-image: url(../../assets/imgss/background.webp);
   background-size: 100% 100%;
   background-position: center center;
 }
@@ -195,7 +195,7 @@ nav {
   position: relative;
   width: 100%;
   height: 60px;
-  background-image: url(../../assets/imgs/logobgd.jpg);
+  background-image: url(../../assets/imgss/logobgd.webp);
   background-repeat: repeat-x;
   font-size: 0;
   line-height: 60px;
