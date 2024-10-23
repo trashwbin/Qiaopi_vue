@@ -302,7 +302,7 @@ export default {
   left: 0; */
   float: left;
   width: 200px;
-  margin-left: 50px;
+  margin-left: 70px;
 }
 .paperGoods button {
   position: absolute;
@@ -354,7 +354,7 @@ export default {
   left: 0; */
   float: left;
   width: 200px;
-  margin-left: 40px;
+  margin-left: 70px;
   margin-bottom:20px;
 }
 .colorGoods h3 {
