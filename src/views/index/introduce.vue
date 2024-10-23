@@ -2,14 +2,14 @@
   <div class="contain">
     <div class="banner">
       <section>
-        <h2 id="text"><img src="../../assets/imgs/bgdlogo.png" alt="" class="logo"></h2>
-        <img src="../../assets/imgs/index1.png" alt="" id="sticker1">
-        <img src="../../assets/imgs/index2.png" alt="" id="sticker2">
+        <h2 id="text"><img src="../../assets/imgss/bgdlogo.webp" alt="" class="logo"></h2>
+        <img src="../../assets/imgss/index1.webp" alt="" id="sticker1">
+        <img src="../../assets/imgss/index2.webp" alt="" id="sticker2">
       </section>
       <div class="introduce">
         <div class="left">
-          <img src="../../assets/imgs/qiaopiIntroduce.png" alt="" class="title">
-          <img src="../../assets/imgs/bell.png" alt="" class="bell">
+          <img src="../../assets/imgss/qiaopiIntroduce.webp" alt="" class="title">
+          <img src="../../assets/imgss/bell.webp" alt="" class="bell">
           <div class="imgLoader"></div>
           <div class="container">
             <div class="credit">
@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="history">
-        <h1><img src="../../assets/imgs/title2.png" alt=""></h1>
+        <h1><img src="../../assets/imgss/title2.webp" alt=""></h1>
         <div class="banner">
           <ul>
             <li v-for="history in histories" :key="history.id" :class="{ 'active': history.active }"
@@ -66,32 +66,32 @@
         </div>
       </div>
       <div class="function">
-        <h1><img src="../../assets/imgs/functionbdg.png" alt=""></h1>
+        <h1><img src="../../assets/imgss/functionbdg.webp" alt=""></h1>
         <div class="images-container">
           <div class="top-row">
-            <router-link to="/drifting"><img src="../../assets/imgs/function1.png" alt="" class="function-img"
+            <router-link to="/drifting"><img src="../../assets/imgss/function1.webp" alt="" class="function-img"
                 title="这是漂流瓶"></router-link>
-            <router-link to="/shop"><img src="../../assets/imgs/function2.png" alt="" class="function-img"
+            <router-link to="/shop"><img src="../../assets/imgss/function2.webp" alt="" class="function-img"
                 title="这是兑换商城"></router-link>
-            <router-link to=""><img src="../../assets/imgs/function3.png" alt="" class="function-img"
+            <router-link to=""><img src="../../assets/imgss/function3.webp" alt="" class="function-img"
                 title="这是故事线探索"></router-link>
           </div>
           <div class="bottom-row">
-            <router-link to=""><img src="../../assets/imgs/function4.png" alt="" class="function-img"
+            <router-link to=""><img src="../../assets/imgss/function4.webp" alt="" class="function-img"
                 title="这是游戏翻翻乐"></router-link>
-            <router-link to="/write"><img src="../../assets/imgs/function5.png" alt="" class="function-img"
+            <router-link to="/write"><img src="../../assets/imgss/function5.webp" alt="" class="function-img"
                 title="这是写信"></router-link>
-            <router-link to="/receive"><img src="../../assets/imgs/function6.png" alt="" class="function-img"
+            <router-link to="/receive"><img src="../../assets/imgss/function6.webp" alt="" class="function-img"
                 title="这是收信"></router-link>
-            <router-link to=""><img src="../../assets/imgs/function7.png" alt="" class="function-img"
+            <router-link to=""><img src="../../assets/imgss/function7.webp" alt="" class="function-img"
                 title="这是知识问答"></router-link>
           </div>
         </div>
       </div>
       <div class="bottom">
-        <img src="../../assets/imgs/online.png" alt="" class="online">
-        <img src="../../assets/imgs/oversees.png" alt="" class="oversees">
-        <img src="../../assets/imgs/logo.png" alt="" class="logo1">
+        <img src="../../assets/imgss/online.webp" alt="" class="online">
+        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
+        <img src="../../assets/imgss/logo.webp" alt="" class="logo1">
         <p class="contact">联系我们：3348620049@qq.com</p>
       </div>
     </div>
@@ -137,15 +137,15 @@ export default {
   data() {
     return {
       histories: [
-        { id: 1, math: '01', title: '起步阶段', description: '19世纪中叶至19世纪末，随着中国东南沿海地区居民开始大规模移民海外，侨批开始出现，主要用于华侨与家人之间的通信和汇款。', img: require('@/assets/imgs/history1.png'), active: false },
-        { id: 2, math: '02', title: '发展阶段', description: '20世纪初至20世纪30年代，随着华侨数量的增加和海外华人社区的形成，侨批业务迅速发展，出现了专门从事侨批传递的“水客”和侨批局。', img: require('@/assets/imgs/history2.png'), active: false },
-        { id: 3, math: '03', title: '繁荣阶段', description: '20世纪30年代至20世纪40年代中期，侨批业务达到顶峰，成为华侨与家乡之间最主要的联系方式之一，侨批局遍布东南亚各地。', img: require('@/assets/imgs/history3.jpg'), active: false },
-        { id: 4, math: '04', title: '衰退阶段', description: '20世纪40年代中期至20世纪50年代，由于第二次世界大战的影响，国际邮件和汇款业务受阻侨批业务受到严重打击。', img: require('@/assets/imgs/history4.jpg'), active: false },
-        { id: 5, math: '05', title: '转型阶段', description: '20世纪50年代至20世纪70年代，随着战后重建和通信技术的发展，电话、电报等现代通信方式逐渐普及，侨批的传统功能开始减弱。', img: require('@/assets/imgs/history5.png'), active: false },
-        { id: 6, math: '06', title: '遗产化阶段', description: '20世纪未至今，随着现代通信技术的高度发展，侨批作为通信手段的功能已经消失，但它作为历史文化遗产的价值逐渐被认识和重视。', img: require('@/assets/imgs/history6.png'), active: false },
-        { id: 7, math: '07', title: '保护阶段', description: '21世纪初至今，侨批作为珍贵的历史文献，受到了学术界的广泛关注，多国政府和国际组织开始采取措施保护和研究侨批。', img: require('@/assets/imgs/history7.jpg'), active: false }
+        { id: 1, math: '01', title: '起步阶段', description: '19世纪中叶至19世纪末，随着中国东南沿海地区居民开始大规模移民海外，侨批开始出现，主要用于华侨与家人之间的通信和汇款。', img: require('@/assets/imgss/history1.webp'), active: false },
+        { id: 2, math: '02', title: '发展阶段', description: '20世纪初至20世纪30年代，随着华侨数量的增加和海外华人社区的形成，侨批业务迅速发展，出现了专门从事侨批传递的“水客”和侨批局。', img: require('@/assets/imgss/history2.webp'), active: false },
+        { id: 3, math: '03', title: '繁荣阶段', description: '20世纪30年代至20世纪40年代中期，侨批业务达到顶峰，成为华侨与家乡之间最主要的联系方式之一，侨批局遍布东南亚各地。', img: require('@/assets/imgss/history3.webp'), active: false },
+        { id: 4, math: '04', title: '衰退阶段', description: '20世纪40年代中期至20世纪50年代，由于第二次世界大战的影响，国际邮件和汇款业务受阻侨批业务受到严重打击。', img: require('@/assets/imgss/history4.webp'), active: false },
+        { id: 5, math: '05', title: '转型阶段', description: '20世纪50年代至20世纪70年代，随着战后重建和通信技术的发展，电话、电报等现代通信方式逐渐普及，侨批的传统功能开始减弱。', img: require('@/assets/imgss/history5.webp'), active: false },
+        { id: 6, math: '06', title: '遗产化阶段', description: '20世纪未至今，随着现代通信技术的高度发展，侨批作为通信手段的功能已经消失，但它作为历史文化遗产的价值逐渐被认识和重视。', img: require('@/assets/imgss/history6.webp'), active: false },
+        { id: 7, math: '07', title: '保护阶段', description: '21世纪初至今，侨批作为珍贵的历史文献，受到了学术界的广泛关注，多国政府和国际组织开始采取措施保护和研究侨批。', img: require('@/assets/imgss/history7.webp'), active: false }
       ],
-      imageUrl: 'http://110.41.58.26:9000/qiaopi/qiaopi-images/letter/7780d647-ac9a-4ac0-9342-ad35e9e709d1.png',
+      imageUrl: 'http://110.41.58.26:9000/qiaopi/qiaopi-images/letter/7780d647-ac9a-4ac0-9342-ad35e9e709d1.webp',
       scale: 0.1,
       rotation: 0,
       marginLeft: 0,
@@ -376,7 +376,7 @@ export default {
 .contain {
   width: 100%;
   height: 3000px;
-  background-image: url(../../assets/imgs/background.jpg);
+  background-image: url(../../assets/imgss/background.webp);
   background-size: 100% 100%;
   background-position: center center;
   background-size: cover;
@@ -548,7 +548,7 @@ section #text {
   width: 900px;
   height: 900px;
   margin-top: 20px;
-  background-image: url(../../assets/imgs/right.png);
+  background-image: url(../../assets/imgss/right.webp);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -819,19 +819,19 @@ section #text {
 
 @keyframes preLoad {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
   }
 
   25% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
   }
 
   50% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
   }
 
   75% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
   }
 
   100% {
@@ -841,53 +841,53 @@ section #text {
 
 @keyframes nextPage {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
   }
 
   20% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
   }
 
   40% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
   }
 
   60% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
   }
 
   80% {
-    background-image: url("../../assets/imgs/page5.png");
+    background-image: url("../../assets/imgss/page5.webp");
   }
 }
 
 @keyframes nextFlip1 {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
     background-position: -178px -2px;
     transform: rotateY(0deg);
   }
 
   25% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
     background-position: -210px -2px;
     transform: rotateY(180deg);
   }
 
   50% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
     background-position: -178px -2px;
     transform: rotateY(0deg);
   }
 
   75% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
     background-position: -210px -2px;
     transform: rotateY(180deg);
   }
 
   100% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
     background-position: -178px -2px;
     transform: rotateY(0deg);
   }
@@ -895,31 +895,31 @@ section #text {
 
 @keyframes nextFlip2 {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
     background-position: -148px -2px;
     transform: rotateY(0deg);
   }
 
   25% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
     background-position: -238px -2px;
     transform: rotateY(180deg);
   }
 
   50% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
     background-position: -148px -2px;
     transform: rotateY(0deg);
   }
 
   75% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
     background-position: -238px -2px;
     transform: rotateY(180deg);
   }
 
   100% {
-    background-image: url("../../assets/imgs/page5.png");
+    background-image: url("../../assets/imgss/page5.webp");
     background-position: -148px -2px;
     transform: rotateY(0deg);
   }
@@ -927,31 +927,31 @@ section #text {
 
 @keyframes nextFlip3 {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
     background-position: -118px -2px;
     transform: rotateY(0deg);
   }
 
   25% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
     background-position: -268px -2px;
     transform: rotateY(180deg);
   }
 
   50% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
     background-position: -118px -2px;
     transform: rotateY(0deg);
   }
 
   75% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
     background-position: -268px -2px;
     transform: rotateY(180deg);
   }
 
   100% {
-    background-image: url("../../assets/imgs/page5.png");
+    background-image: url("../../assets/imgss/page5.webp");
     background-position: -118px -2px;
     transform: rotateY(0deg);
   }
@@ -959,31 +959,31 @@ section #text {
 
 @keyframes nextFlip4 {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
     background-position: -88px -2px;
     transform: rotateY(0deg);
   }
 
   25% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
     background-position: -298px -2px;
     transform: rotateY(180deg);
   }
 
   50% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
     background-position: -88px -2px;
     transform: rotateY(0deg);
   }
 
   75% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
     background-position: -298px -2px;
     transform: rotateY(180deg);
   }
 
   100% {
-    background-image: url("../../assets/imgs/page5.png");
+    background-image: url("../../assets/imgss/page5.webp");
     background-position: -88px -2px;
     transform: rotateY(0deg);
   }
@@ -991,31 +991,31 @@ section #text {
 
 @keyframes nextFlip5 {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
     background-position: -58px -2px;
     transform: rotateY(0deg);
   }
 
   25% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
     background-position: -328px -2px;
     transform: rotateY(180deg);
   }
 
   50% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
     background-position: -58px -2px;
     transform: rotateY(0deg);
   }
 
   75% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
     background-position: -328px -2px;
     transform: rotateY(180deg);
   }
 
   100% {
-    background-image: url("../../assets/imgs/page5.png");
+    background-image: url("../../assets/imgss/page5.webp");
     background-position: -58px -2px;
     transform: rotateY(0deg);
   }
@@ -1023,31 +1023,31 @@ section #text {
 
 @keyframes nextFlip6 {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
     background-position: -28px -2px;
     transform: rotateY(0deg);
   }
 
   25% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
     background-position: -358px -2px;
     transform: rotateY(180deg);
   }
 
   50% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
     background-position: -28px -2px;
     transform: rotateY(0deg);
   }
 
   75% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
     background-position: -358px -2px;
     transform: rotateY(180deg);
   }
 
   100% {
-    background-image: url("../../assets/imgs/page5.png");
+    background-image: url("../../assets/imgss/page5.webp");
     background-position: -28px -2px;
     transform: rotateY(0deg);
   }
@@ -1055,31 +1055,31 @@ section #text {
 
 @keyframes nextFlip7 {
   0% {
-    background-image: url("../../assets/imgs/page1.png");
+    background-image: url("../../assets/imgss/page1.webp");
     background-position: -2px -2px;
     transform: rotateY(0deg);
   }
 
   25% {
-    background-image: url("../../assets/imgs/page2.png");
+    background-image: url("../../assets/imgss/page2.webp");
     background-position: -388px -2px;
     transform: rotateY(180deg);
   }
 
   50% {
-    background-image: url("../../assets/imgs/page3.png");
+    background-image: url("../../assets/imgss/page3.webp");
     background-position: -2px -2px;
     transform: rotateY(0deg);
   }
 
   75% {
-    background-image: url("../../assets/imgs/page4.png");
+    background-image: url("../../assets/imgss/page4.webp");
     background-position: -388px -2px;
     transform: rotateY(180deg);
   }
 
   100% {
-    background-image: url("../../assets/imgs/page5.png");
+    background-image: url("../../assets/imgss/page5.webp");
     background-position: -2px -2px;
     transform: rotateY(0deg);
   }
@@ -1314,7 +1314,7 @@ section #text {
   width: 100%;
   height: 140px;
   margin-top: 50px;
-  background-image: url(../../assets/imgs/logobgd.jpg);
+  background-image: url(../../assets/imgss/logobgd.webp);
   background-repeat: repeat-x;
   font-size: 0;
   line-height: 60px;

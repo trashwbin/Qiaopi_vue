@@ -72,7 +72,7 @@
           </div>
         </el-form>
         <el-row style="margin: 20px auto 0; text-align: center;">
-          <el-button type="warning" :disabled="disabled" @click="generateLetter('letterGen')">生成</el-button>
+          <el-button type="warning" :loading="disabled" @click="generateLetter('letterGen')">生成</el-button>
           <el-tooltip content="请生成后再确认" placement="bottom" effect="light" :disabled="!showTip">
             <el-button type="primary" @click="handleShowConfirmDialog" :disabled="showTip">确认</el-button>
           </el-tooltip>
@@ -181,7 +181,7 @@
 
         <template #footer>
           <div class="dialog-footer">
-            <el-button type="primary" @click="submitPre">发 送</el-button>
+            <el-button type="primary" @click="submitPre" :loading="sendLoading">发 送</el-button>
             <el-button @click="cancel">取 消</el-button>
           </div>
         </template>
@@ -322,8 +322,7 @@
           </div>
 
           <div class="progress">
-            // TODO
-            <el-progress :text-inside="true" :stroke-width="24" :percentage="letterVo.deliveryProgress"
+            <el-progress :text-inside="true" :stroke-width="24" :percentage="letterVo.deliveryProgress / 100"
               style="height: 100px; width: 80%; line-height: 100px;"></el-progress>
           </div>
 
@@ -384,6 +383,8 @@ export default {
       callback()
     }
     return {
+      websocket: null,
+      sendLoading: false,
       isUseCard: false,
       useCardDto: {
         cardId: '',
@@ -733,7 +734,7 @@ export default {
       this.imageUrl = item.letterLink
       // 设置 letterVo
       this.letterVo = item
-      this.letterVo.deliveryProgress = (parseInt(item.deliveryProgress) / 100)
+      this.letterVo.deliveryProgress = (parseInt(item.deliveryProgress))
       // console.log(this.letterVo)
 
       setTimeout(() => {
@@ -856,8 +857,62 @@ export default {
         this.handleShowProgress()
       }
     },
+    // websocket
     handleChange() {
       this.showTip = true
+      if (this.websocket == null) {
+        this.initWebSocket()
+      } else {
+        this.send()
+      }
+    },
+    initWebSocket() {
+      if ('WebSocket' in window) {
+        this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
+        // this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen')
+        console.log(useUserStore().token)
+        this.websocket.onerror = this.onError
+        this.websocket.onopen = this.onOpen
+        this.websocket.onmessage = this.onMessage
+        this.websocket.onclose = this.onClose
+      } else {
+        alert('Not support websocket')
+      }
+    },
+    addUnloadListener() {
+      window.addEventListener('beforeunload', this.handleBeforeUnload)
+    },
+    removeUnloadListener() {
+      window.removeEventListener('beforeunload', this.handleBeforeUnload)
+    },
+    handleBeforeUnload() {
+      if (this.websocket) {
+        this.websocket.close()
+      }
+    },
+    onError() {
+      this.$message.error('连接失败，请刷新页面重试')
+    },
+    onOpen() {
+      this.$message.success('连接成功')
+    },
+    onClose() {
+      this.$message.warning('连接关闭')
+    },
+    onMessage(event) {
+      console.log(event)
+      this.letter.letterLink = 'data:image/png;base64,' + event.data
+    },
+    send() {
+      if (this.websocket && this.letterGen) {
+        console.log(this.letterGen)
+        this.websocket.send(JSON.stringify(this.letterGen))
+      }
+    },
+    closeWebSocket() {
+      if (this.websocket) {
+        this.websocket.close()
+      }
     },
     // 查看大图函数结束
     getLetterStatusLabel(statusId) {
@@ -939,6 +994,7 @@ export default {
       })
     },
     submitPre() {
+      this.sendLoading = true
       this.letter.recipientAddress.longitude = this.recipientAddress[0]
       this.letter.recipientAddress.latitude = this.recipientAddress[1]
       this.letter.recipientAddress.formattedAddress = this.recipientAddress[2]
@@ -966,10 +1022,12 @@ export default {
               type: 'success',
               offset: 100
             })
+            this.sendLoading = false
             this.showConfirmDialog = false
             this.loadFirstImage(res.data)
           })
         } else {
+          this.sendLoading = false
           return false
         }
       })
@@ -1071,6 +1129,10 @@ export default {
     this.getUserRepository()
     this.getUserFriends()
     this.getMyAddress()
+  },
+  beforeDestroy() {
+    this.removeUnloadListener()
+    this.closeWebSocket()
   }
 }
 </script>
@@ -1112,7 +1174,7 @@ export default {
   height: 680px;
   /* height: 1200px; */
   background-color: blanchedalmond;
-  background-image: url(../../assets/imgs/writebgd3.jpg);
+  background-image: url(../../assets/imgss/writebgd3.webp);
   display: flex;
   /* 使用 Flexbox 布局 */
   align-items: flex-start;

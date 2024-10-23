@@ -14,6 +14,7 @@ import WriteLetter from '@/views/letter/WriteLetter.vue'
 import ReceiveLetter from '@/views/letter/ReceiveLetter.vue'
 import DriftingBottle from '@/views/letter/DriftingBottle.vue'
 import GameKown from '@/views/game/know.vue'
+import questionPage from '@/views/game/question.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -88,6 +89,11 @@ const router = new VueRouter({
         path: 'know',
         name: 'GameKnow',
         component: GameKown
+      },
+      {
+        path: 'question',
+        name: 'questionPage',
+        component: questionPage
       }
     ]
   }
