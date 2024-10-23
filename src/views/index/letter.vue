@@ -1,4 +1,3 @@
-
 <template>
   <div class="banner">
     <div class="box" v-for="item in items" :key="item.title">
@@ -11,8 +10,8 @@
           {{ item.description }}
         </p>
         <router-link :to="item.link" tag="button" class="btn">
-  {{ item.btnText }}
-</router-link>
+          {{ item.btnText }}
+        </router-link>
       </div>
     </div>
   </div>
@@ -27,7 +26,7 @@ export default {
         {
           title: '书海情航',
           description: '在书信的海洋中航行，寻找情感的归宿。在这些泛黄的纸张上，每一行文字都承载着深情的寄托，像是一艘艘小船，载着思念和故事，穿越时间的波涛，抵达心灵的港湾。',
-          img: require('@/assets/imgs/write.png'),
+          img: require('@/assets/imgss/write.webp'),
           active: true,
           btnText: '我要写信',
           link: '/write'
@@ -35,7 +34,7 @@ export default {
         {
           title: '书简候音',
           description: '书简中等候着远方的声音。那些被墨水封印的字句，静静躺在信封中，仿佛在低语，诉说着远方的牵挂和期盼。它们在静默中等待，直到被打开的那一刻，释放出所有被压抑的情感和消息。',
-          img: require('@/assets/imgs/piaoliu.png'),
+          img: require('@/assets/imgss/piaoliu.webp'),
           active: true,
           btnText: '查看收信',
           link: '/receive'
@@ -43,7 +42,7 @@ export default {
         {
           title: '信风远航',
           description: '借助风力，信件远航到未知的地方。每一封信都是一次勇敢的航行，它们随风起航，越过千山万水，带着希望和梦想，去往未知的目的地。无论路途多远，它们总能找到自己的方向，将心意送达期待的人手中。',
-          img: require('@/assets/imgs/send.png'),
+          img: require('@/assets/imgss/send.webp'),
           active: true,
           btnText: '写漂流信',
           link: '/drifting'
@@ -55,7 +54,6 @@ export default {
 </script>
 
 <style scoped>
-
 .banner {
   width: 1000px;
   display: flex;
@@ -115,9 +113,11 @@ export default {
   border-radius: 25px;
   cursor: pointer;
 }
+
 .box:hover {
   box-shadow: 0px rgba(0, 0, 0, 0);
 }
+
 .box:hover .btn {
   opacity: 1;
   transition-delay: 0.1s;
@@ -145,18 +145,19 @@ export default {
   opacity: 1;
   transition-delay: 0.1s;
 }
+
 .btn {
   display: inline-block;
- position: absolute;
- bottom: 50px;
- left: 50px;
- width: 200px;
- height: 50px;
- border-radius: 50px;
- background-color: #8b4d38;
- border: 0px;
- color: white;
- opacity: 0;
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  width: 200px;
+  height: 50px;
+  border-radius: 50px;
+  background-color: #8b4d38;
+  border: 0px;
+  color: white;
+  opacity: 0;
 
 }
 </style>

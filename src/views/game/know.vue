@@ -97,6 +97,7 @@ export default {
   margin-top: 55px;
   background: url(../../assets/imgs/sea.jpg) no-repeat;
 }
+
 .bgd {
   position: absolute;
   top: 50%;
@@ -104,6 +105,7 @@ export default {
   transform: translate(-50%, -50%);
   width: 80%;
 }
+
 p {
   position: absolute;
   top: 200px;
@@ -111,6 +113,7 @@ p {
   right: 180px;
   font-size: 25px;
 }
+
 .nexttick {
   position: absolute;
   bottom: 150px;
@@ -120,8 +123,9 @@ p {
   cursor: pointer;
   z-index: 10;
 }
+
 .el-carousel__item {
-  background-image: url(../../assets/imgs/war.jpg);
+  background-image: url(../../assets/imgss/war.webp);
   background-position: center center;
   background-size: cover;
 }

@@ -216,7 +216,7 @@ export default {
       const response = await ProcessingFriendRequests()
       if (response.code === 200) {
         this.friendRequests = response.data
-        if (this.friendRequest.length > 0) {
+        if (this.friendRequests.length > 0) {
           Message.success('您有新的好友申请')
         }
       } else {
@@ -270,7 +270,7 @@ export default {
       }
     },
     hasUnreadRequests() {
-      return this.friendRequests.some(request => !request.read)
+      return this.friendRequests && this.friendRequests.some(request => request.read === false)
     }
     // formattedAddress() {
     //   return {
@@ -297,7 +297,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .banner {
   margin-top: 40px;
@@ -315,7 +314,7 @@ export default {
   top: 20px;
   width: 950px;
   height: 600px;
-  background-image: url(../../assets/imgs/drifting.jpg);
+  background-image: url(../../assets/imgss/drifting.webp);
   background-position: center center;
   background-size: cover;
 }

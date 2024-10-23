@@ -174,7 +174,7 @@ body {
   position: relative;
   height: 1000px;
   width: 100%;
-  background-image: url(../../assets/imgs/loginbgd.jpg);
+  background-image: url(../../assets/imgss/loginbgd.webp);
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
