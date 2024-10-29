@@ -72,7 +72,7 @@ export default {
       colorList: [],
       cardList: [], // 新增功能卡列表
       ownedItems: {},
-      activeTag: null // 控制动画的变量
+      activeTag: 'paper' // 控制动画的变量
     }
   },
   methods: {
@@ -94,9 +94,9 @@ export default {
       try {
         const response = await fetchPaperList()
         this.paperList = response.data
-        console.log(this.paperList) // 检查数据是否正确加载
+        // console.log(this.paperList) // 检查数据是否正确加载
       } catch (error) {
-        console.error('获取纸张商城列表失败:', error)
+        // console.error('获取纸张商城列表失败:', error)
       }
     },
     async fetchFontList() {
@@ -104,7 +104,7 @@ export default {
         const response = await fetchFontList()
         this.fontList = response.data
       } catch (error) {
-        console.error('获取纸张商城列表失败:', error)
+        // console.error('获取纸张商城列表失败:', error)
       }
     },
     async fetchColorList() {
@@ -112,7 +112,7 @@ export default {
         const response = await fetchColorList()
         this.colorList = response.data
       } catch (error) {
-        console.error('获取纸张商城列表失败:', error)
+        // console.error('获取纸张商城列表失败:', error)
       }
     },
     async fetchCardList() {
@@ -120,7 +120,7 @@ export default {
         const response = await fetchCardList()
         this.cardList = response.data
       } catch (error) {
-        console.error('获取纸张商城列表失败:', error)
+        // console.error('获取纸张商城列表失败:', error)
       }
     },
     async buyPaper(paperId) {
@@ -141,7 +141,7 @@ export default {
           })
         }
       } catch (error) {
-        console.error('购买纸张失败:', error)
+        // console.error('购买纸张失败:', error)
       }
     },
     async buyFont(fontId) {
@@ -162,7 +162,7 @@ export default {
           })
         }
       } catch (error) {
-        console.error('购买字体失败:', error)
+        // console.error('购买字体失败:', error)
       }
     },
     async buyFontColor(fontColorId) {
@@ -183,7 +183,7 @@ export default {
           })
         }
       } catch (error) {
-        console.error('购买字体颜色失败:', error)
+        // console.error('购买字体颜色失败:', error)
       }
     },
     async buyCard(CardId) {
@@ -204,7 +204,7 @@ export default {
           })
         }
       } catch (error) {
-        console.error('购买功能卡失败:', error)
+        // console.error('购买功能卡失败:', error)
       }
     }
   },

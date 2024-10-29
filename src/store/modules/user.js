@@ -26,7 +26,7 @@ const useUserStore = defineStore(
             const data = res.data
             setToken(data.token)
             this.token = data.token
-            console.log(data)
+            // console.log(data)
             const avatar = (data.avatar === '' || data.avatar == null) ? defAva : data.avatar
             this.id = data.id
             this.name = data.nickname
