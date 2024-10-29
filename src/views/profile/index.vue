@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="banner">
-      <h1 class="profile"><img src="../../assets/imgs/profile.png" alt=""></h1>
+      <h1 class="profile"><img src="../../assets/imgss/profile.webp" alt=""></h1>
       <div class="data">
 
         <div class="pic" @click="getAvatarList">
@@ -133,10 +133,10 @@
         </el-dialog>
       </div>
       <div class="store">
-        <img src="../../assets/imgs/store.png" alt="仓库" class="bgd">
-        <img src="../../assets/imgs/color.png" title="墨水" class="ink" @click="showInkImage">
-        <img src="../../assets/imgs/pen.png" title="笔" class="pen" @click="showWordImage">
-        <img src="../../assets/imgs/envelope.png" title="信纸" class="envelope" @click="showEnvelopeImage">
+        <img src="../../assets/imgss/store.webp" alt="仓库" class="bgd">
+        <img src="../../assets/imgss/color.webp" alt="墨水" class="ink" @click="showInkImage">
+        <img src="../../assets/imgss/pen.webp" alt="笔" class="pen" @click="showWordImage">
+        <img src="../../assets/imgss/envelope.webp" alt="信纸" class="envelope" @click="showEnvelopeImage">
         <div v-if="showInkImageModal" class="image-modal">
           <div class="colorbox">
             <div class="box" v-for="color in inkColors" :key="color.id"
@@ -144,7 +144,7 @@
             </div>
           </div>
           <span class="close" @click="showInkImageModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+          <img src="../../assets/imgss/mood.webp" alt="墨水图片" class="modal-image" />
         </div>
         <!-- 字体展示台 -->
         <div v-if="showWordModal" class="image-modal">
@@ -154,7 +154,7 @@
             </div>
           </div>
           <span class="close" @click="showWordModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+          <img src="../../assets/imgss/mood.webp" alt="墨水图片" class="modal-image" />
         </div>
         <!-- 信纸展示台 -->
         <div v-if="showEnvelopeModal" class="image-modal">
@@ -164,7 +164,7 @@
             </div>
           </div>
           <span class="close" @click="showEnvelopeModal = false">&times;</span>
-          <img src="../../assets/imgs/mood.png" alt="墨水图片" class="modal-image" />
+          <img src="../../assets/imgss/mood.webp" alt="墨水图片" class="modal-image" />
         </div>
       </div>
     </div>
@@ -248,7 +248,7 @@ export default {
       // 获取我的地址
       await this.fetchAddresses(token)
     } catch (error) {
-      console.error('请求错误:', error)
+      // console.error('请求错误:', error)
     }
   },
   methods: {
@@ -277,10 +277,10 @@ export default {
         if (response.data.code === 200) {
           this.friends = response.data.data
         } else {
-          console.error('获取好友列表失败:', response.data.msg)
+          // console.error('获取好友列表失败:', response.data.msg)
         }
       } catch (error) {
-        console.error('获取好友列表错误:', error)
+        // console.error('获取好友列表错误:', error)
       }
     },
     async getUserInfo() {
@@ -357,11 +357,11 @@ export default {
         if (response.data.code === 200 && response.data.data.length > 0) {
           return response.data.data[0].formattedAddress
         } else {
-          console.error('获取好友地址失败:', response.data.msg)
+          // console.error('获取好友地址失败:', response.data.msg)
           return null
         }
       } catch (error) {
-        console.error('获取好友地址错误:', error)
+        // console.error('获取好友地址错误:', error)
         return null
       }
     },
@@ -418,7 +418,7 @@ export default {
           Message.error(response.data.msg || '修改用户信息失败')
         }
       } catch (error) {
-        console.error('更新用户信息错误:', error)
+        // console.error('更新用户信息错误:', error)
         Message.error('更新用户信息时发生错误')
       }
     },
@@ -456,7 +456,7 @@ export default {
   box-sizing: border-box;
   min-height: 100vh;
   width: 100%;
-  background-image: url(../../assets/imgs/background.jpg);
+  background-image: url(../../assets/imgss/background.jpg);
   background-size: 100% 100%;
   background-position: top center;
 } */
@@ -490,7 +490,7 @@ export default {
   padding-top: 30px;
   box-sizing: border-box;
   margin-top: 60px;
-  background-image: url(../../assets/imgs/profilebgd.png);
+  background-image: url(../../assets/imgss/profilebgd.webp);
   background-position: center center;
   background-size: cover;
 }
@@ -613,7 +613,7 @@ export default {
   top: 60px;
   width: 850px;
   height: 640px;
-  background-image: url(../../assets/imgs/frame.png);
+  background-image: url(../../assets/imgss/frame.webp);
   background-position: center center;
   background-size: cover;
 }
@@ -672,7 +672,7 @@ export default {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 400px;
-  background-image: url(../../assets/imgs/profilebgd.png);
+  background-image: url(../../assets/imgss/profilebgd.webp);
   border-radius: 25px;
   z-index: 1000;
   padding: 20px;
@@ -700,7 +700,7 @@ export default {
   /* 使弹窗正好位于中心 */
   width: 300px;
   /* 弹窗的宽度 */
-  background-image: url(../../assets/imgs/profilebgd.png);
+  background-image: url(../../assets/imgss/profilebgd.webp);
   border-radius: 8px;
   /* 弹窗的边框圆角 */
   z-index: 1000;
@@ -862,7 +862,7 @@ li {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 400px;
-  background-image: url(../../assets/imgs/profilebgd.png);
+  background-image: url(../../assets/imgss/profilebgd.webp);
   border-radius: 25px;
   z-index: 1000;
   padding: 20px;
