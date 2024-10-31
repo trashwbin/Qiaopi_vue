@@ -199,9 +199,10 @@
       <el-dialog title="确认信件信息" :visible.sync="showConfirmDialog" width="650px" append-to-body>
         <el-form :model="letter" :inline="true" label-width="100px" :rules="rules" ref="letter" hide-required-asterisk>
           <el-form-item label="收信人邮箱" prop="recipientEmail">
-            <el-input v-model="letter.recipientEmail" style="width: 300px;" placeholder="请输入收信人邮箱"
+            <el-input v-model="letter.recipientEmail" style="width: 200px;" placeholder="请输入收信人邮箱"
               @input="getFriendAddressesByEmail"></el-input>
           </el-form-item>
+
           <el-form-item label="收信人地址" prop="recipientAddress">
             <el-select v-model="recipientCountryId" filterable default-first-option placeholder="请选择收信人所在国家"
               style="margin-right:10px; height: 10px;width: 200px; float: left;"
@@ -274,6 +275,10 @@
               </div>
               <i slot="reference" v-show="showMyAddressBtn" class="el-icon-s-home address-aside"></i>
             </el-popover>
+          </el-form-item>
+          <el-form-item label="携带猪仔钱" prop="piggyMoney">
+            <el-input-number v-model="letter.piggyMoney" style="width: 200px;" controls-position="right"
+              @change="handleChange" :min="0" :max="500"></el-input-number>
           </el-form-item>
         </el-form>
 
@@ -384,6 +389,10 @@
               <div class="card_item">
                 <i class="el-icon-user"></i>
                 寄信人：{{ letterVo.senderName }}
+              </div>
+              <div class="card_item" v-show="letterVo.piggyMoney > 0">
+                <i class="el-icon-money"></i>
+                携带猪仔钱：{{ letterVo.piggyMoney }}
               </div>
               <div style="margin-left: 20px;">
 
@@ -540,7 +549,8 @@ export default {
         createTime: '',
         expectedDeliveryTime: '',
         status: '',
-        letterType: '1'
+        letterType: '1',
+        piggyMoney: ''
       },
       coverUrl: '',
       imageUrl: '',
@@ -647,7 +657,8 @@ export default {
         recipientEmail: '',
         recipientUserId: '',
         signetId: '',
-        letterType: '1'
+        letterType: '1',
+        piggyMoney: ''
       },
       repository: {
         fonts: [],
@@ -1079,7 +1090,7 @@ export default {
     },
     // 查看大图函数结束
     getLetterStatusLabel(statusId) {
-      if (this.letterVo.status === 2 && this.letterVo.speedRate !== '1') {
+      if (this.letterVo.status === 2 && this.letterVo.speedRate !== '1' && this.letterVo.speedRate !== null) {
         return `${this.letterVo.speedRate}倍加速` + this.letterStatusMap[statusId]
       }
       return this.letterStatusMap[statusId] || '未知状态'
