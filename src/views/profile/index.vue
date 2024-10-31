@@ -248,7 +248,7 @@ export default {
       // 获取我的地址
       await this.fetchAddresses(token)
     } catch (error) {
-      console.error('请求错误:', error)
+      // console.error('请求错误:', error)
     }
   },
   methods: {
@@ -277,10 +277,10 @@ export default {
         if (response.data.code === 200) {
           this.friends = response.data.data
         } else {
-          console.error('获取好友列表失败:', response.data.msg)
+          // console.error('获取好友列表失败:', response.data.msg)
         }
       } catch (error) {
-        console.error('获取好友列表错误:', error)
+        // console.error('获取好友列表错误:', error)
       }
     },
     async getUserInfo() {
@@ -357,11 +357,11 @@ export default {
         if (response.data.code === 200 && response.data.data.length > 0) {
           return response.data.data[0].formattedAddress
         } else {
-          console.error('获取好友地址失败:', response.data.msg)
+          // console.error('获取好友地址失败:', response.data.msg)
           return null
         }
       } catch (error) {
-        console.error('获取好友地址错误:', error)
+        // console.error('获取好友地址错误:', error)
         return null
       }
     },
@@ -418,7 +418,7 @@ export default {
           Message.error(response.data.msg || '修改用户信息失败')
         }
       } catch (error) {
-        console.error('更新用户信息错误:', error)
+        // console.error('更新用户信息错误:', error)
         Message.error('更新用户信息时发生错误')
       }
     },
