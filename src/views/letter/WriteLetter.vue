@@ -8,75 +8,93 @@
     </div>
     <div v-if="currentView === 'write'">
       <div class="left">
-        <el-form :model="letterGen" :inline="true" label-width="55px" :rules="rules" ref="letterGen"
+        <div class="c-toggle" @click="handleClickTab">
+          <button class="c-toggle__item" :class="{ 'c-toggle__item--checked': activeTab === 'information' }"
+            @click.stop="activeTab = 'information'">
+            信件信息
+          </button>
+          <button class="c-toggle__item" :class="{ 'c-toggle__item--checked': activeTab === 'letter' }"
+            @click.stop="activeTab = 'letter'">
+            开始撰写
+          </button>
+        </div>
+
+        <el-form :model="letterGen" :inline="true" label-width="65px" :rules="rules" ref="letterGen"
           :hide-required-asterisk="true">
-          <el-form-item label="信纸" prop="paperId" style="margin-left: -10px;">
-            <el-select v-model="letterGen.paperId" placeholder="信纸" style="width: 200px; height: 10px;margin-top:10px;"
-              height="10">
-              <el-option v-for="item in repository.papers" :key="item.id" :label="item.name" :value="item.id"
-                @change="handleChange" />
-            </el-select>
-          </el-form-item>
-          <div style="display: flex;">
-            <el-form-item label="字体" prop="fontId" style="margin-left: -10px; flex: 1;">
-              <el-select v-model="letterGen.fontId" placeholder="字体" style="width: 85px; margin-top:10px;">
-                <el-option v-for="item in repository.fonts" :key="item.id" :label="item.name" :value="item.id"
-                  @change="handleChange" />
+          <div v-show="activeTab === 'information'">
+            <el-form-item label="信纸" prop="paperId" style="margin-left: -20px;">
+              <el-select v-model="letterGen.paperId" placeholder="请选择字体颜色纸张" @change="handleChange"
+                style="width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
+                <el-option v-for="item in repository.papers" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
-            <el-form-item label="颜色" prop="fontColorId" style="margin-left: -10px; flex: 1;">
-              <el-select v-model="letterGen.fontColorId" placeholder="颜色" style="width: 85px; margin-top:10px;">
+
+            <el-form-item label="字体" prop="fontId" style="margin-left: -20px; ">
+              <el-select v-model="letterGen.fontId" placeholder="请选择字体" @change="handleChange"
+                style="width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
+                <el-option v-for="item in repository.fonts" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="颜色" prop="fontColorId" style="margin-left: -20px; ">
+              <el-select v-model="letterGen.fontColorId" placeholder="请选择字体颜色" @change="handleChange"
+                style=" width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
                 <el-option v-for=" item in repository.fontColors" :key="item.id" :label="item.description"
-                  :value="item.id" @change="handleChange" />
+                  :value="item.id" />
               </el-select>
             </el-form-item>
+            <el-form-item label="款式" prop="letterType" style="margin-left: -20px; ">
+              <el-select v-model="letterGen.letterType" placeholder="请选择字体款式" @change="handleChange"
+                style=" width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
+                <el-option v-for=" item in letterTypes" :key="item.id" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label=" 寄信人" prop="senderName" style="margin-left: -20px; " label-width="75px">
+              <el-input v-model="letterGen.senderName" placeholder="请输入寄信人" @input="handleChange"
+                style="margin-top:10px;height: 10px; width: 200px;" />
+            </el-form-item>
+            <el-form-item label="收信人" prop="recipientName" style="margin-left: -20px;" label-width="75px">
+              <!-- <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend"
+                style="margin-top:10px;" /> -->
+              <el-select v-model="selectedFriendId" filterable allow-create default-first-option placeholder="请输入收信人"
+                style="margin-top:10px; height: 10px;width: 200px;" @change="handleChangeFriend">
+                <el-option v-for="item in friends" :key="item.id" :label="item.name" :value="item.id">
+                  <span style="float: left">{{ item.name }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.email }}</span>
+                </el-option>
+              </el-select>
+              <!-- <el-popover placement="right" width="250" trigger="manual" v-model="showFriend">
+                <el-table :data="selectFriend" style="width: 100%" :show-header="false" highlight-current-row
+                  @current-change="handleCurrentChange" ref="singleTable">
+                  <el-table-column type="expand">
+                    <template slot-scope="props">
+                      <el-form label-position="left" class="demo-table-expand" label-width="50px">
+                        <el-form-item label="昵称:">
+                          <span>{{ props.row.name }}</span>
+                        </el-form-item>
+                        <el-form-item label="性别:">
+                          <span> {{ props.row.sex }}</span>
+                        </el-form-item>
+                        <el-form-item label="邮箱:">
+                          <span style="overflow: hidden;">{{ props.row.email }}</span>
+                        </el-form-item>
+                      </el-form>
+                    </template>
+</el-table-column>
+<el-table-column prop="name">
+</el-table-column>
+</el-table>
+</el-popover> -->
+            </el-form-item>
+
           </div>
-          <el-form-item label="寄信人" prop="senderName" style="margin-left: -10px; " label-width="65px">
-            <el-input v-model="letterGen.senderName" placeholder="请输入寄信人" @input="handleChange"
-              style="margin-top:10px;" />
-          </el-form-item>
-          <el-form-item label="收信人" prop="recipientName" style="margin-left: -10px;" label-width="65px">
-            <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend"
-              style="margin-top:10px;" />
-          </el-form-item>
-          <el-popover placement="right" width="250" trigger="manual" v-model="showFriend">
-            <el-table :data="selectFriend" style="width: 100%" :show-header="false" highlight-current-row
-              @current-change="handleCurrentChange" ref="singleTable">
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <el-form label-position="left" class="demo-table-expand" label-width="50px">
-                    <el-form-item label="昵称:">
-                      <span>{{ props.row.name }}</span>
-                    </el-form-item>
-                    <el-form-item label="性别:">
-                      <span> {{ props.row.sex }}</span>
-                    </el-form-item>
-                    <el-form-item label="邮箱:">
-                      <span style="overflow: hidden;">{{ props.row.email }}</span>
-                    </el-form-item>
-                  </el-form>
-                </template>
-              </el-table-column>
-              <el-table-column prop="name">
-              </el-table-column>
-            </el-table>
-            <!-- <el-tree :data="selectFriend" :props="props" accordion @node-click="handleNodeClick">
-            </el-tree> -->
-          </el-popover>
-          <div class="text">
+          <div v-show="activeTab === 'letter'" class="text">
             <el-form-item label="信的内容：" prop="letterContent" style=" text-align: center;" label-width="100px">
-              <el-input v-model="letterGen.letterContent" placeholder="请开始写信吧" required type="textarea"
-                :autosize="{ minRows: 10, maxRows: 12 }" style="width: 120%;margin-left: -10px;" resize="none"
-                @input="handleChange"></el-input>
+              <el-input v-model="letterGen.letterContent" maxlength="300" show-word-limit placeholder="请开始写信吧" required
+                type="textarea" :autosize="{ minRows: 15, maxRows: 20 }" style="width: 500px;margin-left: -20px;"
+                resize="none" @input="handleChange"></el-input>
             </el-form-item>
           </div>
         </el-form>
-        <el-row style="margin: 20px auto 0; text-align: center;">
-          <el-button type="warning" :loading="disabled" @click="generateLetter('letterGen')">生成</el-button>
-          <el-tooltip content="请生成后再确认" placement="bottom" effect="light" :disabled="!showTip">
-            <el-button type="primary" @click="handleShowConfirmDialog" :disabled="showTip">确认</el-button>
-          </el-tooltip>
-        </el-row>
       </div>
       <div class="right">
         <el-skeleton style="width: 100%; margin:0 auto" :loading="loading" animated>
@@ -117,9 +135,10 @@
             <!-- <el-skeleton-item variant="image" style="width: 100%; height: 500px;" /> -->
           </template>
           <template>
-            <el-image crossorigin="anonymous" :src="letter.letterLink" style="max-width: 100%; max-height: 640px;">
+            <!-- <img crossorigin="anonymous" :src="backImageUrl" style="max-width: 100%; max-height: 640px;" /> -->
+            <el-image crossorigin="anonymous" :src="letterUrl" style="max-width: 100%; max-height: 640px;">
               <div slot="placeholder" style="width: 100% ;height: 100%;">
-                <div class="waibu">
+                <!-- <div class="waibu">
                   <div class="scene">
                     <div class="objects">
                       <div class="square"></div>
@@ -150,7 +169,9 @@
                   </div>
                   <div class="letterProgress"></div>
                   <div class="noise"></div>
-                </div>
+                </div> -->
+                <img crossorigin="anonymous" :src="backImageUrl"
+                  style="max-width: 100%; max-height: 640px; margin-top: 13px" />
                 <!-- <i class="el-icon-loading" style="line-height: 250px; color: #A52328; font-size: 30px;"></i> -->
               </div>
               <div slot="error" class="image-slot" style="width: 100%; height: 100%; color: #A52328;">
@@ -162,20 +183,97 @@
           </template>
         </el-skeleton>
       </div>
-
+      <button class="panda-button" @click="handleShowConfirmDialog">
+        <div class="panda_face">
+          <svg x="0px" y="0px" width="100%" height="100%" viewBox="0 0 91.7 71.3">
+            <path class="panda_icon panda_white"
+              d="M86.6,20.4v15.3h5.1v20.4h-5.1v5.1h-5.1v5H71.3v5.1H20.4v-5.1H10.2v-5H5.1v-5.1H0V35.7h5.1V20.4L25.5,5.1h40.7L86.6,20.4z" />
+            <path class="panda_icon pink" d="M40.7,45.8h10.2v5.1H40.7V45.8z M10.2,25.4H5.1v-5.1H0V10.2h5.1V5.1h5.1V0h10.2v5.1h5.1v5.1h-5.1v5.1h-5.1v5h-5.1V25.4z
+            M30.5,45.8h-5v5.1H15.3V35.6h5.1v-5.1h10.1V45.8z M61.1,56H56v5.1H35.6V56H56v-5.1h5.1V56z M76.4,50.9H66.2v-5.1h-5.1V30.5h10.2
+          v5.1h5.1V50.9z M91.7,20.3h-5.1v5.1h-5.1v-5.1h-5.1v-5h-5.1v-5.1h-5.1V5.1h5.1V0h10.2v5.1h5.1v5.1h5.1V20.3z" />
+          </svg>
+        </div>
+        <span>发给好友!</span>
+      </button>
       <!-- 确认信件信息 -->
-      <el-dialog title="确认信件信息" :visible.sync="showConfirmDialog" width="400px" append-to-body>
+      <el-dialog title="确认信件信息" :visible.sync="showConfirmDialog" width="650px" append-to-body>
         <el-form :model="letter" :inline="true" label-width="100px" :rules="rules" ref="letter" hide-required-asterisk>
           <el-form-item label="收信人邮箱" prop="recipientEmail">
-            <el-input v-model="letter.recipientEmail" placeholder="请输入收信人邮箱"></el-input>
+            <el-input v-model="letter.recipientEmail" style="width: 300px;" placeholder="请输入收信人邮箱"
+              @input="getFriendAddressesByEmail"></el-input>
           </el-form-item>
           <el-form-item label="收信人地址" prop="recipientAddress">
-            <avue-input-map :params="params" :autosize="{ minRows: 1, maxRows: 4 }" placeholder="请选择收信地址"
-              v-model="recipientAddress"></avue-input-map>
+            <el-select v-model="recipientCountryId" filterable default-first-option placeholder="请选择收信人所在国家"
+              style="margin-right:10px; height: 10px;width: 200px; float: left;"
+              @change="handleChangeRecipientCountryId">
+              <el-option v-for="item in countries" :key="item.id" :label="item.countryName" :value="item.id">
+                <span style="float: left">{{ item.countryName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.countryNameEnglish }}</span>
+              </el-option>
+            </el-select>
+            <avue-input-map @input="selectedFriendAddressId = null" v-show="recipientCountryId === 1" :params="params"
+              :autosize="{ minRows: 1, maxRows: 3 }" placeholder="请选择收信地址" v-model="recipientAddress"
+              style="float: left; margin-top: 3px;"></avue-input-map>
+            <el-input v-show="recipientCountryId !== 1" @input="selectedFriendAddressId = null"
+              v-model="letter.recipientAddress.formattedAddress" placeholder="请输入详细地址" required type="textarea"
+              :autosize="{ minRows: 1, maxRows: 3 }"
+              style="width: 200px; min-height: 35px !important; margin-top: 3px; float: left;" resize="none" />
+            <el-popover placement="right" v-model="showFriendAddresses" width="500">
+              <div class="AddressDialog">
+                <i class="el-icon-close closeIcon" @click="showFriendAddresses = false"></i>
+                <div class="addressTip">选择地址</div>
+                <div class="addressContent">
+                  <div class="UserAddress beautify-scroll-bar ">
+                    <div class="userAddressItem" :class="{ isSelected: selectedFriendAddressId === address.id }"
+                      @click="selectFriendAddress(address.id)" v-for="address in friendAddresses" :key="address.id">
+                      <div class="defaultTip" v-if="address.isDefault == 'true'">默认</div>
+                      <div class="recipientInfo">
+                        <div class="recipient">{{ letterGen.recipientName }}</div>
+                        <div class="addressCountry">{{ getCountyNameById(address.countryId) }}</div>
+                      </div>
+                      <div class="detailAddress f-els-2">{{ address.formattedAddress }}</div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <i slot="reference" v-show="showFriendAddressBtn" class="el-icon-s-home address-aside"></i>
+            </el-popover>
           </el-form-item>
           <el-form-item label="我的地址" prop="senderAddress">
-            <avue-input-map :params="params" :autosize="{ minRows: 1, maxRows: 4 }" placeholder="请选择寄信地址"
-              v-model="senderAddress"></avue-input-map>
+            <el-select v-model="senderCountryId" filterable default-first-option placeholder="请选择寄信人所在国家"
+              style="margin-right:10px; height: 10px;width: 200px; float: left;" @change="handleChangeSenderCountryId">
+              <el-option v-for="item in countries" :key="item.id" :label="item.countryName" :value="item.id">
+                <span style="float: left">{{ item.countryName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.countryNameEnglish }}</span>
+              </el-option>
+            </el-select>
+            <avue-input-map v-show="senderCountryId === 1" :params="params" :autosize="{ minRows: 1, maxRows: 3 }"
+              placeholder="请选择寄信地址" v-model="senderAddress" style="float: left; margin-top: 3px;"></avue-input-map>
+            <el-input v-show="senderCountryId !== 1" v-model="letter.senderAddress.formattedAddress"
+              placeholder="请输入详细地址" required type="textarea" :autosize="{ minRows: 1, maxRows: 3 }"
+              style="width: 200px; min-height: 35px !important; margin-top: 3px;  float: left;" resize="none" />
+            <el-popover placement="right" v-model="showMyAddresses" width="500">
+              <div class="AddressDialog">
+                <i class="el-icon-close closeIcon" @click="showMyAddresses = false"></i>
+                <div class="addressTip">选择地址</div>
+                <div class="addressContent">
+                  <div class="UserAddress beautify-scroll-bar ">
+                    <div class="userAddressItem " :class="{ isSelected: selectedMyAddressId === address.id }"
+                      @click="selectMyAddress(address.id)" v-for="address in myAddresses" :key="address.id">
+                      <div class="defaultTip" v-if="address.isDefault == 'true'">默认</div>
+                      <div class="recipientInfo">
+                        <div class="recipient">{{ letterGen.senderName }}</div>
+                        <div class="addressCountry">{{ getCountyNameById(address.countryId) }}</div>
+                      </div>
+                      <div class="detailAddress f-els-2">{{ address.formattedAddress }}</div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <i slot="reference" v-show="showMyAddressBtn" class="el-icon-s-home address-aside"></i>
+            </el-popover>
           </el-form-item>
         </el-form>
 
@@ -291,9 +389,9 @@
 
                 <i class="el-icon-document-add"></i>
                 <el-button type="text" @click="writeMore">再写一封</el-button>
-                <el-divider direction="vertical"></el-divider>
+                <el-divider v-if="this.letterVo.status === 2" direction="vertical"></el-divider>
 
-                <el-popover placement="bottom" width="160" v-model="isUseCard">
+                <el-popover placement="bottom" width="200" v-model="isUseCard">
                   <el-select no-data-text="没有功能卡哦" v-model="useCardDto.cardId" placeholder="请选择功能卡">
                     <el-option v-for="item in myFunctionCards" :key="item.id" :label="item.cardName" :value="item.id">
                       <span style="float: left">{{ item.cardName }}</span>
@@ -305,8 +403,8 @@
                     <el-button type="primary" size="mini" @click="useCard">确定</el-button>
                   </div>
 
-                  <el-button slot="reference" type="text"><i class="el-icon-postcard"
-                      style="color: #fff;"></i>使用卡片</el-button>
+                  <el-button v-show="this.letterVo.status === 2" slot="reference" type="text"><i
+                      class="el-icon-postcard" style="color: #fff;"></i>使用卡片</el-button>
                 </el-popover>
 
                 <!-- <el-divider direction="vertical"></el-divider>
@@ -341,10 +439,24 @@
 </template>
 
 <script>
-import { getUserRepository, getUserFriends, getFriendAddress, getMyAddress, getMyFunctionCard } from '@/api/user'
-import { generateLetter, sendLetter, getMySendLetter } from '@/api/letter'
+import { getCountries, getUserRepository, getUserFriends, getMyAddress, getMyFunctionCard } from '@/api/user'
+import { sendLetter, getMySendLetter } from '@/api/letter'
 import { useCard } from '@/api/card'
 import useUserStore from '@/store/modules/user'
+import { MessageBox } from 'element-ui'
+// 自定义节流函数
+function throttle(func, limit) {
+  let inThrottle
+  return function () {
+    const args = arguments
+    const context = this
+    if (!inThrottle) {
+      func.apply(context, args)
+      inThrottle = true
+      setTimeout(() => (inThrottle = false), limit)
+    }
+  }
+}
 
 export default {
   name: 'WriteLetter',
@@ -365,9 +477,11 @@ export default {
       const name = value.formattedAddress
 
       if (value.length === 0 || name === '') {
-        callback(new Error('请选择地址'))
+        callback(new Error('请输入详细地址'))
       }
-
+      if (value.countryId !== 1) {
+        callback()
+      }
       // 检查 name 是否包含市级以上城市之一
       if (!cities.some(city => name.includes(city))) {
         // throw new Error('地址必须包含市级以上城市之一')
@@ -383,6 +497,8 @@ export default {
       callback()
     }
     return {
+      activeTab: 'information', // 默认激活 "For rent" 标签
+      // websocket
       websocket: null,
       sendLoading: false,
       isUseCard: false,
@@ -406,11 +522,13 @@ export default {
         senderName: '',
         recipientName: '',
         senderAddress: {
+          countryId: '',
           formattedAddress: '',
           longitude: '',
           latitude: ''
         },
         recipientAddress: {
+          countryId: '',
           formattedAddress: '',
           longitude: '',
           latitude: ''
@@ -421,10 +539,11 @@ export default {
         deliveryProgress: '',
         createTime: '',
         expectedDeliveryTime: '',
-        status: ''
+        status: '',
+        letterType: '1'
       },
-      coverUrl: 'http://110.41.58.26:9000/qiaopi/qiaopi-images/cover/823eec55-0d12-41bd-a013-483892daf166.png',
-      imageUrl: 'http://110.41.58.26:9000/qiaopi/qiaopi-images/letter/7780d647-ac9a-4ac0-9342-ad35e9e709d1.png',
+      coverUrl: '',
+      imageUrl: '',
       scale: 0,
       rotation: 0,
       marginLeft: 0,
@@ -454,9 +573,6 @@ export default {
         name: '忆往昔',
         value: 'send'
       }],
-      showConfirmDialog: false, // 控制弹窗的显示
-      senderAddress: [116.397455, 39.909187, '北京市东城区东华门街道天安门'],
-      recipientAddress: [116.397455, 39.909187, '北京市东城区东华门街道天安门'],
       rules: {
         senderName: [
           { required: true, message: '请输入寄信人', trigger: 'blur' },
@@ -489,28 +605,41 @@ export default {
         recipientAddress: [
           { required: true, validator: validateAddress, trigger: 'blur' }
         ],
-        letterLink: [
-          { required: true, message: '请先生成信件', trigger: 'blur' }
+        letterType: [
+          { required: true, message: '请选择信件款式', trigger: 'change' }
         ]
       },
+      letterTypes: [{
+        label: '侨批',
+        value: '1',
+        default: true
+      }, {
+        label: '普通信件',
+        value: '2'
+      }],
       letterGen: {
         fontId: '',
         fontColorId: '',
         paperId: '',
         letterContent: '',
-        senderName: '',
-        recipientName: ''
+        senderName: useUserStore().name,
+        recipientName: '',
+        letterType: '1'
       },
+      backImageUrl: '',
+      letterUrl: '',
       letter: {
         letterContent: '',
         senderName: '',
         recipientName: '',
         senderAddress: {
+          countryId: '',
           formattedAddress: '',
           longitude: '',
           latitude: ''
         },
         recipientAddress: {
+          countryId: '',
           formattedAddress: '',
           longitude: '',
           latitude: ''
@@ -518,7 +647,7 @@ export default {
         recipientEmail: '',
         recipientUserId: '',
         signetId: '',
-        letterLink: ''
+        letterType: '1'
       },
       repository: {
         fonts: [],
@@ -526,20 +655,36 @@ export default {
         fontColors: [],
         signets: []
       },
+      countries: [],
+      recipientCountryId: 1,
+      senderCountryId: 1,
+      myAddresses: [],
+      friendAddresses: [],
+      showMyAddresses: false,
+      showFriendAddresses: false,
+      showMyAddressBtn: false,
+      showFriendAddressBtn: false,
+      selectedFriendAddressId: '',
+      selectedMyAddressId: '',
+      showConfirmDialog: false, // 控制弹窗的显示
+      senderAddress: [116.397455, 39.909187, ''],
+      recipientAddress: [116.397455, 39.909187, ''],
       friends: [],
-      selectFriend: [],
-      showFriend: false,
-      showFriendDetail: false,
+      selectedFriendId: '',
       showContent: false,
       currentView: '',
       newLayout: false, // 控制表单布局
-      // currentRow: null,
       showTip: true,
       disabled: false
     }
   },
 
   methods: {
+
+    handleClickTab(event) {
+      // 阻止事件冒泡，防止点击按钮时触发外层 div 的点击事件
+      event.stopPropagation()
+    },
     loadFirstImage(item) {
       this.showSend()
       setTimeout(() => {
@@ -857,20 +1002,10 @@ export default {
         this.handleShowProgress()
       }
     },
-    // websocket
-    handleChange() {
-      this.showTip = true
-      if (this.websocket == null) {
-        this.initWebSocket()
-      } else {
-        this.send()
-      }
-    },
     initWebSocket() {
       if ('WebSocket' in window) {
         this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
         // this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen')
-        console.log(useUserStore().token)
         this.websocket.onerror = this.onError
         this.websocket.onopen = this.onOpen
         this.websocket.onmessage = this.onMessage
@@ -894,21 +1029,49 @@ export default {
       this.$message.error('连接失败，请刷新页面重试')
     },
     onOpen() {
-      this.$message.success('连接成功')
+      // this.$message.success('连接成功')
+      this.send()
     },
     onClose() {
-      this.$message.warning('连接关闭')
+      // this.$message.warning('连接关闭')
+      this.websocket = null
     },
     onMessage(event) {
-      console.log(event)
-      this.letter.letterLink = 'data:image/png;base64,' + event.data
-    },
-    send() {
-      if (this.websocket && this.letterGen) {
-        console.log(this.letterGen)
-        this.websocket.send(JSON.stringify(this.letterGen))
+      if (event.data === 'success') {
+        this.loading = false
+      } else {
+        this.letterUrl = 'data:image/jpg;base64,' + event.data
       }
     },
+    // websocket
+    handleChange() {
+      this.showTip = true
+      if (this.websocket == null) {
+        this.initWebSocket()
+      } else {
+        this.send('letterGen')
+      }
+    },
+    send: throttle(function () {
+      this.$refs.letterGen.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          if (this.websocket && this.letterGen) {
+            this.backImageUrl = this.letterUrl
+            this.websocket.send(JSON.stringify(this.letterGen))
+            this.loading = false
+          }
+        } else {
+          if (this.letterGen.letterContent === '') {
+            this.activeTab = 'letter'
+          } else {
+            this.activeTab = 'information'
+          }
+          return false
+        }
+      })
+      // 做了一个50ms的节流,防止频繁发送,这里可以根据实际情况调整,缓解服务器压力
+    }, 50),
     closeWebSocket() {
       if (this.websocket) {
         this.websocket.close()
@@ -916,6 +1079,9 @@ export default {
     },
     // 查看大图函数结束
     getLetterStatusLabel(statusId) {
+      if (this.letterVo.status === 2 && this.letterVo.speedRate !== '1') {
+        return `${this.letterVo.speedRate}倍加速` + this.letterStatusMap[statusId]
+      }
       return this.letterStatusMap[statusId] || '未知状态'
     },
     getMySendLetter() {
@@ -941,6 +1107,39 @@ export default {
     // 使用卡片
     useCard() {
       this.useCardDto.letterId = this.letterVo.id
+      if (this.letterVo.status !== 2) {
+        this.$notify({
+          title: '使用失败',
+          message: '只有传递中的侨批才能使用功能卡哦!😅',
+          type: 'warning',
+          offset: 100
+        })
+        return
+      }
+      if (this.letterVo.speedRate !== '1') {
+        const card = this.myFunctionCards.find(card => card.id === this.useCardDto.cardId)
+        console.log(card)
+        if (card && card.cardType === 1) {
+          MessageBox.confirm(`当前已处于${this.letterVo.speedRate}倍加速中，继续使用加速卡将覆盖原来加速效果！是否继续使用？`, '侨缘信使', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            useCard(this.useCardDto).then(res => {
+              this.letterVo = res.data
+              this.$notify({
+                title: '使用成功',
+                message: '侨批很快就要送达了!🥳',
+                type: 'success',
+                offset: 100
+              })
+              this.getMyFunctionCard()
+            })
+          })
+          this.isUseCard = false
+          return
+        }
+      }
       if (this.useCardDto.cardId !== '') {
         useCard(this.useCardDto).then(res => {
           this.letterVo = res.data
@@ -964,49 +1163,22 @@ export default {
         this.showSend()
       }
     },
-    generateLetter(letterGen) {
-      this.disabled = true
-      setTimeout(() => {
-        this.disabled = false
-      }, 1500)
-      this.$refs[letterGen].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          generateLetter(this.letterGen).then(res => {
-            this.letter.letterLink = res.data
-            this.showTip = false
-            // 将生成的信件信息存储在数组和localStorage中
-            // this.generatedLetters.push({
-            //   letterLink: this.letter.letterLink
-            // })
-            // localStorage.setItem('generatedLetters', JSON.stringify(this.generatedLetters))
-            this.loading = false
-            this.$notify({
-              title: '生成成功',
-              message: '侨批已生成!🥳',
-              type: 'success',
-              offset: 100
-            })
-          })
-        } else {
-          return false
-        }
-      })
-    },
     submitPre() {
       this.sendLoading = true
-      this.letter.recipientAddress.longitude = this.recipientAddress[0]
-      this.letter.recipientAddress.latitude = this.recipientAddress[1]
-      this.letter.recipientAddress.formattedAddress = this.recipientAddress[2]
-
-      this.letter.senderAddress.longitude = this.senderAddress[0]
-      this.letter.senderAddress.latitude = this.senderAddress[1]
-      this.letter.senderAddress.formattedAddress = this.senderAddress[2]
-
+      if (this.letter.recipientAddress.countryId === 1) {
+        this.letter.recipientAddress.longitude = this.recipientAddress[0]
+        this.letter.recipientAddress.latitude = this.recipientAddress[1]
+        this.letter.recipientAddress.formattedAddress = this.recipientAddress[2]
+      }
+      if (this.letter.senderAddress.countryId === 1) {
+        this.letter.senderAddress.longitude = this.senderAddress[0]
+        this.letter.senderAddress.latitude = this.senderAddress[1]
+        this.letter.senderAddress.formattedAddress = this.senderAddress[2]
+      }
       this.letter.letterContent = this.letterGen.letterContent
       this.letter.senderName = this.letterGen.senderName
+      this.letter.letterType = this.letterGen.letterType
       this.letter.recipientName = this.letterGen.recipientName
-
       this.submitForm('letter')
     },
     /** 提交按钮 */
@@ -1014,7 +1186,7 @@ export default {
       this.$refs[letter].validate((valid) => {
         if (valid) {
           // 提交表单
-          console.log('提交表单:', this.letter)
+          // console.log('提交表单:', this.letter)
           sendLetter(this.letter).then(res => {
             this.$notify({
               title: '发送成功',
@@ -1038,71 +1210,159 @@ export default {
     getMyAddress() {
       // 获取我的地址
       getMyAddress().then(res => {
-        const addresses = res.data
-        for (let i = 0; i < addresses.length; i++) {
-          if (addresses[i].isDefault) {
-            this.letter.senderAddress = addresses[i]
-          }
+        this.myAddresses = res.data
+      })
+    },
+    handleChangeRecipientCountryId(val) {
+      if ((val !== 1 && this.letter.senderAddress.countryId !== 1) && (val !== 2 && this.letter.senderAddress.countryId !== 2)) {
+        this.$message.warning('寄信人和收信人不能都不在中国')
+        this.recipientCountryId = 1
+      } else {
+        if (val === 1) {
+          this.recipientAddress = [116.397455, 39.909187, '']
+        } else if (this.letter.recipientAddress.countryId === 1) {
+          this.letter.recipientAddress.formattedAddress = ''
         }
-      })
+        this.letter.recipientAddress.countryId = val
+        this.selectedFriendAddressId = ''
+      }
     },
-    handleCurrentChange(val) {
-      this.showFriend = false
-      // this.currentRow = val
-      this.letterGen.recipientName = val.name
-      this.letter.recipientEmail = val.email
-      this.letter.recipientUserId = val.userId
-      getFriendAddress(val.id).then(res => {
-        this.letterGen.recipientAddress = res.data.get[0]
-      })
+    handleChangeSenderCountryId(val) {
+      if ((val !== 1 && this.letter.recipientAddress.countryId !== 1) && (val !== 2 && this.letter.recipientAddress.countryId !== 2)) {
+        this.$message.warning('寄信人和收信人不能都不在中国')
+        this.senderCountryId = 1
+      } else {
+        if (val === 1) {
+          this.senderAddress = [116.397455, 39.909187, '']
+        } else if (this.letter.senderAddress.countryId === 1) {
+          this.letter.senderAddress.formattedAddress = ''
+        }
+        this.letter.senderAddress.countryId = val
+        this.selectedMyAddressId = ''
+      }
     },
-    handleCheckFriend() {
-      this.handleChange()
-      // 每次输入收信人时，清空收信人信息
-      this.$refs.singleTable.setCurrentRow()
-      this.recipientAddress = [116.397455, 39.909187, '北京市东城区东华门街道天安门']
-      this.letter.recipientEmail = ''
-      this.letter.recipientUserId = ''
-
-      // 检查收信人是否是好友
-      const tempList = []
-      for (const friend of this.friends) {
-        if (friend.name.includes(this.letterGen.recipientName) && this.letterGen.recipientName !== '') {
-          tempList.push(friend)
+    getCountyNameById(id) {
+      // console.log(id)
+      for (const country of this.countries) {
+        if (country.id === id) {
+          return country.countryName
         }
       }
-      if (tempList.length > 0) {
-        this.selectFriend = tempList
-        this.showFriend = true
-      } else {
-        this.showFriend = false
+      return '中国'
+    },
+    handleChangeFriend(selectedFriendId) {
+      // console.log(selectedFriendId)
+      for (const friend of this.friends) {
+        if (friend.id === selectedFriendId) {
+          this.letterGen.recipientName = friend.name
+          this.letter.recipientUserId = friend.userId
+          this.letter.recipientEmail = friend.email
+          this.handleChange()
+          return
+        }
+      }
+      this.letterGen.recipientName = selectedFriendId
+      this.handleChange()
+    },
+    selectFriendAddress(addressId) {
+      for (const address of this.friendAddresses) {
+        if (address.id === addressId) {
+          this.letter.recipientAddress = { ...address }
+          this.selectedFriendAddressId = addressId
+          this.showFriendAddresses = false
+          this.recipientCountryId = address.countryId || 1
+          if (this.recipientCountryId === 1) {
+            this.recipientAddress = [address.longitude, address.latitude, address.formattedAddress]
+          }
+          break
+        }
+      }
+    },
+    selectMyAddress(addressId) {
+      for (const address of this.myAddresses) {
+        if (address.id === addressId) {
+          this.letter.senderAddress = { ...address }
+          this.selectedMyAddressId = addressId
+          this.showMyAddresses = false
+          this.senderCountryId = address.countryId || 1
+          if (this.senderCountryId === 1) {
+            this.senderAddress = [address.longitude, address.latitude, address.formattedAddress]
+          }
+          break
+        }
+      }
+    },
+    getFriendAddressesByEmail() {
+      if (this.letter.recipientEmail !== '') {
+        let friendAddresses = []
+        for (const friend of this.friends) {
+          if (friend.email === this.letter.recipientEmail) {
+            this.letter.recipientUserId = friend.userId
+            friendAddresses = friend.addresses
+            break
+          }
+        }
+        if (friendAddresses.length > 0) {
+          this.friendAddresses = friendAddresses
+          for (const address of friendAddresses) {
+            if (address.isDefault === 'true') {
+              this.selectedFriendAddressId = address.id
+              this.letter.recipientAddress = { ...address }
+              this.recipientCountryId = address.countryId || 1
+              if (this.recipientCountryId === 1) {
+                this.recipientAddress = [address.longitude, address.latitude, address.formattedAddress]
+              }
+              break
+            }
+          }
+          this.showFriendAddressBtn = true
+        } else {
+          this.showFriendAddressBtn = false
+        }
       }
     },
     handleShowConfirmDialog() {
-      this.showConfirmDialog = true
+      this.$refs.letterGen.validate((valid) => {
+        if (valid) {
+          this.showConfirmDialog = true
 
-      this.senderAddress[0] = this.letter.senderAddress.longitude
-      this.senderAddress[1] = this.letter.senderAddress.latitude
-      this.senderAddress[2] = this.letter.senderAddress.formattedAddress
-
-      if (this.letter.recipientAddress !== null && this.letter.recipientAddress.formattedAddress !== '') {
-        this.recipientAddress[0] = this.letter.recipientAddress.longitude
-        this.recipientAddress[1] = this.letter.recipientAddress.latitude
-        this.recipientAddress[2] = this.letter.recipientAddress.formattedAddress
-      }
+          this.getFriendAddressesByEmail()
+          if (this.myAddresses.length > 0) {
+            for (const address of this.myAddresses) {
+              if (address.isDefault === 'true') {
+                this.selectedMyAddressId = address.id
+                this.letter.senderAddress = address
+                this.senderCountryId = address.countryId || 1
+                if (this.senderCountryId === 1) {
+                  this.senderAddress = [address.longitude, address.latitude, address.formattedAddress]
+                }
+                break
+              }
+            }
+            this.showMyAddressBtn = true
+          } else {
+            this.showMyAddressBtn = false
+          }
+        } else {
+          this.$message.info('请填写完整信息')
+        }
+      })
+    },
+    getCountries() {
+      // 获取国家列表
+      getCountries().then(res => {
+        this.countries = res.data
+      })
     },
     getUserRepository() {
       this.loading = true
-      const userStore = useUserStore()
-      // 通过pinia获取用户信息
-      this.letterGen.senderName = userStore.name
       // 获取用户仓库
       getUserRepository().then(res => {
         this.repository = res.data
         this.letterGen.fontId = this.repository.fonts[0].id
         this.letterGen.fontColorId = this.repository.fontColors[0].id
         this.letterGen.paperId = this.repository.papers[0].id
-        this.letter.letterLink = this.repository.papers[0].previewImage
+        this.letterUrl = this.repository.papers[0].previewImage
         this.loading = false
       })
     },
@@ -1129,6 +1389,7 @@ export default {
     this.getUserRepository()
     this.getUserFriends()
     this.getMyAddress()
+    this.getCountries()
   },
   beforeDestroy() {
     this.removeUnloadListener()
@@ -1138,8 +1399,179 @@ export default {
 </script>
 
 <style scoped>
+.dialog-address {
+  background: #fff;
+  border: 1px solid rgba(0, 17, 51, .05);
+  border-radius: 12px;
+  box-shadow: 0 0 6px 0 rgba(0, 17, 51, .1);
+  padding: 16px;
+}
+
+.UserAddress {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-height: 176px;
+  overflow: auto;
+  width: 100%
+}
+
+.beautify-scroll-bar {
+  scrollbar-color: #e6e9eb;
+  scrollbar-width: 4px
+}
+
+.beautify-scroll-bar::-webkit-scrollbar-thumb {
+  background: #e6e9eb;
+  border-radius: 4px;
+  height: 4px;
+  width: 4px
+}
+
+.UserAddress.scrollHide--j2x2WPbg {
+  scrollbar-width: none
+}
+
+.UserAddress .userAddressItem {
+  background-color: #f3f6f8;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  font-weight: 400;
+  /* height: 80px; */
+  margin-right: 12px;
+  padding: 12px 12px 9px;
+  position: relative;
+  width: 200px;
+}
+
+.closeIcon {
+  cursor: pointer;
+  display: inline-block;
+  font-size: 18px;
+  line-height: 18px;
+  position: absolute;
+  right: 0;
+  top: -4px
+}
+
+.UserAddress .userAddressItem:nth-of-type(2n) {
+  margin-right: 0
+}
+
+.UserAddress .userAddressItem:nth-of-type(n+3) {
+  margin-top: 12px
+}
+
+.UserAddress .userAddressItem.isSelected,
+.UserAddress .userAddressItem:hover {
+  background-color: #fff;
+  border: 1px solid #ff6200
+}
+
+.UserAddress .defaultTip {
+  background-color: rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 12px;
+  padding: 4px;
+  position: absolute;
+  right: 4px;
+  top: 4px
+}
+
+.UserAddress .detailAddress {
+  color: #50607a;
+  height: 36px;
+  line-height: 18px
+}
+
+.UserAddress .recipientInfo {
+  display: flex;
+  flex-direction: row;
+  line-height: 12px;
+  margin-bottom: 8px
+}
+
+.UserAddress .recipientInfo .recipient {
+  font-family: PingFangSC-Semibold;
+  font-weight: 600;
+  margin-right: 8px
+}
+
+.UserAddress .recipientInfo .addressCountry {
+  color: #50607a;
+  font-family: PingFangSC-Regular;
+  font-weight: 400
+}
+
+.beautify-scroll-bar::-webkit-scrollbar {
+  height: 4px;
+  margin-right: 4px;
+  width: 4px
+}
+
+.f-els-1 {
+  white-space: nowrap;
+  word-break: keep-all
+}
+
+.f-els-1,
+.f-els-2 {
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.f-els-2 {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box
+}
+
+.AddressDialog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative
+}
+
+.addressTip {
+  color: #11192d;
+  font-family: PingFangSC-Semibold;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 14px;
+  margin-bottom: 12px;
+  margin-left: 4px
+}
+
+.addressContent {
+  flex: 1;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center
+}
+
+.address-aside {
+  float: right;
+  background-color: #A52328;
+  color: #fff;
+  width: 40px;
+  border-radius: 8px;
+  border: 1px solid #ff6200;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+}
+
 .row-bg {
-  width: 1200px;
+  width: 95%;
   height: 600px;
 
   position: relative;
@@ -1170,11 +1602,13 @@ export default {
 .banner {
   position: relative;
   margin-top: 40px;
-  width: 1300px;
+  width: 90%;
   height: 680px;
+  border-radius: 20px;
   /* height: 1200px; */
-  background-color: blanchedalmond;
-  background-image: url(../../assets/imgss/writebgd3.webp);
+  background-color: transparent;
+  /* background-image: url(../../assets/imgss/writebgd3.webp); */
+  background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9;
   display: flex;
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
@@ -1197,12 +1631,13 @@ export default {
 
 .left {
   position: absolute;
-  width: 320px;
+  width: 520px;
   top: 10px;
   left: 80px;
   padding: 20px;
   box-sizing: border-box;
-  background-color: rgb(222, 201, 162);
+  /* background-color: #f9f9f9; */
+  background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9;
   border-radius: 25px;
   text-align: left;
 }
@@ -1212,7 +1647,7 @@ export default {
   /* background-color: rgb(222, 201, 162); */
   padding: 20px;
   border-radius: 25px;
-  left: 450px;
+  right: 150px;
   top: 115px;
   width: 700px;
   height: 450px;
@@ -1243,31 +1678,37 @@ export default {
 .left ::v-deep .el-input__inner {
   height: 35px;
   border: 1px solid #1296db;
-  background-color: rgba(0, 0, 0, 0.1) !important;
+  /* background-color: rgba(0, 0, 0, 0.1) !important; */
   color: #666;
-}
-
-.selectPage ::v-deep .el-input__inner,
-::v-deep .el-textarea__inner {
-  height: 35px;
-  border-radius: 10px;
-  border: 1px solid #1296db;
-  background-color: rgba(222, 201, 162, 0.6) !important;
-  color: #b00f0f;
 }
 
 ::v-deep .el-input__inner,
 ::v-deep .el-textarea__inner {
+  resize: none;
+  min-height: 35px !important;
+  min-width: 200px;
   height: 35px;
   border: 1px solid #1296db;
-  background-color: rgba(0, 0, 0, 0.1) !important;
+  /* background-color: rgba(0, 0, 0, 0.1) !important; */
   color: #666;
+}
+
+.selectPage ::v-deep .el-input__inner,
+.selectPage ::v-deep .el-textarea__inner {
+  height: 35px;
+  border-radius: 4px;
+  min-width: 0;
+  border: 1px solid #1296db;
+  /* background-color: rgba(222, 201, 162, 0.6) !important; */
+  color: #b00f0f;
 }
 
 ::v-deep .el-dialog {
   margin-top: 200px !important;
   border-radius: 10px;
-  background-color: rgba(222, 201, 162, 1) !important;
+  /* background-color: rgba(222, 201, 162, 1) !important; */
+  background: 0 0 / 400px auto repeat, #f9f9f9;
+
 }
 
 ::v-deep input::-webkit-input-placeholder {
@@ -1593,7 +2034,7 @@ export default {
   content: "";
   position: absolute;
   top: 16px;
-  left: -10px;
+  left: -20px;
   width: 40px;
   height: 20px;
   border-radius: 20px;
@@ -1625,7 +2066,7 @@ export default {
   content: "";
   position: absolute;
   top: 16px;
-  left: -10px;
+  left: -20px;
   width: 50px;
   height: 20px;
   border-radius: 20px;
@@ -1636,7 +2077,7 @@ export default {
 .head .face .adds {
   position: absolute;
   top: 0px;
-  left: -10px;
+  left: -20px;
   width: 40px;
   height: 20px;
   border-radius: 20px;
@@ -2365,7 +2806,7 @@ export default {
 .circle::after {
   content: "";
   position: absolute;
-  bottom: -10px;
+  bottom: -20px;
   left: 25px;
   width: 50px;
   height: 50px;
@@ -2376,7 +2817,7 @@ export default {
 .triangle {
   position: absolute;
   bottom: -62px;
-  left: -10px;
+  left: -20px;
   width: 110px;
   height: 110px;
   border-radius: 50%;
@@ -2390,7 +2831,7 @@ export default {
   content: "";
   position: absolute;
   top: 0;
-  right: -10px;
+  right: -20px;
   width: 0;
   height: 0;
   border-style: solid;
@@ -2611,5 +3052,217 @@ export default {
   /* z-index: 1000; */
   /* background-color: rgb(222, 201, 162); */
   /* background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykOWQWGqwwMA7QiYAxi+IlPdqo+hYHnUt5ZPfnsHJyNiDtnpJyayNBkF6cWoYGAMY92U2hXHF/C1M8uP/ZtYdiuj26UdAdQQSXQErwSOMzt/XWRWAz5GuSBIkwG1H3FabJ2OsUOUhGC6tK4EMtJO0ttC6IBD3kM0ve0tJwMdSfjZo+EEISaeTr9P3wYrGjXqyC1krcKdhMpxEnt5JetoulscpyzhXN5FRpuPHvbeQaKxFAEB6EN+cYN6xD7RYGpXpNndMmZgM5Dcs3YSNFDHUo2LGfZuukSWyUYirJAdYbF3MfqEKmjM+I2EfhA94iG3L7uKrR+GdWD73ydlIB+6hgref1QTlmgmbM3/LeX5GI1Ux1RWpgxpLuZ2+I+IjzZ8wqE4nilvQdkUdfhzI5QDWy+kw5Wgg2pGpeEVeCCA7b85BO3F9DzxB3cdqvBzWcmzbyMiqhzuYqtHRVG2y4x+KOlnyqla8AoWWpuBoYRxzXrfKuILl6SfiWCbjxoZJUaCBj1CjH7GIaDbc9kqBY3W/Rgjda1iqQcOJu2WW+76pZC9QG7M00dffe9hNnseupFL53r8F7YHSwJWUKP2q+k7RdsxyOB11n0xtOvnW4irMMFNV4H0uqwS5ExsmP9AxbDTc9JwgneAT5vTiUSm1E7BSflSt3bfa1tv8Di3R8n3Af7MNWzs49hmauE2wP+ttrq+AsWpFG2awvsuOqbipWHgtuvuaAE+A1Z/7gC9hesnr+7wqCwG8c5yAg3AL1fm8T9AZtp/bbJGwl1pNrE7RuOX7PeMRUERVaPpEs+yqeoSmuOlokqw49pgomjLeh7icHNlG19yjs6XXOMedYm5xH2YxpV2tc0Ro2jJfxC50ApuxGob7lMsxfTbeUv07TyYxpeLucEH1gNd4IKH2LAg5TdVhlCafZvpskfncCfx8pOhJzd76bJWeYFnFciwcYfubRc12Ip/ppIhA1/mSZ/RxjFDrJC5xifFjJpY2Xl5zXdguFqYyTR1zSp1Y9p+tktDYYSNflcxI0iyO4TPBdlRcpeqjK/piF5bklq77VSEaA+z8qmJTFzIWiitbnzR794USKBUaT0NTEsVjZqLaFVqJoPN9ODG70IPbfBHKK+/q/AWR0tJzYHRULOa4MP+W/HfGadZUbfw177G7j/OGbIs8TahLyynl4X4RinF793Oz+BU0saXtUHrVBFT/DnA3ctNPoGbs4hRIjTok8i+algT1lTHi4SxFvONKNrgQFAq2/gFnWMXgwffgYMJpiKYkmW3tTg3ZQ9Jq+f8XN+A5eeUKHWvJWJ2sgJ1Sop+wwhqFVijqWaJhwtD8MNlSBeWNNWTa5Z5kPZw5+LbVT99wqTdx29lMUH4OIG/D86ruKEauBjvH5xy6um/Sfj7ei6UUVk4AIl3MyD4MSSTOFgSwsH/QJWaQ5as7ZcmgBZkzjjU1UrQ74ci1gWBCSGHtuV1H2mhSnO3Wp/3fEV5a+4wz//6qy8JxjZsmxxy5+4w9CDNJY09T072iKG0EnOS0arEYgXqYnXcYHwjTtUNAcMelOd4xpkoqiTYICWFq0JSiPfPDQdnt+4/wuqcXY47QILbgAAAABJRU5ErkJggg==) */
+}
+
+/* 熊猫按钮 */
+
+span {
+  margin-left: 12px;
+}
+
+.panda-button {
+  width: 180px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid rgb(131, 88, 59);
+  border-width: 2px 2px 7px 2px;
+  border-radius: 10px;
+  background-color: rgb(83, 39, 9);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 15px;
+  color: white;
+  transition: 0.3s;
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.panda-button:hover {
+  border-width: 2px 2px 4px 2px;
+  margin-top: 3px;
+}
+
+.panda-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px hotpink;
+}
+
+.panda_face {
+  position: relative;
+  height: 25px;
+  width: auto;
+}
+
+.panda_face {
+  opacity: 1;
+}
+
+.panda_face svg {
+  height: 100%;
+  width: auto;
+}
+
+.panda_white {
+  fill: white;
+}
+
+.pink {
+  fill: hotpink;
+}
+
+.panda-button:hover .panda_face {
+  animation: bop infinite 0.5s;
+}
+
+@keyframes bop {
+  0% {
+    top: 0;
+    transform: scale(1);
+  }
+
+  50% {
+    top: -5px;
+    transform: scale(0.95, 1.05);
+  }
+
+  90% {
+    transform: scale(1.1, 0.9);
+  }
+
+  100% {
+    top: 0;
+    transform: scale(1);
+  }
+}
+
+.panda-button.animate svg {
+  animation: spin infinite linear 0.5s;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(-720deg);
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.panda-button:hover .fade_in,
+.panda_face.fade_in {
+  animation: fade_in forwards 0.5s;
+}
+
+@keyframes fade_in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.panda-button.animate {
+  border-color: rgb(58, 28, 9);
+  transform-origin: bottom right;
+  animation: shake ease forwards 0.5s;
+}
+
+@keyframes shake {
+  0% {
+    transform-origin: bottom right;
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  40% {
+    transform: translate(5px, 0) rotate(45deg);
+  }
+
+  70% {
+    transform-origin: bottom right;
+    transform: translate(5px, 0) rotate(45deg);
+  }
+
+  85% {
+    transform-origin: bottom left;
+    transform: translate(0, 0) rotate(-20deg);
+  }
+
+  95% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  100% {
+    transform-origin: bottom right;
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 熊猫按钮结束 */
+
+.c-toggle {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 70px;
+  margin-bottom: 50px;
+}
+
+.c-toggle__item {
+  cursor: pointer;
+  border: 1px solid #1a78d4;
+  color: #1a78d4;
+  display: inline-block;
+  min-width: 10.4rem;
+  padding: 0.64rem 0.8rem;
+  opacity: 0.75;
+  transition: all 200ms ease-out 0s;
+}
+
+.c-toggle__item:hover {
+  background: rgba(26, 120, 212, 0.15);
+}
+
+.c-toggle__item:active {
+  box-shadow: inset 0px 0px 0.4rem #1a78d4;
+}
+
+.c-toggle__item:first-of-type {
+  border-top-left-radius: 0.64rem;
+  border-bottom-left-radius: 0.64rem;
+}
+
+.c-toggle__item:last-of-type {
+  border-top-right-radius: 0.64rem;
+  border-bottom-right-radius: 0.64rem;
+}
+
+.c-toggle__item:not(:first-of-type) {
+  border-left: 0;
+}
+
+.c-toggle__item--checked {
+  background: rgba(26, 120, 212, 0.15);
+  font-weight: 700;
+  opacity: 1;
 }
 </style>

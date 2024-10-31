@@ -33,7 +33,7 @@
 
 /* // el-popover的z-index问题 */
 .el-popover {
-  z-index: 2005 !important;
+  z-index: 9999 !important;
 }
 
 /* 就这两条样式，修了一天 */
