@@ -428,8 +428,8 @@
             </div>
           </div>
           <div class="progress">
-            <el-progress :text-inside="true" :stroke-width="24" :percentage="letterVo.deliveryProgress / 100"
-              style="height: 100px; width: 80%; line-height: 100px;" class="custom-progress">
+            <el-progress ref="progress" :text-inside="true" :stroke-width="24"
+              :percentage="letterVo.deliveryProgress / 100" style="height: 100px; width: 80%; line-height: 100px;">
             </el-progress>
           </div>
 
@@ -488,7 +488,7 @@ export default {
       if (value.length === 0 || name === '') {
         callback(new Error('请输入详细地址'))
       }
-      if (value.countryId !== 1) {
+      if (value.countryId !== 1 && value.countryId !== null) {
         callback()
       }
       // 检查 name 是否包含市级以上城市之一
@@ -901,6 +901,8 @@ export default {
           this.handleShowProgress()
         }
         this.scale = 0.9
+        // 更新进度
+        this.updateInnerTextBackground()
       }, 100)
     },
     closeImageViewer() {
@@ -1127,7 +1129,7 @@ export default {
         })
         return
       }
-      if (this.letterVo.speedRate !== '1') {
+      if (this.letterVo.speedRate !== '1' && this.letterVo.speedRate !== null) {
         const card = this.myFunctionCards.find(card => card.id === this.useCardDto.cardId)
         console.log(card)
         if (card && card.cardType === 1) {
@@ -1392,6 +1394,12 @@ export default {
       this.getMyFunctionCard()
       this.showContent = true
       this.currentView = 'send'
+    },
+    updateInnerTextBackground() {
+      const innerTextElement = this.$refs.progress.$el.querySelector('.el-progress-bar__innerText')
+      if (innerTextElement) {
+        innerTextElement.style.backgroundImage = `url(${this.innerTextBackground})`
+      }
     }
   },
   mounted() {
@@ -1401,16 +1409,31 @@ export default {
     this.getUserFriends()
     this.getMyAddress()
     this.getCountries()
+    this.updateInnerTextBackground()
   },
   beforeDestroy() {
     this.removeUnloadListener()
     this.closeWebSocket()
+  },
+  computed: {
+    innerTextBackground() {
+      if (this.letterVo.deliveryProgress / 100 <= 40) {
+        return require('@/assets/imgs/car1.png')
+      } else if (this.letterVo.deliveryProgress / 100 <= 80) {
+        return require('@/assets/imgs/car2.png')
+      } else {
+        return require('@/assets/imgs/car3.png')
+      }
+    }
+  },
+  watch: {
+    'letterVo.deliveryProgress': {
+      handler() {
+        this.updateInnerTextBackground()
+      },
+      immediate: true
+    }
   }
-  // watch: {
-  //   'letterVo.deliveryProgress'(newProgress) {
-  //     this.updateProgressImage(newProgress)
-  //   }
-  // }
 }
 </script>
 
@@ -3094,12 +3117,12 @@ export default {
 
 ::v-deep .el-progress-bar__innerText {
   display: block;
-  width: 40px;
-  height: 40px !important;
+  width: 35px;
+  height: 30px !important;
   float: right;
   background-image: url("../../assets/imgs/car1.png");
   background-size: 100% 100%;
-  margin: -14px -35px;
+  margin: -3px -35px;
   position: absolute;
   right: 0;
   font-size: 0;
