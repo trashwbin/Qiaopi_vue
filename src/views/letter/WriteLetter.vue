@@ -57,33 +57,12 @@
                 style="margin-top:10px;" /> -->
               <el-select v-model="selectedFriendId" filterable allow-create default-first-option placeholder="请输入收信人"
                 style="margin-top:10px; height: 10px;width: 200px;" @change="handleChangeFriend">
-                <el-option v-for="item in friends" :key="item.id" :label="item.name" :value="item.id">
-                  <span style="float: left">{{ item.name }}</span>
+                <el-option v-for="item in friends" :key="item.id" :label="item.remark || item.name" :value="item.id">
+                  <span v-if="item.remark" style="float: left">{{ item.name + '(' + item.remark + ')' }}</span>
+                  <span v-else style="float: left">{{ item.name }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.email }}</span>
                 </el-option>
               </el-select>
-              <!-- <el-popover placement="right" width="250" trigger="manual" v-model="showFriend">
-                <el-table :data="selectFriend" style="width: 100%" :show-header="false" highlight-current-row
-                  @current-change="handleCurrentChange" ref="singleTable">
-                  <el-table-column type="expand">
-                    <template slot-scope="props">
-                      <el-form label-position="left" class="demo-table-expand" label-width="50px">
-                        <el-form-item label="昵称:">
-                          <span>{{ props.row.name }}</span>
-                        </el-form-item>
-                        <el-form-item label="性别:">
-                          <span> {{ props.row.sex }}</span>
-                        </el-form-item>
-                        <el-form-item label="邮箱:">
-                          <span style="overflow: hidden;">{{ props.row.email }}</span>
-                        </el-form-item>
-                      </el-form>
-                    </template>
-</el-table-column>
-<el-table-column prop="name">
-</el-table-column>
-</el-table>
-</el-popover> -->
             </el-form-item>
 
           </div>
@@ -138,38 +117,6 @@
             <!-- <img crossorigin="anonymous" :src="backImageUrl" style="max-width: 100%; max-height: 640px;" /> -->
             <el-image crossorigin="anonymous" :src="letterUrl" style="max-width: 100%; max-height: 640px;">
               <div slot="placeholder" style="width: 100% ;height: 100%;">
-                <!-- <div class="waibu">
-                  <div class="scene">
-                    <div class="objects">
-                      <div class="square"></div>
-                      <div class="circle"></div>
-                      <div class="triangle"></div>
-                    </div>
-                    <div class="wizard">
-                      <div class="body"></div>
-                      <div class="right-arm">
-                        <div class="right-hand"></div>
-                      </div>
-                      <div class="left-arm">
-                        <div class="left-hand"></div>
-                      </div>
-                      <div class="head">
-                        <div class="beard"></div>
-                        <div class="face">
-                          <div class="adds"></div>
-                        </div>
-                        <div class="hat">
-                          <div class="hat-of-the-hat"></div>
-                          <div class="four-point-star --first"></div>
-                          <div class="four-point-star --second"></div>
-                          <div class="four-point-star --third"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="letterProgress"></div>
-                  <div class="noise"></div>
-                </div> -->
                 <img crossorigin="anonymous" :src="backImageUrl"
                   style="max-width: 100%; max-height: 640px; margin-top: 13px" />
                 <!-- <i class="el-icon-loading" style="line-height: 250px; color: #A52328; font-size: 30px;"></i> -->
@@ -219,10 +166,10 @@
               v-model="letter.recipientAddress.formattedAddress" placeholder="请输入详细地址" required type="textarea"
               :autosize="{ minRows: 1, maxRows: 3 }"
               style="width: 200px; min-height: 35px !important; margin-top: 3px; float: left;" resize="none" />
-            <el-popover placement="right" v-model="showFriendAddresses" width="500">
+            <el-popover placement="right" v-model="showFriendAddresses" width="250">
               <div class="AddressDialog">
                 <i class="el-icon-close closeIcon" @click="showFriendAddresses = false"></i>
-                <div class="addressTip">选择地址</div>
+                <div class="addressTip">选择收信人地址</div>
                 <div class="addressContent">
                   <div class="UserAddress beautify-scroll-bar ">
                     <div class="userAddressItem" :class="{ isSelected: selectedFriendAddressId === address.id }"
@@ -254,7 +201,7 @@
             <el-input v-show="senderCountryId !== 1" v-model="letter.senderAddress.formattedAddress"
               placeholder="请输入详细地址" required type="textarea" :autosize="{ minRows: 1, maxRows: 3 }"
               style="width: 200px; min-height: 35px !important; margin-top: 3px;  float: left;" resize="none" />
-            <el-popover placement="right" v-model="showMyAddresses" width="500">
+            <el-popover placement="right" v-model="showMyAddresses" width="250">
               <div class="AddressDialog">
                 <i class="el-icon-close closeIcon" @click="showMyAddresses = false"></i>
                 <div class="addressTip">选择地址</div>
@@ -375,10 +322,6 @@
                 收信人地址：{{ letterVo.recipientAddress.formattedAddress }}
               </div>
               <div class="card_item">
-                <i class="el-icon-position"></i>
-                信件状态：{{ getLetterStatusLabel(letterVo.status) }}
-              </div>
-              <div class="card_item">
                 <i class="el-icon-date"></i>
                 写信时间：{{ formatDateTime(letterVo.createTime) }}
               </div>
@@ -427,10 +370,16 @@
               <i v-else class="el-icon-arrow-right"></i>
             </div>
           </div>
-          <div class="progress">
-            <el-progress ref="progress" :text-inside="true" :stroke-width="24"
-              :percentage="letterVo.deliveryProgress / 100" style="height: 100px; width: 80%; line-height: 100px;">
-            </el-progress>
+          <div class="progress" v-show="letterVo.deliveryProgress > 100">
+            <div style="width: 100%; margin-top: 10px ;margin-left: 55px">
+              <el-progress ref="progress" :text-inside="true" :stroke-width="24"
+                :percentage="letterVo.deliveryProgress / 100" style="height: 45px; width: 80%; line-height: 60px;">
+              </el-progress>
+            </div>
+            <div style="color: #fff;">
+              <i class="el-icon-position"></i>
+              信件状态：{{ getLetterStatusLabel(letterVo.status) }}
+            </div>
           </div>
 
         </div>
@@ -1399,6 +1348,11 @@ export default {
       const innerTextElement = this.$refs.progress.$el.querySelector('.el-progress-bar__innerText')
       if (innerTextElement) {
         innerTextElement.style.backgroundImage = `url(${this.innerTextBackground})`
+        if (this.letterVo.deliveryProgress > 1000) {
+          innerTextElement.style.margin = '-3px 3px'
+        } else {
+          innerTextElement.style.margin = '-3px -36px'
+        }
       }
     }
   },
@@ -1468,8 +1422,15 @@ export default {
   width: 4px
 }
 
-.UserAddress.scrollHide--j2x2WPbg {
+.UserAddress.scrollHide {
   scrollbar-width: none
+}
+
+/* 滑动轨道按钮 */
+::-webkit-scrollbar-button {
+  width: 10px;
+  height: 10px;
+  display: none;
 }
 
 .UserAddress .userAddressItem {
@@ -1498,7 +1459,7 @@ export default {
 }
 
 .UserAddress .userAddressItem:nth-of-type(2n) {
-  margin-right: 0
+  margin-top: 12px
 }
 
 .UserAddress .userAddressItem:nth-of-type(n+3) {
@@ -1612,9 +1573,7 @@ export default {
 .row-bg {
   width: 95%;
   height: 600px;
-
   position: relative;
-
   padding-top: 20px;
   padding-left: 20px;
   margin: 40px auto 0 auto;
@@ -1646,7 +1605,6 @@ export default {
   border-radius: 20px;
   /* height: 1200px; */
   background-color: transparent;
-  /* background-image: url(../../assets/imgss/writebgd3.webp); */
   background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9;
   display: flex;
   /* 使用 Flexbox 布局 */
@@ -1747,7 +1705,6 @@ export default {
   border-radius: 10px;
   /* background-color: rgba(222, 201, 162, 1) !important; */
   background: 0 0 / 400px auto repeat, #f9f9f9;
-
 }
 
 ::v-deep input::-webkit-input-placeholder {
@@ -3103,7 +3060,6 @@ export default {
   background: rgba(0, 0, 0, .7);
   border-radius: 10px;
   transition: 1s ease-in-out;
-  display: flex;
   justify-content: center;
   align-items: center;
   opacity: 1;
@@ -3122,22 +3078,10 @@ export default {
   float: right;
   background-image: url("../../assets/imgs/car1.png");
   background-size: 100% 100%;
-  margin: -3px -35px;
+  margin: -3px 3px;
   position: absolute;
   right: 0;
   font-size: 0;
-}
-
-.progress-background-1 {
-  background-image: url('../../assets/imgs/car1.png');
-}
-
-.progress-background-2 {
-  background-image: url('../../assets/imgs/car2.png');
-}
-
-.progress-background-3 {
-  background-image: url('../../assets/imgs/car3.png');
 }
 
 /* 熊猫按钮 */
