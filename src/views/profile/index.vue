@@ -129,7 +129,7 @@
                           <i class="el-icon-delete closeIcon" v-if="address.isDefault !== 'true'"
                             @click="deleteFriendAddress(friend.id, address.id)"></i>
                           <div class="recipientInfo">
-                            <div class="recipient">{{ friend.name }}</div>
+                            <div class="recipient">{{ friend.remark || friend.name }}</div>
                             <div class="addressCountry">{{ getCountyNameById(address.countryId) }}</div>
                           </div>
                           <div class="detailAddress f-els-2">{{ address.formattedAddress }}</div>
