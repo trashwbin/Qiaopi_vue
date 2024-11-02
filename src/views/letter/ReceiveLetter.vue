@@ -426,7 +426,7 @@ export default {
         }
         // 从路由获取
         if (this.$route.params.showFirst) {
-          console.log(this.$route.params)
+          // console.log(this.$route.params)
           this.loadFirstImage(this.$route.params.myNotReadLetter)
           this.$route.params.showFirst = false
         }
@@ -434,7 +434,7 @@ export default {
     },
     loadFirstImage(item) {
       setTimeout(() => {
-        console.log(item)
+        // console.log(item)
         this.showMask = true
         const imageElement = document.createElement('img')
         imageElement.setAttribute('style', 'width: 250px; height: 250px; position: absolute; top: 0; left: 0; z-index: 1000')
@@ -443,7 +443,7 @@ export default {
         // 获取第一个图片元素
         const firstImageElement = document.querySelector('.content .row-bg .el-col .el-image')
         if (!firstImageElement) {
-          console.error('No image element found')
+          // console.error('No image element found')
           this.showMask = false
           return
         }
