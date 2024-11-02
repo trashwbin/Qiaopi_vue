@@ -68,9 +68,9 @@
           </div>
           <div v-show="activeTab === 'letter'" class="text">
             <el-form-item label="信的内容：" prop="letterContent" style=" text-align: center;" label-width="100px">
-              <el-input v-model="letterGen.letterContent" maxlength="300" show-word-limit placeholder="请开始写信吧" required
-                type="textarea" :autosize="{ minRows: 15, maxRows: 20 }" style="width: 500px;margin-left: -20px;"
-                resize="none" @input="handleChange"></el-input>
+              <el-input v-model="letterGen.letterContent" :maxlength="currentMaxlength" show-word-limit
+                placeholder="请开始写信吧" required type="textarea" :autosize="{ minRows: 15, maxRows: 20 }"
+                style="width: 500px;margin-left: -20px;" resize="none" @input="handleChange"></el-input>
             </el-form-item>
           </div>
         </el-form>
@@ -398,7 +398,7 @@
 
 <script>
 import { getCountries, getUserRepository, getUserFriends, getMyAddress, getMyFunctionCard } from '@/api/user'
-import { sendLetter, getMySendLetter } from '@/api/letter'
+import { getFontPaperLimit, sendLetter, getMySendLetter } from '@/api/letter'
 import { useCard } from '@/api/card'
 import useUserStore from '@/store/modules/user'
 import { MessageBox } from 'element-ui'
@@ -635,12 +635,17 @@ export default {
       currentView: '',
       newLayout: false, // 控制表单布局
       showTip: true,
-      disabled: false
+      disabled: false,
+      fontPaperLimitList: []
     }
   },
 
   methods: {
-
+    getFontPaperLimit() {
+      getFontPaperLimit().then(response => {
+        this.fontPaperLimitList = response.data
+      })
+    },
     handleClickTab(event) {
       // 阻止事件冒泡，防止点击按钮时触发外层 div 的点击事件
       event.stopPropagation()
@@ -1156,10 +1161,12 @@ export default {
               type: 'success',
               offset: 100
             })
-            this.sendLoading = false
             this.showConfirmDialog = false
             this.loadFirstImage(res.data)
           })
+          setTimeout(() => {
+            this.sendLoading = false
+          }, 1000)
         } else {
           this.sendLoading = false
           return false
@@ -1216,13 +1223,14 @@ export default {
       // console.log(selectedFriendId)
       for (const friend of this.friends) {
         if (friend.id === selectedFriendId) {
-          this.letterGen.recipientName = friend.name
+          this.letterGen.recipientName = friend.remark || friend.nickname
           this.letter.recipientUserId = friend.userId
           this.letter.recipientEmail = friend.email
           this.handleChange()
           return
         }
       }
+      // 如果不是好友的情况,这个名字就是这个id
       this.letterGen.recipientName = selectedFriendId
       this.handleChange()
     },
@@ -1345,13 +1353,15 @@ export default {
       this.currentView = 'send'
     },
     updateInnerTextBackground() {
-      const innerTextElement = this.$refs.progress.$el.querySelector('.el-progress-bar__innerText')
-      if (innerTextElement) {
-        innerTextElement.style.backgroundImage = `url(${this.innerTextBackground})`
-        if (this.letterVo.deliveryProgress > 1000) {
-          innerTextElement.style.margin = '-3px 3px'
-        } else {
-          innerTextElement.style.margin = '-3px -36px'
+      if (this.isVisible) {
+        const innerTextElement = this.$refs.progress.$el.querySelector('.el-progress-bar__innerText')
+        if (innerTextElement) {
+          innerTextElement.style.backgroundImage = `url(${this.innerTextBackground})`
+          if (this.letterVo.deliveryProgress > 1000) {
+            innerTextElement.style.margin = '-3px 3px'
+          } else {
+            innerTextElement.style.margin = '-3px -36px'
+          }
         }
       }
     }
@@ -1363,7 +1373,7 @@ export default {
     this.getUserFriends()
     this.getMyAddress()
     this.getCountries()
-    this.updateInnerTextBackground()
+    this.getFontPaperLimit()
   },
   beforeDestroy() {
     this.removeUnloadListener()
@@ -1378,6 +1388,13 @@ export default {
       } else {
         return require('@/assets/imgs/car3.png')
       }
+    },
+    currentMaxlength() {
+      const { paperId, fontId } = this.letterGen
+      const limitItem = this.fontPaperLimitList.find(
+        item => item.paperId === paperId && item.fontId === fontId
+      )
+      return limitItem ? limitItem.fitNumber : 300 // 默认值为300
     }
   },
   watch: {

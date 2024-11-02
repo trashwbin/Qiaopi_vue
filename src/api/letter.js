@@ -42,3 +42,9 @@ export function readLetter(letterId) {
     method: 'put'
   })
 }
+export function getFontPaperLimit() {
+  return request({
+    url: '/paper/getFontPaperLimit',
+    method: 'get'
+  })
+}
