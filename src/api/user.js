@@ -7,16 +7,7 @@ export function getMyFunctionCard() {
     method: 'get'
   })
 }
-// 获取国家列表
-export function getCountries() {
-  return request({
-    url: '/user/getCountries',
-    method: 'get',
-    headers: {
-      isToken: false
-    }
-  })
-}export function updateFriendRemark(friendId, remark) {
+export function updateFriendRemark(friendId, remark) {
   return request({
     url: '/user/updateFriendRemark',
     method: 'put',

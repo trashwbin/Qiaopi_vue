@@ -4,14 +4,13 @@
     <p v-show="showWord">{{ paragraphs[currentParagraph] }}</p>
     <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showWord">继续</a>
     <el-carousel :interval="4000" type="card" height="400px" v-show="showCarousel" :autoplay="false">
-      <el-carousel-item v-for="(status, index) in lockStatus" :key="index" :style="{ height: '400px', width: '300px' }" style="margin-left: 130px;">
-        <div
-          v-if="lockStatus[index-1] === 1 || index === 0"
-          @click="openpage(index)"
+      <el-carousel-item v-for="(status, index) in lockStatus" :key="index" :style="{ height: '400px', width: '300px' }"
+        style="margin-left: 130px;">
+        <div v-if="lockStatus[index - 1] === 1 || index === 0" @click="openpage(index)"
           style="height: 100%; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
           <h3 class="medium">{{ index + 1 }}</h3>
         </div>
-        <div v-if="lockStatus[index-1] === 0" class="locked">
+        <div v-if="lockStatus[index - 1] === 0" class="locked">
           <p class="locked-text">您未解锁</p>
         </div>
       </el-carousel-item>
@@ -75,97 +74,49 @@ export default {
         Message.warning('您还未解锁此题库')
       }
     },
-    decryptData(encryptedData, secretKey) {
-      console.log('解密前数据', encryptedData)
-      try {
-        // 解密数据
-        const bytes = CryptoJS.AES.decrypt(CryptoJS.enc.Base64.parse(encryptedData), secretKey)
-        // 将解密后的字节转换为字符串
-        const originalText = bytes.toString(CryptoJS.enc.Utf8)
-        return originalText
-      } catch (e) {
-        // 错误处理
-        console.error('解密失败:', e)
-        throw e
-      }
-    },
-    // decode(base64Str) {
-    //   const utf8Str = CryptoJS.enc.Base64.parse(base64Str)
-    //   const secretKey = CryptoJS.enc.Utf8.parse('12345678901234567890123456789012')
-    //   // const iv = CryptoJS.enc.Utf8.parse('0000000000000000')
-    //   try {
-    //     const decryptedBytes = CryptoJS.AES.decrypt(utf8Str, secretKey, {
-    //       // iv: iv,
-    //       mode: CryptoJS.mode.CBC,
-    //       padding: CryptoJS.pad.Pkcs7
-    //     })
-    //     const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8)
-    //     console.log('解密后的数据:', decryptedData) // 检查解密后的数据
-    //     return decryptedData
-    //   } catch (error) {
-    //     console.error('解密失败:', error)
-    //     return null
-    //   }
-    // },
-    // decode(encryptedStr = '') {
-    //   // 将输入字符串转换为UTF-8格式
-    //   const message = encryptedStr
-
-    //   // 定义AES密钥
-    //   const secretKey = CryptoJS.enc.Utf8.parse('1234567890123456')
-
-    //   try {
-    //     // 使用AES-ECB模式解密
-    //     const decryptedMessage = CryptoJS.AES.decrypt(message, secretKey, {
-    //       mode: CryptoJS.mode.ECB,
-    //       padding: CryptoJS.pad.Pkcs7
-    //     })
-
-    //     // 将解密后的WordArray转换为UTF-8字符串
-    //     return decryptedMessage.toString(CryptoJS.enc.Utf8)
-    //   } catch (error) {
-    //     // 错误处理
-    //     console.error('解密失败:', error)
-    //     return null
-    //   }
-    // },
-    // decode(str = '') {
-    //   try {
-    //     // 确保密钥和 IV 的长度正确
-    //     const secretKey = CryptoJS.enc.Utf8.parse('12345678901234567890123456789012')
-    //     const iv = CryptoJS.enc.Utf8.parse('0000000000000000') // 16 字节长度
-
-    //     // 使用 CryptoJS 解密
-    //     const decryptedBytes = CryptoJS.AES.decrypt(str, secretKey, {
-    //       iv: iv,
-    //       mode: CryptoJS.mode.CBC,
-    //       padding: CryptoJS.pad.Pkcs7
-    //     })
-
-    //     // 将解密后的 WordArray 转换为 UTF-8 编码的字符串
-    //     const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8)
-
-    //     // 返回解密后的字符串
-    //     return decryptedData
-    //   } catch (error) {
-    //     console.error('解密失败:', error)
-    //     // 处理解密错误，例如返回 null 或错误消息
-    //     return null
-    //   }
-    // },
     async allAnswerToFront(setId) {
       await allAnswerToFront(setId).then(res => {
-        // this.$router.push({
-        //   path: '/question',
-        //   query: {
-        //     questions: this.decode(res.data)
-        //   }
-        // })
-        // const content = this.decode(res.data)
-        const secretKey = '12345678901234567890123456789012'
-        // console.log('解密前的数据：', res.data)
-        console.log('解密后的数据：', this.decryptData(res.data, secretKey))
+        const secretKey = 'qiaopiqiaopiqiaopiqiaopiqiaopinb'
+
+        // 示例用法
+        const encryptedQuestions = res.data // 替换成你的加密字符串
+
+        try {
+          const questions = this.decryptQuestions(encryptedQuestions, secretKey)
+          // 这里拿去用就可以了,记得删掉log
+          console.log('Decrypted Questions:', questions)
+        } catch (error) {
+          console.error('Decryption failed:', error)
+        }
       })
+    },
+    // 解密函数
+    decrypt(encryptedData, secretKey) {
+      // 解码Base64字符串
+      const bytes = CryptoJS.enc.Base64.parse(encryptedData)
+
+      // 创建密钥
+      const key = CryptoJS.enc.Utf8.parse(secretKey)
+
+      // 解密
+      const decrypted = CryptoJS.AES.decrypt({ ciphertext: bytes }, key, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+      })
+
+      // 返回解密后的字符串
+      return decrypted.toString(CryptoJS.enc.Utf8)
+    },
+
+    // 解密列表中的每个字符串
+    decryptList(list, secretKey) {
+      return list.map(item => this.decrypt(item, secretKey))
+    },
+
+    // 解密并解析JSON字符串到对象数组
+    decryptQuestions(encryptedQuestions, secretKey) {
+      const decryptedJson = this.decrypt(encryptedQuestions, secretKey)
+      return JSON.parse(decryptedJson)
     }
   }
 }
@@ -212,19 +163,24 @@ p {
   background-position: center center;
   background-size: cover;
 }
+
 .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;
 }
+
 .el-carousel__item:nth-child(2n+1) {
   background-color: #d3dce6;
 }
+
 .el-carousel {
   margin-top: 100px;
 }
+
 .locked {
   position: relative;
   cursor: not-allowed;
 }
+
 .locked-text {
   position: absolute;
   top: 50px;
