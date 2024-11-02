@@ -67,49 +67,83 @@
             </span>
           </el-dialog>
           <div class="email">邮箱:<span>{{ user.email }}</span></div>
-
-          <!-- 地址列表弹窗 -->
-          <div v-if="showAddressesModal" class="address-modal">
-            <div class="modal-content">
-              <span class="close" @click="showAddressesModal = false">&times;</span>
-              <h2>我的地址</h2>
-              <ul>
-                <li v-for="item in addresses" :key="item.id">
-                  {{ item.formattedAddress }} <!-- 显示地址信息 -->
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- 地址列表弹窗 -->
-          <div v-if="showAddressesModal" class="address-modal">
-            <div class="modal-content">
-              <span class="close" @click="showAddressesModal = false">&times;</span>
-              <h2>我的地址</h2>
-              <ul>
-                <li v-for="item in addresses" :key="item.id">
-                  {{ item.formattedAddress }} <!-- 显示地址信息 -->
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="friends-container">
-            <!-- 好友列表浮窗 -->
-            <div v-if="showFriendsModal" class="friends-modal">
-              <div class="modal-content">
-                <span class="close" @click="toggleFriendsModal">&times;</span>
-                <h2>我的好友</h2>
-                <div class="friends-container">
-                  <div class="friend" v-for="friend in friends" :key="friend.id">
-                    <div class="friendname">姓名：{{ friend.name }}</div>
-                    <div class="friendsex">性别：{{ friend.sex }}</div>
-                    <div class="friendemail">邮箱号：{{ friend.email }}</div>
-                    <div class="friendadress">地址：{{ friend.address }}</div>
+          <el-dialog title="我的地址" :visible.sync="showAddressesModal" width="720px" append-to-body>
+            <div class="AddressDialog">
+              <div class="addressContent">
+                <div class="UserAddress beautify-scroll-bar ">
+                  <div class="myAddressItem" v-for="address in addresses" :key="address.id">
+                    <div class="defaultTip" v-if="address.isDefault == 'true'">默认</div>
+                    <div class="setDefaultTip" @click="setUserDefaultAddress(address.id)" v-else>设为默认</div>
+                    <i class="el-icon-delete closeIcon" v-if="address.isDefault !== 'true'"
+                      @click="deleteMyAddress(address.id)"></i>
+                    <div class="recipientInfo">
+                      <div class="recipient">{{ user.nickname }}</div>
+                      <div class="addressCountry">{{ getCountyNameById(address.countryId) }}</div>
+                    </div>
+                    <div class="detailAddress f-els-2">{{ address.formattedAddress }}</div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </el-dialog>
+          <el-dialog title="我的好友" :visible.sync="showFriendsModal" width="520px" append-to-body>
+            <div class="friends-container beautify-scroll-bar">
+              <div class="friend" v-for="friend in friends" :key="friend.id">
+                <div style="float: left;">
+                  <el-avatar :src="friend.avatar" shape="square" fit="fill"></el-avatar>
+                </div>
+                <div style="float: left; margin-left: 10px;">
+                  <div class="friendname editFriendName" v-if="!friend.isEditing">
+                    {{ friend.remark || friend.name }}
+                    <i v-if="friend.sex === '男'" style="color:cornflowerblue; font-size: 16px;"
+                      class="el-icon-male"></i>
+                    <i v-if="friend.sex === '女'" style="color: pink; font-size: 16px;" class="el-icon-female"></i>
+                    <i v-if="!isEditingAnyFriend" class="el-icon-edit-outline editRemarkIcon"
+                      @click="editFriendRemark(friend.id)"></i>
+                  </div>
+                  <div class="friendname" v-else>
+                    <el-input v-model="newRemark" style="height: 20px;width: 150px;" maxlength="10"
+                      show-word-limit></el-input>
+                    <el-button @click="saveFriendRemark(friend.id)" size="mini"
+                      style="height: 20px; line-height: 7px; border-radius: 5px;  padding: 0 auto !important; margin-left: 10px; background-color:  #ff6200; color: #fff;"
+                      round>提交</el-button>
+                    <el-button @click="cancelEdit(friend.id)" size="mini"
+                      style="height: 20px; line-height: 7px; border-radius: 5px; padding: 0 auto !important;"
+                      round>取消</el-button>
+                  </div>
+                  <div class="friendemail" v-show="friend.remark"><span
+                      style="color: #666; font-size: 14px;">昵称：</span>{{ friend.name }}
+                  </div>
+                  <div class="friendemail"><span style="color: #666; font-size: 14px;">邮箱号：</span>{{ friend.email }}
+                  </div>
+                </div>
+                <el-popover placement="right" trigger="click" width="250">
+                  <div class="AddressDialog">
+                    <div class="addressTip">好友地址</div>
+                    <div class="addressContent">
+                      <div class="UserAddress beautify-scroll-bar ">
+                        <div class="friendAddressItem" v-for="address in friend.addresses" :key="address.id">
+                          <div class="defaultTip" v-if="address.isDefault == 'true'">默认</div>
+                          <div class="setDefaultTip" @click="setFriendDefaultAddress(friend.id, address.id)" v-else>设为默认
+                          </div>
+                          <i class="el-icon-delete closeIcon" v-if="address.isDefault !== 'true'"
+                            @click="deleteFriendAddress(friend.id, address.id)"></i>
+                          <div class="recipientInfo">
+                            <div class="recipient">{{ friend.remark || friend.name }}</div>
+                            <div class="addressCountry">{{ getCountyNameById(address.countryId) }}</div>
+                          </div>
+                          <div class="detailAddress f-els-2">{{ address.formattedAddress }}</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <i slot="reference" v-show="friend.addresses.length > 0" class="el-icon-s-home closeIcon"></i>
+                </el-popover>
+              </div>
+            </div>
+          </el-dialog>
+
         </div>
         <a @click="showAddressesModal = true" class="address">我的地址</a>
         <a @click="toggleFriendsModal" class="friends">我的好友</a>
@@ -173,7 +207,7 @@
 
 <script>
 import { Message } from 'element-ui'
-import { getMyAddress, updateUsername, updateNickname, updateSex, getAvatarList, updatePassword } from '@/api/user'
+import { updateFriendRemark, getUserFriends, setFriendDefaultAddress, deleteFriendAddress, setUserDefaultAddress, deleteUserAddress, getMyAddress, updateUsername, updateNickname, updateSex, getAvatarList, updatePassword } from '@/api/user'
 import axios from 'axios'
 import useUserStore from '@/store/modules/user'
 
@@ -187,6 +221,7 @@ export default {
         newPassword: '',
         confirmPassword: ''
       },
+      countries: [],
       avatars: [], // 存储头像列表
       showAvatarModal: false, // 控制头像列表弹窗的显示
       editSexDialogVisible: false, // 控制性别编辑弹窗显示的状态
@@ -196,6 +231,8 @@ export default {
       addresses: [],
       showFriendsModal: false,
       friends: [],
+      isEditingAnyFriend: false,
+      newRemark: '',
       wordFonts: [], // 存储字体信息
       inkColors: [], // 存储墨水颜色的 hexCode
       paperPreviews: [], // 存储信纸预览图信息
@@ -252,6 +289,79 @@ export default {
     }
   },
   methods: {
+    editFriendRemark(friendId) {
+      this.isEditingAnyFriend = true
+      const friend = this.friends.find(f => f.id === friendId)
+      if (friend) {
+        friend.isEditing = true
+        this.newRemark = friend.remark || friend.name
+        // this.dialogKey += 1 // 强制重新渲染
+        this.$forceUpdate() // 强制刷新组件
+      }
+    },
+    saveFriendRemark(friendId) {
+      const friend = this.friends.find(f => f.id === friendId)
+      if (friend) {
+        updateFriendRemark(friendId, this.newRemark).then(res => {
+          friend.remark = this.newRemark
+          getUserFriends().then(res => {
+            this.friends = res.data
+          })
+          this.$message.success(res.msg)
+        })
+        friend.isEditing = false
+        this.$forceUpdate() // 强制刷新组件
+      }
+      this.isEditingAnyFriend = false
+    },
+    cancelEdit(friendId) {
+      const friend = this.friends.find(f => f.id === friendId)
+      if (friend) {
+        friend.isEditing = false
+        this.dialogKey += 1 // 强制重新渲染
+        friend.id = friendId
+        // this.dialogKey += 1 // 强制重新渲染
+        this.$forceUpdate() // 强制刷新组件
+      }
+      this.isEditingAnyFriend = false
+    },
+    setFriendDefaultAddress(friendId, addressId) {
+      setFriendDefaultAddress(friendId, addressId).then(res => {
+        getUserFriends().then(res => {
+          this.friends = res.data
+        })
+        this.$message.success(res.msg)
+      })
+    },
+    deleteFriendAddress(friendId, addressId) {
+      deleteFriendAddress(friendId, addressId).then(res => {
+        getUserFriends().then(res => {
+          this.friends = res.data
+        })
+        this.$message.success(res.msg)
+      })
+    },
+    setUserDefaultAddress(id) {
+      setUserDefaultAddress(id).then(res => {
+        this.fetchAddresses()
+        this.$message.success(res.msg)
+      })
+    },
+    deleteMyAddress(id) {
+      deleteUserAddress(id).then(res => {
+        this.fetchAddresses()
+        this.$message.success(res.msg)
+      })
+    },
+    getCountyNameById(id) {
+      // console.log(id)
+      for (const country of this.countries) {
+        if (country.id === id) {
+          return country.countryName
+        }
+      }
+      return '中国'
+    },
     showEditSexDialog() {
       this.editSexDialogVisible = true
     },
@@ -332,7 +442,7 @@ export default {
     async updateSex() {
       await updateSex(this.user.sex).then(res => {
         this.editSexDialogVisible = false
-        Message.success('修改昵称成功')
+        Message.success('修改性别成功')
         this.user.sex = res.data.sex // 更新用户名
         this.getUserInfo()
       })
@@ -341,11 +451,6 @@ export default {
       // 获取我的地址
       getMyAddress().then(res => {
         this.addresses = res.data
-        for (let i = 0; i < this.addresses.length; i++) {
-          if (this.addresses[i].isDefault) {
-            this.senderAddress = this.addresses[i]
-          }
-        }
       })
     },
     async getFriendAddress(friendId, token) {
@@ -460,6 +565,224 @@ export default {
   background-size: 100% 100%;
   background-position: top center;
 } */
+.UserAddress {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-height: 300px;
+  overflow: auto;
+  width: 100%
+}
+
+.beautify-scroll-bar {
+  scrollbar-color: #e6e9eb;
+  scrollbar-width: 4px
+}
+
+.beautify-scroll-bar::-webkit-scrollbar-thumb {
+  background: #e6e9eb;
+  border-radius: 4px;
+  height: 4px;
+  width: 4px
+}
+
+.UserAddress.scrollHide {
+  scrollbar-width: none
+}
+
+/* 滑动轨道按钮 */
+::-webkit-scrollbar-button {
+  width: 10px;
+  height: 10px;
+  display: none;
+}
+
+.UserAddress .myAddressItem {
+  background-color: #f3f6f8;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: PingFangSC-Regular;
+  font-size: 16px;
+  font-weight: 400;
+  /* height: 80px; */
+  margin-right: 12px;
+  padding: 12px 12px 9px;
+  position: relative;
+  width: 300px;
+}
+
+.closeIcon {
+  cursor: pointer;
+  display: inline-block;
+  font-size: 18px;
+  line-height: 18px;
+  position: absolute;
+  right: 10px;
+  top: 34px
+}
+
+.UserAddress .myAddressItem:nth-of-type(2n) {
+  margin-right: 0
+}
+
+.UserAddress .myAddressItem:nth-of-type(n+3) {
+  margin-top: 12px
+}
+
+.UserAddress .myAddressItem.isSelected,
+.UserAddress .myAddressItem:hover {
+  background-color: #fff;
+  border: 1px solid #ff6200
+}
+
+.UserAddress .friendAddressItem {
+  background-color: #f3f6f8;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  font-weight: 400;
+  /* height: 80px; */
+  margin-right: 12px;
+  padding: 12px 12px 9px;
+  position: relative;
+  width: 200px;
+}
+
+.UserAddress .friendAddressItem:nth-of-type(2n) {
+  margin-top: 12px
+}
+
+.UserAddress .friendAddressItem:nth-of-type(n+3) {
+  margin-top: 12px
+}
+
+.UserAddress .friendAddressItem.isSelected,
+.UserAddress .friendAddressItem:hover {
+  background-color: #fff;
+  border: 1px solid #ff6200
+}
+
+.UserAddress .defaultTip {
+  background-color: #ff6200;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 12px;
+  padding: 4px;
+  position: absolute;
+  right: 4px;
+  top: 4px
+}
+
+.UserAddress .setDefaultTip {
+  background-color: rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 12px;
+  padding: 4px;
+  position: absolute;
+  right: 4px;
+  top: 4px
+}
+
+.UserAddress .detailAddress {
+  color: #50607a;
+  height: 36px;
+  line-height: 18px
+}
+
+.UserAddress .recipientInfo {
+  display: flex;
+  flex-direction: row;
+  line-height: 12px;
+  margin-bottom: 8px
+}
+
+.UserAddress .recipientInfo .recipient {
+  font-family: PingFangSC-Semibold;
+  font-weight: 600;
+  margin-right: 8px
+}
+
+.UserAddress .recipientInfo .addressCountry {
+  color: #50607a;
+  font-family: PingFangSC-Regular;
+  font-weight: 400
+}
+
+.beautify-scroll-bar::-webkit-scrollbar {
+  height: 4px;
+  margin-right: 4px;
+  width: 4px
+}
+
+.f-els-1 {
+  white-space: nowrap;
+  word-break: keep-all
+}
+
+.f-els-1,
+.f-els-2 {
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.f-els-2 {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box
+}
+
+.AddressDialog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative
+}
+
+.addressTip {
+  color: #11192d;
+  font-family: PingFangSC-Semibold;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 14px;
+  margin-bottom: 12px;
+  margin-left: 4px
+}
+
+.addressContent {
+  flex: 1;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center
+}
+
+.address-aside {
+  float: right;
+  background-color: #A52328;
+  color: #fff;
+  width: 40px;
+  border-radius: 8px;
+  border: 1px solid #ff6200;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+}
+
+::v-deep .el-dialog {
+  margin-top: 200px !important;
+  border-radius: 10px;
+  /* background-color: rgba(222, 201, 162, 1) !important; */
+  background: 0 0 / 400px auto repeat, #f9f9f9;
+}
+
 .banner {
   position: relative;
   margin: 0 auto;
@@ -640,6 +963,7 @@ export default {
   bottom: 180px;
   left: 200px;
   cursor: pointer;
+  animation: float 2.7s ease-in-out infinite;
 }
 
 .pen {
@@ -647,6 +971,7 @@ export default {
   bottom: 180px;
   left: 330px;
   cursor: pointer;
+  animation: float 3s ease-in-out infinite;
 }
 
 .envelope {
@@ -656,6 +981,19 @@ export default {
   bottom: 180px;
   left: 450px;
   cursor: pointer;
+  animation: float 2.5s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-5px) translateY(-1px);
+  }
 }
 
 .data .showEdit {
@@ -677,46 +1015,6 @@ export default {
   z-index: 1000;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.address-modal {
-  position: fixed;
-  /* 使用固定定位 */
-  top: 50%;
-  /* 定位到页面的垂直中心 */
-  left: 50%;
-  /* 定位到页面的水平中心 */
-  transform: translate(-50%, -50%);
-  /* 使弹窗正好位于中心 */
-  width: 300px;
-  /* 弹窗的宽度 */
-  position: fixed;
-  /* 使用固定定位 */
-  top: 50%;
-  /* 定位到页面的垂直中心 */
-  left: 50%;
-  /* 定位到页面的水平中心 */
-  transform: translate(-50%, -50%);
-  /* 使弹窗正好位于中心 */
-  width: 300px;
-  /* 弹窗的宽度 */
-  background-image: url(../../assets/imgss/profilebgd.webp);
-  border-radius: 8px;
-  /* 弹窗的边框圆角 */
-  z-index: 1000;
-  /* 确保弹窗在最上层 */
-  padding: 20px;
-  /* 弹窗内边距 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* 弹窗的阴影 */
-  border-radius: 8px;
-  /* 弹窗的边框圆角 */
-  z-index: 1000;
-  /* 确保弹窗在最上层 */
-  padding: 20px;
-  /* 弹窗内边距 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* 弹窗的阴影 */
 }
 
 ul {
@@ -817,14 +1115,15 @@ li {
   background-size: cover;
   border: 1px solid #ccc;
   /* 可选的边框样式 */
-  border: 1px solid #ccc;
-  /* 可选的边框样式 */
+  margin-right: 12px;
+  margin-bottom: 5px;
+  border-radius: 5px;
 }
 
 .penboxs {
   position: absolute;
-  top: 50px;
-  left: 50px;
+  top: 40px;
+  left: 40px;
 }
 
 .penbox {
@@ -832,41 +1131,21 @@ li {
   width: 130px;
   height: 60px;
   background-size: cover;
-  border: 1px solid #000000;
-  /* 可选的边框样式 */
-  border: 1px solid #000000;
-  /* 可选的边框样式 */
-  margin-right: 30px;
+  margin-right: 12px;
   margin-bottom: 5px;
-  background-size: cover;
-  border: 1px solid #000000;
-  /* 可选的边框样式 */
-  border: 1px solid #000000;
-  /* 可选的边框样式 */
+  border-radius: 5px;
 }
 
 .envelopebox {
   float: left;
   width: 185px;
   height: 120px;
-  margin-right: 10px;
   border: 1px solid #000000;
   background-position: center center;
   background-size: cover;
-}
-
-.friends-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 400px;
-  background-image: url(../../assets/imgss/profilebgd.webp);
-  border-radius: 25px;
-  z-index: 1000;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-right: 12px;
+  margin-bottom: 5px;
+  border-radius: 5px;
 }
 
 .modal-content {
@@ -880,6 +1159,16 @@ li {
   cursor: pointer;
 }
 
+.friends-container {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-height: 300px;
+  overflow: auto;
+  width: 100%
+}
+
 .friends {
   position: absolute;
   top: 500px;
@@ -889,15 +1178,32 @@ li {
 }
 
 .friend {
+  position: relative;
   width: 80%;
-  height: 90px;
+  min-height: 50px;
+  max-height: 70px;
   text-align: left;
   margin-left: 30px;
   margin-bottom: 10px;
   padding: 10px;
-  background-color: #c0c0a8;
+  padding-top: 20px;
+  /* background-color: #c0c0a8; */
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.friendname ::v-deep .el-input__inner {
+  font-size: 12px;
+  height: 20px !important;
+  margin-bottom: 2px;
+}
+
+.editFriendName .editRemarkIcon {
+  display: none;
+}
+
+.editFriendName:hover .editRemarkIcon {
+  display: inline-block;
 }
 
 .friendname,

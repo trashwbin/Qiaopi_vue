@@ -16,6 +16,50 @@ export function getCountries() {
       isToken: false
     }
   })
+}export function updateFriendRemark(friendId, remark) {
+  return request({
+    url: '/user/updateFriendRemark',
+    method: 'put',
+    params: { friendId, remark }
+  })
+}
+export function setFriendDefaultAddress(friendId, addressId) {
+  return request({
+    url: '/user/setFriendDefaultAddress',
+    method: 'put',
+    params: { friendId, addressId }
+  })
+}
+export function deleteFriendAddress(friendId, addressId) {
+  return request({
+    url: '/user/deleteFriendAddress',
+    method: 'delete',
+    params: { friendId, addressId }
+  })
+}
+export function setUserDefaultAddress(addressId) {
+  return request({
+    url: '/user/setUserDefaultAddress',
+    method: 'put',
+    params: { addressId }
+  })
+}
+export function deleteUserAddress(addressId) {
+  return request({
+    url: '/user/deleteUserAddress',
+    method: 'delete',
+    params: { addressId }
+  })
+}
+// 获取国家列表
+export function getCountries() {
+  return request({
+    url: '/user/getCountries',
+    method: 'get',
+    headers: {
+      isToken: false
+    }
+  })
 }
 // 获取用户地址
 export function getMyAddress() {
