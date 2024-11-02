@@ -89,10 +89,10 @@
         </div>
       </div>
       <div class="bottom">
-        <img src="../../assets/imgss/online.webp" alt="" class="online">
+        <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
         <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
-        <img src="../../assets/imgss/logo.webp" alt="" class="logo1">
-        <p class="contact">联系我们：3348620049@qq.com</p>
+        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
+        <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
       </div>
     </div>
 
@@ -1312,7 +1312,7 @@ section #text {
 .bottom {
   position: relative;
   width: 100%;
-  height: 140px;
+  height: 70px;
   margin-top: 50px;
   background-image: url(../../assets/imgss/logobgd.webp);
   background-repeat: repeat-x;
@@ -1343,9 +1343,12 @@ section #text {
 
 .contact {
   position: absolute;
-  top: 40px;
-  right: 180px;
-  font-size: 23px;
+  /* top: 40px;
+  right: 180px; */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 18px;
   color: rgba(255, 255, 255, 0.6);
 }
 </style>

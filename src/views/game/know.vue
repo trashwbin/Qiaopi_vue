@@ -21,8 +21,9 @@
 
 <script>
 import { Message } from 'element-ui'
-import { userLoginPage, startAnswer } from '@/api/know'
-
+// import { userLoginPage, startAnswer } from '@/api/know'
+import { userLoginPage, allAnswerToFront } from '@/api/know'
+import CryptoJS from 'crypto-js'
 export default {
   name: 'GameKnow',
   data() {
@@ -63,25 +64,107 @@ export default {
           Message.error(res.msg)
         }
       } catch (error) {
-        console.error('获取题库信息失败:', error)
+        // console.error('获取题库信息失败:', error)
         Message.error('获取题库信息失败')
       }
     },
     openpage(index) {
       if (this.lockStatus[index - 1] === 1 || index === 0) {
-        this.Answer(index + 1)
+        this.allAnswerToFront(index + 1)
       } else if (this.lockStatus[index - 1] === 0) {
         Message.warning('您还未解锁此题库')
       }
     },
-    async Answer(setId) {
-      await startAnswer(setId).then(res => {
-        this.$router.push({
-          path: '/question',
-          query: {
-            questions: JSON.stringify(res.data.questions)
-          }
-        })
+    decryptData(encryptedData, secretKey) {
+      console.log('解密前数据', encryptedData)
+      try {
+        // 解密数据
+        const bytes = CryptoJS.AES.decrypt(CryptoJS.enc.Base64.parse(encryptedData), secretKey)
+        // 将解密后的字节转换为字符串
+        const originalText = bytes.toString(CryptoJS.enc.Utf8)
+        return originalText
+      } catch (e) {
+        // 错误处理
+        console.error('解密失败:', e)
+        throw e
+      }
+    },
+    // decode(base64Str) {
+    //   const utf8Str = CryptoJS.enc.Base64.parse(base64Str)
+    //   const secretKey = CryptoJS.enc.Utf8.parse('12345678901234567890123456789012')
+    //   // const iv = CryptoJS.enc.Utf8.parse('0000000000000000')
+    //   try {
+    //     const decryptedBytes = CryptoJS.AES.decrypt(utf8Str, secretKey, {
+    //       // iv: iv,
+    //       mode: CryptoJS.mode.CBC,
+    //       padding: CryptoJS.pad.Pkcs7
+    //     })
+    //     const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8)
+    //     console.log('解密后的数据:', decryptedData) // 检查解密后的数据
+    //     return decryptedData
+    //   } catch (error) {
+    //     console.error('解密失败:', error)
+    //     return null
+    //   }
+    // },
+    // decode(encryptedStr = '') {
+    //   // 将输入字符串转换为UTF-8格式
+    //   const message = encryptedStr
+
+    //   // 定义AES密钥
+    //   const secretKey = CryptoJS.enc.Utf8.parse('1234567890123456')
+
+    //   try {
+    //     // 使用AES-ECB模式解密
+    //     const decryptedMessage = CryptoJS.AES.decrypt(message, secretKey, {
+    //       mode: CryptoJS.mode.ECB,
+    //       padding: CryptoJS.pad.Pkcs7
+    //     })
+
+    //     // 将解密后的WordArray转换为UTF-8字符串
+    //     return decryptedMessage.toString(CryptoJS.enc.Utf8)
+    //   } catch (error) {
+    //     // 错误处理
+    //     console.error('解密失败:', error)
+    //     return null
+    //   }
+    // },
+    // decode(str = '') {
+    //   try {
+    //     // 确保密钥和 IV 的长度正确
+    //     const secretKey = CryptoJS.enc.Utf8.parse('12345678901234567890123456789012')
+    //     const iv = CryptoJS.enc.Utf8.parse('0000000000000000') // 16 字节长度
+
+    //     // 使用 CryptoJS 解密
+    //     const decryptedBytes = CryptoJS.AES.decrypt(str, secretKey, {
+    //       iv: iv,
+    //       mode: CryptoJS.mode.CBC,
+    //       padding: CryptoJS.pad.Pkcs7
+    //     })
+
+    //     // 将解密后的 WordArray 转换为 UTF-8 编码的字符串
+    //     const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8)
+
+    //     // 返回解密后的字符串
+    //     return decryptedData
+    //   } catch (error) {
+    //     console.error('解密失败:', error)
+    //     // 处理解密错误，例如返回 null 或错误消息
+    //     return null
+    //   }
+    // },
+    async allAnswerToFront(setId) {
+      await allAnswerToFront(setId).then(res => {
+        // this.$router.push({
+        //   path: '/question',
+        //   query: {
+        //     questions: this.decode(res.data)
+        //   }
+        // })
+        // const content = this.decode(res.data)
+        const secretKey = '12345678901234567890123456789012'
+        // console.log('解密前的数据：', res.data)
+        console.log('解密后的数据：', this.decryptData(res.data, secretKey))
       })
     }
   }

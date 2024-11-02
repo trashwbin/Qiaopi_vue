@@ -43,7 +43,7 @@ service.interceptors.request.use((config) => {
     const requestSize = Object.keys(JSON.stringify(requestObj)).length // 请求数据大小
     const limitSize = 5 * 1024 * 1024 // 限制存放数据5M
     if (requestSize >= limitSize) {
-      console.warn(`[${config.url}]: ` + '请求数据大小超出允许的5M限制，无法进行防重复提交验证。')
+      // console.warn(`[${config.url}]: ` + '请求数据大小超出允许的5M限制，无法进行防重复提交验证。')
       return config
     }
     const sessionObj = cache.session.getJSON('sessionObj')
@@ -56,7 +56,7 @@ service.interceptors.request.use((config) => {
       const interval = 1000 // 间隔时间(ms)，小于此时间视为重复提交
       if (sdata === requestObj.data && requestObj.time - stime < interval && surl === requestObj.url) {
         const message = '数据正在处理，请勿重复提交'
-        console.warn(`[${surl}]: ` + message)
+        // console.warn(`[${surl}]: ` + message)
         return Promise.reject(new Error(message))
       } else {
         cache.session.setJSON('sessionObj', requestObj)
@@ -66,7 +66,7 @@ service.interceptors.request.use((config) => {
   // console.log(config)
   return config
 }, (error) => {
-  console.log(error)
+  // console.log(error)
   Promise.reject(error)
 }
 )
@@ -113,7 +113,7 @@ service.interceptors.response.use(res => {
   }
 }, error => {
   // console.log(111)
-  console.log('err' + error)
+  // console.log('err' + error)
   let { message } = error
 
   if (error && error.response) {

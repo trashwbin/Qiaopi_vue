@@ -20,3 +20,10 @@ export function submitAnswers(data) {
     data: data
   })
 }
+export function allAnswerToFront(setId) {
+  return request({
+    url: '/question/allAnswerToFront',
+    method: 'get',
+    params: { setId }
+  })
+}

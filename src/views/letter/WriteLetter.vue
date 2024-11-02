@@ -661,7 +661,7 @@ export default {
         // 获取第一个图片元素
         const firstImageElement = document.querySelector('.content .row-bg .el-col .el-image')
         if (!firstImageElement) {
-          console.error('No image element found')
+          // console.error('No image element found')
           this.showMask = false
           return
         }

@@ -12,7 +12,8 @@ module.exports = {
   },
   rules: {
     'space-before-function-paren': 0,
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    // 'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
   }
 }

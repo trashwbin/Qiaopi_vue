@@ -41,6 +41,7 @@
 // import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import { submitAnswers } from '@/api/know'
+// import CryptoJS from 'crypto-js'
 // import useUserStore from '@/store/modules/user'
 export default {
   name: 'questionPage',
@@ -57,6 +58,39 @@ export default {
     this.fetchQuestions()
   },
   methods: {
+    // async allAnswerToFront(setId) {
+    //   await allAnswerToFront(setId).then(res => {
+    //     const ncryptedText = res.data
+    //   })
+    // },
+    // encode(str = '') {
+    //   // utf-8 转换
+    //   const message = CryptoJS.enc.Utf8.parse(str)
+    //   const secret_key = CryptoJS.enc.Utf8.parse('1234567890123456')
+    //   const iv = CryptoJS.enc.Utf8.parse('0000000000000000')
+    //   // Encrypt
+    //   const ciphertext = CryptoJS.AES.encrypt(message, secret_key, {
+    //     iv: iv,
+    //     mode: CryptoJS.mode.CBC,
+    //     padding: CryptoJS.pad.Pkcs7
+    //   })
+    //   return ciphertext.toString()
+    // },
+    // decode(str = '') {
+    //   // utf-8 转换
+    //   const message = str
+    //   const secret_key = CryptoJS.enc.Utf8.parse('12345678901234567890123456789012')
+    //   const iv = CryptoJS.enc.Utf8.parse('0000000000000000')
+
+    //   // Decrypt
+    //   const ciphertext = CryptoJS.AES.decrypt(message.toString(), secret_key, {
+    //     iv: iv,
+    //     mode: CryptoJS.mode.CBC,
+    //     padding: CryptoJS.pad.Pkcs7
+    //   })
+    //   return ciphertext.toString(CryptoJS.enc.Utf8)
+    // },
+
     fetchQuestions() {
       // 获取传递的问题数据
       const questionsJson = this.$route.query.questions
@@ -78,7 +112,7 @@ export default {
           this.submitAnswers()
         }).catch(() => {
           // 用户点击取消按钮
-          console.log('用户取消了提交答案')
+          // console.log('用户取消了提交答案')
         })
       }
     },
@@ -123,7 +157,7 @@ export default {
         Message.success('答案提交成功！')
         this.handleResponse(response.data)
       } catch (error) {
-        console.error('提交答案失败:', error)
+        // console.error('提交答案失败:', error)
         Message.error('提交答案失败')
       }
     },
