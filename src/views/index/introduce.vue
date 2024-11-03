@@ -88,12 +88,7 @@
           </div>
         </div>
       </div>
-      <div class="bottom">
-        <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
-        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
-        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
-        <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
-      </div>
+
     </div>
 
     <transition name="el-fade-in-linear">
@@ -126,6 +121,12 @@
         </div>
       </div>
     </transition>
+    <div class="bottom">
+      <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
+        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
+        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
+      <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
+    </div>
   </div>
 </template>
 
@@ -375,7 +376,7 @@ export default {
 
 .contain {
   width: 100%;
-  height: 3000px;
+  height: 100%;
   background-image: url(../../assets/imgss/background.webp);
   background-size: 100% 100%;
   background-position: center center;
@@ -384,8 +385,8 @@ export default {
 
 .banner {
   position: relative;
-  width: 1440px;
-  height: 700px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
 }
 
@@ -412,7 +413,7 @@ export default {
 section {
   position: relative;
   width: 100%;
-  height: 800px;
+  height: 900px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1313,11 +1314,12 @@ section #text {
   position: relative;
   width: 100%;
   height: 70px;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   background-image: url(../../assets/imgss/logobgd.webp);
   background-repeat: repeat-x;
   font-size: 0;
   line-height: 60px;
+  margin-top: 200px;
 }
 
 .online {
@@ -1347,7 +1349,7 @@ section #text {
   right: 180px; */
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   font-size: 18px;
   color: rgba(255, 255, 255, 0.6);
 }
