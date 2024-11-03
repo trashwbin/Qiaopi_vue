@@ -258,7 +258,7 @@ export default {
   position: absolute;
    width: 186px; /* 或者你需要的尺寸 */
   height: 168px; /* 保持图片比例 */
-  right: -30px;
+  right: -50px;
   bottom: 50px;
 }
 </style>
