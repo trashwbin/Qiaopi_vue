@@ -558,7 +558,7 @@ export default {
   border-radius: 20px;
   /* height: 1200px; */
   background-color: transparent;
-  background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9;
+  background: url('@/assets/imgss/yellowbackground.png') 0 0 / 400px auto repeat, #f9f9f9;
   display: flex;
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
