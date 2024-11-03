@@ -545,10 +545,11 @@ section #text {
 
 .right {
   position: relative;
-  float: left;
+  float: right;
   width: 900px;
   height: 900px;
   margin-top: 20px;
+  margin-right: 100px;
   background-image: url(../../assets/imgss/right.webp);
   background-repeat: no-repeat;
   background-position: center center;
