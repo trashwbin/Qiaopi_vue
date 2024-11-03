@@ -1001,8 +1001,8 @@ export default {
       this.websocket = null
     },
     onOpen() {
-      // this.$message.success('连接成功')
-      this.send()
+      this.$message.success('开始写信吧!')
+      // this.send()
     },
     onClose() {
       // this.$message.warning('连接关闭')
@@ -1350,6 +1350,7 @@ export default {
     showWrite() {
       this.showContent = true
       this.currentView = 'write'
+      this.initWebSocket()
     },
     showSend() {
       this.getMySendLetter()
