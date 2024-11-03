@@ -971,8 +971,12 @@ export default {
     },
     initWebSocket() {
       if ('WebSocket' in window) {
-        this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
-        // this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen')
+        // 这里记得要改成你自己的ip
+
+        this.websocket = new WebSocket('/ws/letterGen', useUserStore().token)
+        // 偷个懒,竟然用这种方式判断
+        // this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
+        this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/letterGen', useUserStore().token)
         this.websocket.onerror = this.onError
         this.websocket.onopen = this.onOpen
         this.websocket.onmessage = this.onMessage
@@ -994,6 +998,7 @@ export default {
     },
     onError() {
       this.$message.error('连接失败，请刷新页面重试')
+      this.websocket = null
     },
     onOpen() {
       // this.$message.success('连接成功')
@@ -1622,7 +1627,7 @@ export default {
   border-radius: 20px;
   /* height: 1200px; */
   background-color: transparent;
-  background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9;
+  background: url('@/assets/imgss/yellowbackground.png') 0 0 / 400px auto repeat, #f9f9f9;
   display: flex;
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
@@ -1651,7 +1656,7 @@ export default {
   padding: 20px;
   box-sizing: border-box;
   /* background-color: #f9f9f9; */
-  background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9;
+  background: url('@/assets/imgss/yellowbackground.png') 0 0 / 400px auto repeat, #f9f9f9;
   border-radius: 25px;
   text-align: left;
 }

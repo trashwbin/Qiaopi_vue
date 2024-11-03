@@ -4,9 +4,10 @@
       <!-- 登录表单 -->
       <div class="header">登录</div>
       <div class="form-wrapper">
-        <input type="text" v-model="loginForm.username" name="username" placeholder="邮箱/用户名" class="input-item"
-          autocomplete="off">
-        <input type="password" v-model="loginForm.password" name="password" placeholder="密码" class="input-item">
+        <input type="text" @keyup.enter="handleCodePre" v-model="loginForm.username" name="username"
+          placeholder="邮箱/用户名" class="input-item" autocomplete="off" ref="usernameInput">
+        <input type="password" @keyup.enter="handleCodePre" v-model="loginForm.password" name="password"
+          placeholder="密码" class="input-item">
         <router-link to="/forget" class="forget">忘记密码</router-link>
         <button @click="handleCodePre" class="btn">登录</button>
       </div>
@@ -18,8 +19,8 @@
         <span>输入验证码</span>
         <button class="close-btn" @click="codeOpen = false">×</button>
         <div class="code-content">
-          <input type="text" v-model="loginForm.code" placeholder="验证码" class="inputcode"
-            style="width: 200px; height: 50px;" />
+          <input ref="codeInput" type="text" v-model="loginForm.code" @keyup.enter="handleLogin" placeholder="验证码"
+            class="inputcode" style="width: 200px; height: 50px;" />
           <div class="picbox" style="margin-left: 10px;">
             <img :src="captchaImg" alt="验证码" @click="handleGetPicCode">
           </div>
@@ -86,7 +87,18 @@ export default {
         })
     }
   },
-  created() {
+  watch: {
+    codeOpen(newVal) {
+      if (newVal) {
+        this.$nextTick(() => {
+          this.$refs.codeInput.focus()
+        })
+      }
+    }
+  },
+  mounted() {
+    // 页面加载完成后，将焦点设置到输入框
+    this.$refs.usernameInput.focus()
   }
 }
 </script>
@@ -107,7 +119,7 @@ body {
 
 .container {
   position: relative;
-  height: 1000px;
+  height: 50rem;
   /* height: 100%; */
   width: 100%;
   background-image: url(../../assets/imgss/loginbgd.webp);
