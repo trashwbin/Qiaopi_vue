@@ -4,8 +4,7 @@
     <p v-show="showWord">{{ paragraphs[currentParagraph] }}</p>
     <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showWord">继续</a>
     <el-carousel :interval="4000" type="card" height="400px" v-show="showCarousel" :autoplay="false">
-      <el-carousel-item v-for="(status, index) in lockStatus" :key="index" :style="{ height: '400px', width: '300px' }"
-        style="margin-left: 130px;">
+  <el-carousel-item v-for="(status, index) in lockStatus" :key="index" :class="'carousel-item-' + index" style="height: 400px; width: 300px; margin-left: 130px;">
         <div v-if="lockStatus[index - 1] === 1 || index === 0" @click="openpage(index)"
           style="height: 100%; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
           <h3 class="medium">{{ index + 1 }}</h3>
@@ -82,9 +81,15 @@ export default {
         const encryptedQuestions = res.data // 替换成你的加密字符串
 
         try {
-          const questions = this.decryptQuestions(encryptedQuestions, secretKey)
+          const content = this.decryptQuestions(encryptedQuestions, secretKey)
           // 这里拿去用就可以了,记得删掉log
-          console.log('Decrypted Questions:', questions)
+          this.$router.push({
+            path: '/question',
+            query: {
+              questions: content
+            }
+          })
+          console.log('Decrypted Questions:', content)
         } catch (error) {
           console.error('Decryption failed:', error)
         }
@@ -159,7 +164,7 @@ p {
 }
 
 .el-carousel__item {
-  background-image: url(../../assets/imgss/war.webp);
+  /* background-image: url(../../assets/imgss/war.webp); */
   background-position: center center;
   background-size: cover;
 }
@@ -187,5 +192,22 @@ p {
   left: 50%;
   transform: translateX(-50%);
   color: rgb(0, 0, 0);
+}
+.carousel-item-0 {
+  background-image: url(../../assets/imgs/pic1.png);
+  background-size: cover;
+  background-position: center center;
+}
+
+.carousel-item-1 {
+  background-image: url(../../assets/imgs/pic2.png);
+  background-size: cover;
+  background-position: center center;
+}
+
+.carousel-item-2 {
+  background-image: url(../../assets/imgs/pic3.png);
+  background-size: cover;
+  background-position: center center;
 }
 </style>
