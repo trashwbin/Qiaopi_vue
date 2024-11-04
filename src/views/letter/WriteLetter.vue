@@ -23,9 +23,10 @@
           :hide-required-asterisk="true">
           <div v-show="activeTab === 'information'">
             <el-form-item label="信纸" prop="paperId" style="margin-left: -20px;">
-              <el-select v-model="letterGen.paperId" placeholder="请选择字体颜色纸张" @change="handleChange"
+              <el-select v-model="letterGen.paperId" placeholder="请选择纸张" @change="handleChange"
                 style="width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
-                <el-option v-for="item in repository.papers" :key="item.id" :label="item.name" :value="item.id" />
+                <el-option v-for="item in repository.papers" :key="item.id" :label="item.name" :value="item.id"
+                  :disabled="letterGen.letterType !== item.type" />
               </el-select>
             </el-form-item>
 
@@ -43,14 +44,14 @@
               </el-select>
             </el-form-item>
             <el-form-item label="款式" prop="letterType" style="margin-left: -20px; ">
-              <el-select v-model="letterGen.letterType" placeholder="请选择字体款式" @change="handleChange"
+              <el-select v-model="letterGen.letterType" placeholder="请选择信件款式" @change="handleChange"
                 style=" width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
-                <el-option v-for=" item in letterTypes" :key="item.id" :label="item.label" :value="item.value" />
+                <el-option v-for=" item in letterTypes" :key="item.id" :label="item.label" :value="item.id" />
               </el-select>
             </el-form-item>
             <el-form-item label=" 寄信人" prop="senderName" style="margin-left: -20px; " label-width="75px">
-              <el-input v-model="letterGen.senderName" placeholder="请输入寄信人" @input="handleChange"
-                style="margin-top:10px;height: 10px; width: 200px;" />
+              <el-input :maxlength="15" show-word-limit v-model="letterGen.senderName" placeholder="请输入寄信人"
+                @input="handleChange" style="margin-top:10px;height: 10px; width: 200px;" />
             </el-form-item>
             <el-form-item label="收信人" prop="recipientName" style="margin-left: -20px;" label-width="75px">
               <!-- <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend"
@@ -498,7 +499,7 @@ export default {
         createTime: '',
         expectedDeliveryTime: '',
         status: '',
-        letterType: '1',
+        letterType: 1,
         piggyMoney: ''
       },
       coverUrl: '',
@@ -535,11 +536,11 @@ export default {
       rules: {
         senderName: [
           { required: true, message: '请输入寄信人', trigger: 'blur' },
-          { min: 1, max: 30, message: '最多输入30个字符', trigger: 'blur' }
+          { min: 1, max: 15, message: '最多输入15个字符', trigger: 'blur' }
         ],
         recipientName: [
           { required: true, message: '请输入收信人', trigger: 'blur' },
-          { min: 1, max: 30, message: '最多输入30个字符', trigger: 'blur' }
+          { min: 1, max: 15, message: '最多输入15个字符', trigger: 'blur' }
         ],
         fontId: [
           { required: true, message: '请选择字体', trigger: 'change' }
@@ -570,11 +571,13 @@ export default {
       },
       letterTypes: [{
         label: '侨批',
-        value: '1',
-        default: true
+        value: '侨批',
+        default: true,
+        id: 1
       }, {
         label: '普通信件',
-        value: '2'
+        value: '普通信件',
+        id: 2
       }],
       letterGen: {
         fontId: '',
@@ -583,7 +586,7 @@ export default {
         letterContent: '',
         senderName: useUserStore().name,
         recipientName: '',
-        letterType: '1'
+        letterType: 1
       },
       backImageUrl: '',
       letterUrl: '',
@@ -1001,8 +1004,11 @@ export default {
       this.websocket = null
     },
     onOpen() {
-      this.$message.success('开始写信吧!')
+      // this.$message.success('开始写信吧!')
       // this.send()
+      setTimeout(() => {
+        this.websocket.send(JSON.stringify(this.letterGen))
+      }, 500)
     },
     onClose() {
       // this.$message.warning('连接关闭')
@@ -1017,6 +1023,20 @@ export default {
     },
     // websocket
     handleChange() {
+      const content = this.letterGen.letterContent
+      if (/[a-zA-Z0-9]/.test(content) && this.letterGen.letterType === 1) {
+        this.letterGen.letterType = 2
+        const firstPaperWithType2 = this.repository.papers.find(paper => paper.type === 2)
+        if (firstPaperWithType2) {
+          this.letterGen.paperId = firstPaperWithType2.id
+        } else {
+          this.letterGen.paperId = 4
+        }
+        this.$message({
+          message: '检测到您的信件内容中包含英文或数字，已自动切换为普通信件',
+          type: 'warning'
+        })
+      }
       this.showTip = true
       if (this.websocket == null) {
         this.initWebSocket()

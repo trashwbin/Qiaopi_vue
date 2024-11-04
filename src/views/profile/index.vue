@@ -24,9 +24,9 @@
           <!-- 修改昵称弹窗 -->
           <el-dialog title="修改昵称" :visible.sync="editNicknameDialogVisible" width="30%"
             @close="editNicknameDialogVisible = false">
-            <el-form ref="nicknameForm" :model="user" label-width="80px">
+            <el-form ref="nicknameForm" label-width="80px">
               <el-form-item label="昵称">
-                <el-input v-model="user.nickname" autocomplete="off"></el-input>
+                <el-input v-model="newNickname" autocomplete="off"></el-input>
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -38,9 +38,9 @@
               @click="showEditUsernameDialog">编辑</el-link></div>
           <el-dialog title="修改用户名" :visible.sync="editUsernameDialogVisible" width="30%"
             @close="editUsernameDialogVisible = false">
-            <el-form ref="usernameForm" :model="user" label-width="80px">
+            <el-form ref="usernameForm" label-width="80px">
               <el-form-item label="用户名">
-                <el-input v-model="user.username" autocomplete="off"></el-input>
+                <el-input v-model="newUsername" autocomplete="off"></el-input>
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -53,9 +53,9 @@
           <!-- 修改性别弹窗 -->
           <el-dialog title="修改性别" :visible.sync="editSexDialogVisible" width="30%"
             @close="editSexDialogVisible = false">
-            <el-form ref="sexForm" :model="user" label-width="80px">
+            <el-form ref="sexForm" label-width="80px">
               <el-form-item label="性别">
-                <el-select v-model="user.sex" placeholder="请选择">
+                <el-select v-model="newSex" placeholder="请选择">
                   <el-option label="男" value="男"></el-option>
                   <el-option label="女" value="女"></el-option>
                 </el-select>
@@ -232,7 +232,6 @@ export default {
       showFriendsModal: false,
       friends: [],
       isEditingAnyFriend: false,
-      newRemark: '',
       wordFonts: [], // 存储字体信息
       inkColors: [], // 存储墨水颜色的 hexCode
       paperPreviews: [], // 存储信纸预览图信息
@@ -240,6 +239,10 @@ export default {
       showWordModal: false,
       showEnvelopeModal: false,
       user: {},
+      newRemark: '',
+      newUsername: '',
+      newNickname: '',
+      newSex: '',
       money: '',
       repository: {
         fonts: [],
@@ -432,7 +435,7 @@ export default {
       this.editNicknameDialogVisible = true
     },
     async updateNickname() {
-      await updateNickname(this.user.nickname).then(res => {
+      await updateNickname(this.newNickname).then(res => {
         this.editNicknameDialogVisible = false
         Message.success('修改昵称成功')
         // this.user.nickname = res.data.nickname // 更新用户名
@@ -440,10 +443,10 @@ export default {
       })
     },
     async updateSex() {
-      await updateSex(this.user.sex).then(res => {
+      await updateSex(this.newSex).then(res => {
         this.editSexDialogVisible = false
         Message.success('修改性别成功')
-        this.user.sex = res.data.sex // 更新用户名
+        // this.user.sex = res.data.sex // 更新用户名
         this.getUserInfo()
       })
     },
@@ -483,7 +486,7 @@ export default {
     },
     // 更新用户名
     async updateUsername() {
-      await updateUsername(this.user.username).then(res => {
+      await updateUsername(this.newUsername).then(res => {
         this.editUsernameDialogVisible = false
         Message.success('修改用户名成功')
         // this.user.username = res.data.username // 更新用户名
