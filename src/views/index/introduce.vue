@@ -127,6 +127,12 @@
         <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
       <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
     </div>
+    <el-backtop :bottom="100" :visibility-height="1200">
+      <div style="height: 100%; width: 100%;box-shadow: 0 0 6px rgba(0,0,0, .12);text-align: center;line-height: 20px;">
+        <img style="width: 40px; height: 40px;" src="../../assets/logo/backtop.png" alt="">
+        <span style="font-size: 14px; color: #A52328;">回顶部</span>
+      </div>
+    </el-backtop>
   </div>
 </template>
 
@@ -221,9 +227,16 @@ export default {
 <style scoped>
 * {
   margin: 0;
-  padding: 0;
+  /* padding: 0; */
   list-style: none;
   box-sizing: border-box;
+}
+
+::v-deep .el-backtop {
+  width: 50px;
+  height: 75px;
+  padding-top: 5px;
+  border-radius: 10px;
 }
 
 .target {

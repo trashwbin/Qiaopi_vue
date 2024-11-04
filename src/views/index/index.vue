@@ -87,7 +87,6 @@ export default {
         this.$refs.slider3?.$el?.offsetLeft || 0,
         this.$refs.slider4?.$el?.offsetLeft || 0
       ]
-      console.log(this.$refs)
     },
     handleCommand(command) {
       if (command === 'logout') {

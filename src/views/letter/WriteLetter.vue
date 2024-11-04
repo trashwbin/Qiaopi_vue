@@ -1649,7 +1649,6 @@ export default {
   /* height: 1200px; */
   background-color: transparent;
   background: url('@/assets/imgss/yellowbackground.png') 0 0 / 400px auto repeat, #f9f9f9;
-  display: flex;
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
   /* 垂直对齐子元素 */

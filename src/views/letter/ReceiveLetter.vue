@@ -528,7 +528,7 @@ export default {
   height: 600px;
   position: relative;
   padding-top: 20px;
-  padding-left: 20px;
+  padding-right: 20px;
   margin: 40px auto 0 auto;
   flex-wrap: wrap;
   border-radius: 20px;
@@ -559,7 +559,7 @@ export default {
   /* height: 1200px; */
   background-color: transparent;
   background: url('@/assets/imgss/yellowbackground.png') 0 0 / 400px auto repeat, #f9f9f9;
-  display: flex;
+  /* display: flex; */
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
   /* 垂直对齐子元素 */
