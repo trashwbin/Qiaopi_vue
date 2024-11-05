@@ -2,8 +2,8 @@ import request from '@/utils/request'
 // 获取纸张商城列表
 export function fetchPaperList() {
   return request({
-    url: '/card/list',
-    method: 'put'
+    url: '/paper/list',
+    method: 'get'
   })
 }
 // 获取字体商城列表
@@ -23,7 +23,7 @@ export function fetchColorList() {
 // 买纸
 export function buyPaper(paperId) {
   return request({
-    url: '/card/buyPaper',
+    url: '/paper/buyPaper',
     method: 'post',
     params: { paperId }
   })

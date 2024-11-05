@@ -23,9 +23,10 @@
           :hide-required-asterisk="true">
           <div v-show="activeTab === 'information'">
             <el-form-item label="信纸" prop="paperId" style="margin-left: -20px;">
-              <el-select v-model="letterGen.paperId" placeholder="请选择字体颜色纸张" @change="handleChange"
+              <el-select v-model="letterGen.paperId" placeholder="请选择纸张" @change="handleChange"
                 style="width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
-                <el-option v-for="item in repository.papers" :key="item.id" :label="item.name" :value="item.id" />
+                <el-option v-for="item in repository.papers" :key="item.id" :label="item.name" :value="item.id"
+                  :disabled="letterGen.letterType !== item.type" />
               </el-select>
             </el-form-item>
 
@@ -43,14 +44,14 @@
               </el-select>
             </el-form-item>
             <el-form-item label="款式" prop="letterType" style="margin-left: -20px; ">
-              <el-select v-model="letterGen.letterType" placeholder="请选择字体款式" @change="handleChange"
+              <el-select v-model="letterGen.letterType" placeholder="请选择信件款式" @change="handleChange"
                 style=" width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
-                <el-option v-for=" item in letterTypes" :key="item.id" :label="item.label" :value="item.value" />
+                <el-option v-for=" item in letterTypes" :key="item.id" :label="item.label" :value="item.id" />
               </el-select>
             </el-form-item>
             <el-form-item label=" 寄信人" prop="senderName" style="margin-left: -20px; " label-width="75px">
-              <el-input v-model="letterGen.senderName" placeholder="请输入寄信人" @input="handleChange"
-                style="margin-top:10px;height: 10px; width: 200px;" />
+              <el-input :maxlength="15" show-word-limit v-model="letterGen.senderName" placeholder="请输入寄信人"
+                @input="handleChange" style="margin-top:10px;height: 10px; width: 200px;" />
             </el-form-item>
             <el-form-item label="收信人" prop="recipientName" style="margin-left: -20px;" label-width="75px">
               <!-- <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend"
@@ -68,9 +69,9 @@
           </div>
           <div v-show="activeTab === 'letter'" class="text">
             <el-form-item label="信的内容：" prop="letterContent" style=" text-align: center;" label-width="100px">
-              <el-input v-model="letterGen.letterContent" maxlength="300" show-word-limit placeholder="请开始写信吧" required
-                type="textarea" :autosize="{ minRows: 15, maxRows: 20 }" style="width: 500px;margin-left: -20px;"
-                resize="none" @input="handleChange"></el-input>
+              <el-input v-model="letterGen.letterContent" :maxlength="currentMaxlength" show-word-limit
+                placeholder="请开始写信吧" required type="textarea" :autosize="{ minRows: 15, maxRows: 20 }"
+                style="width: 500px;margin-left: -20px;" resize="none" @input="handleChange"></el-input>
             </el-form-item>
           </div>
         </el-form>
@@ -398,7 +399,7 @@
 
 <script>
 import { getCountries, getUserRepository, getUserFriends, getMyAddress, getMyFunctionCard } from '@/api/user'
-import { sendLetter, getMySendLetter } from '@/api/letter'
+import { getFontPaperLimit, sendLetter, getMySendLetter } from '@/api/letter'
 import { useCard } from '@/api/card'
 import useUserStore from '@/store/modules/user'
 import { MessageBox } from 'element-ui'
@@ -498,7 +499,7 @@ export default {
         createTime: '',
         expectedDeliveryTime: '',
         status: '',
-        letterType: '1',
+        letterType: 1,
         piggyMoney: ''
       },
       coverUrl: '',
@@ -535,11 +536,11 @@ export default {
       rules: {
         senderName: [
           { required: true, message: '请输入寄信人', trigger: 'blur' },
-          { min: 1, max: 30, message: '最多输入30个字符', trigger: 'blur' }
+          { min: 1, max: 15, message: '最多输入15个字符', trigger: 'blur' }
         ],
         recipientName: [
           { required: true, message: '请输入收信人', trigger: 'blur' },
-          { min: 1, max: 30, message: '最多输入30个字符', trigger: 'blur' }
+          { min: 1, max: 15, message: '最多输入15个字符', trigger: 'blur' }
         ],
         fontId: [
           { required: true, message: '请选择字体', trigger: 'change' }
@@ -570,11 +571,13 @@ export default {
       },
       letterTypes: [{
         label: '侨批',
-        value: '1',
-        default: true
+        value: '侨批',
+        default: true,
+        id: 1
       }, {
         label: '普通信件',
-        value: '2'
+        value: '普通信件',
+        id: 2
       }],
       letterGen: {
         fontId: '',
@@ -583,7 +586,7 @@ export default {
         letterContent: '',
         senderName: useUserStore().name,
         recipientName: '',
-        letterType: '1'
+        letterType: 1
       },
       backImageUrl: '',
       letterUrl: '',
@@ -635,12 +638,17 @@ export default {
       currentView: '',
       newLayout: false, // 控制表单布局
       showTip: true,
-      disabled: false
+      disabled: false,
+      fontPaperLimitList: []
     }
   },
 
   methods: {
-
+    getFontPaperLimit() {
+      getFontPaperLimit().then(response => {
+        this.fontPaperLimitList = response.data
+      })
+    },
     handleClickTab(event) {
       // 阻止事件冒泡，防止点击按钮时触发外层 div 的点击事件
       event.stopPropagation()
@@ -656,7 +664,7 @@ export default {
         // 获取第一个图片元素
         const firstImageElement = document.querySelector('.content .row-bg .el-col .el-image')
         if (!firstImageElement) {
-          console.error('No image element found')
+          // console.error('No image element found')
           this.showMask = false
           return
         }
@@ -966,8 +974,15 @@ export default {
     },
     initWebSocket() {
       if ('WebSocket' in window) {
-        this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
-        // this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen')
+        // 这里记得要改成你自己的ip
+        this.websocket = new WebSocket('/ws/letterGen', useUserStore().token)
+        // 偷个懒,竟然用这种方式判断
+        if (this.websocket === null) {
+          this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
+        }
+        if (this.websocket === null) {
+          this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/letterGen', useUserStore().token)
+        }
         this.websocket.onerror = this.onError
         this.websocket.onopen = this.onOpen
         this.websocket.onmessage = this.onMessage
@@ -989,10 +1004,14 @@ export default {
     },
     onError() {
       this.$message.error('连接失败，请刷新页面重试')
+      this.websocket = null
     },
     onOpen() {
-      // this.$message.success('连接成功')
-      this.send()
+      // this.$message.success('开始写信吧!')
+      // this.send()
+      setTimeout(() => {
+        this.websocket.send(JSON.stringify(this.letterGen))
+      }, 500)
     },
     onClose() {
       // this.$message.warning('连接关闭')
@@ -1007,6 +1026,20 @@ export default {
     },
     // websocket
     handleChange() {
+      const content = this.letterGen.letterContent
+      if (/[a-zA-Z0-9]/.test(content) && this.letterGen.letterType === 1) {
+        this.letterGen.letterType = 2
+        const firstPaperWithType2 = this.repository.papers.find(paper => paper.type === 2)
+        if (firstPaperWithType2) {
+          this.letterGen.paperId = firstPaperWithType2.id
+        } else {
+          this.letterGen.paperId = 4
+        }
+        this.$message({
+          message: '检测到您的信件内容中包含英文或数字，已自动切换为普通信件',
+          type: 'warning'
+        })
+      }
       this.showTip = true
       if (this.websocket == null) {
         this.initWebSocket()
@@ -1156,10 +1189,12 @@ export default {
               type: 'success',
               offset: 100
             })
-            this.sendLoading = false
             this.showConfirmDialog = false
             this.loadFirstImage(res.data)
           })
+          setTimeout(() => {
+            this.sendLoading = false
+          }, 1000)
         } else {
           this.sendLoading = false
           return false
@@ -1216,13 +1251,14 @@ export default {
       // console.log(selectedFriendId)
       for (const friend of this.friends) {
         if (friend.id === selectedFriendId) {
-          this.letterGen.recipientName = friend.name
+          this.letterGen.recipientName = friend.remark || friend.nickname
           this.letter.recipientUserId = friend.userId
           this.letter.recipientEmail = friend.email
           this.handleChange()
           return
         }
       }
+      // 如果不是好友的情况,这个名字就是这个id
       this.letterGen.recipientName = selectedFriendId
       this.handleChange()
     },
@@ -1337,6 +1373,7 @@ export default {
     showWrite() {
       this.showContent = true
       this.currentView = 'write'
+      this.initWebSocket()
     },
     showSend() {
       this.getMySendLetter()
@@ -1345,13 +1382,15 @@ export default {
       this.currentView = 'send'
     },
     updateInnerTextBackground() {
-      const innerTextElement = this.$refs.progress.$el.querySelector('.el-progress-bar__innerText')
-      if (innerTextElement) {
-        innerTextElement.style.backgroundImage = `url(${this.innerTextBackground})`
-        if (this.letterVo.deliveryProgress > 1000) {
-          innerTextElement.style.margin = '-3px 3px'
-        } else {
-          innerTextElement.style.margin = '-3px -36px'
+      if (this.isVisible) {
+        const innerTextElement = this.$refs.progress.$el.querySelector('.el-progress-bar__innerText')
+        if (innerTextElement) {
+          innerTextElement.style.backgroundImage = `url(${this.innerTextBackground})`
+          if (this.letterVo.deliveryProgress > 1000) {
+            innerTextElement.style.margin = '-3px 3px'
+          } else {
+            innerTextElement.style.margin = '-3px -36px'
+          }
         }
       }
     }
@@ -1363,7 +1402,7 @@ export default {
     this.getUserFriends()
     this.getMyAddress()
     this.getCountries()
-    this.updateInnerTextBackground()
+    this.getFontPaperLimit()
   },
   beforeDestroy() {
     this.removeUnloadListener()
@@ -1378,6 +1417,13 @@ export default {
       } else {
         return require('@/assets/imgs/car3.png')
       }
+    },
+    currentMaxlength() {
+      const { paperId, fontId } = this.letterGen
+      const limitItem = this.fontPaperLimitList.find(
+        item => item.paperId === paperId && item.fontId === fontId
+      )
+      return limitItem ? limitItem.fitNumber : 300 // 默认值为300
     }
   },
   watch: {
@@ -1605,8 +1651,7 @@ export default {
   border-radius: 20px;
   /* height: 1200px; */
   background-color: transparent;
-  background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9;
-  display: flex;
+  background: url('@/assets/imgss/yellowbackground.png') 0 0 / 400px auto repeat, #f9f9f9;
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
   /* 垂直对齐子元素 */
@@ -1634,7 +1679,7 @@ export default {
   padding: 20px;
   box-sizing: border-box;
   /* background-color: #f9f9f9; */
-  background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9;
+  background: url('@/assets/imgss/yellowbackground.png') 0 0 / 400px auto repeat, #f9f9f9;
   border-radius: 25px;
   text-align: left;
 }
