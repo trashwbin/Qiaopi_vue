@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <button>敬请期待</button>
+      <router-link to='/memory'><button>开始探索</button></router-link>
     </div>
   </section>
 </template>

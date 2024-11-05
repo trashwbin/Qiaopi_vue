@@ -97,6 +97,10 @@
               <i class="el-icon-user"></i>
               寄信人：{{ letterVo.senderName }}
             </div>
+            <div class="card_item" v-show="letterVo.piggyMoney > 0">
+              <i class="el-icon-money"></i>
+              携带猪仔钱：{{ letterVo.piggyMoney }}
+            </div>
             <div style="margin-left: 20px;">
               <i class="el-icon-document-add"></i>
               <el-button type="text" @click="writeMore">写一封回信</el-button>
@@ -426,7 +430,7 @@ export default {
         }
         // 从路由获取
         if (this.$route.params.showFirst) {
-          console.log(this.$route.params)
+          // console.log(this.$route.params)
           this.loadFirstImage(this.$route.params.myNotReadLetter)
           this.$route.params.showFirst = false
         }
@@ -434,7 +438,7 @@ export default {
     },
     loadFirstImage(item) {
       setTimeout(() => {
-        console.log(item)
+        // console.log(item)
         this.showMask = true
         const imageElement = document.createElement('img')
         imageElement.setAttribute('style', 'width: 250px; height: 250px; position: absolute; top: 0; left: 0; z-index: 1000')
@@ -443,7 +447,7 @@ export default {
         // 获取第一个图片元素
         const firstImageElement = document.querySelector('.content .row-bg .el-col .el-image')
         if (!firstImageElement) {
-          console.error('No image element found')
+          // console.error('No image element found')
           this.showMask = false
           return
         }
@@ -512,14 +516,19 @@ export default {
 </script>
 
 <style scoped>
+/* 滑动轨道按钮 */
+::-webkit-scrollbar-button {
+  width: 10px;
+  height: 10px;
+  display: none;
+}
+
 .row-bg {
-  width: 1200px;
+  width: 95%;
   height: 600px;
-
   position: relative;
-
   padding-top: 20px;
-  padding-left: 20px;
+  padding-right: 20px;
   margin: 40px auto 0 auto;
   flex-wrap: wrap;
   border-radius: 20px;
@@ -544,98 +553,17 @@ export default {
 .banner {
   position: relative;
   margin-top: 40px;
-  width: 1300px;
+  width: 90%;
   height: 680px;
+  border-radius: 20px;
   /* height: 1200px; */
-  background-color: blanchedalmond;
-  background-image: url(../../assets/imgss/writebgd3.webp);
-  display: flex;
+  background-color: transparent;
+  background: url('@/assets/imgss/yellowbackground.png') 0 0 / 400px auto repeat, #f9f9f9;
+  /* display: flex; */
   /* 使用 Flexbox 布局 */
   align-items: flex-start;
   /* 垂直对齐子元素 */
   line-height: 40px;
-}
-
-.selectPage {
-  position: absolute;
-  z-index: 5;
-  /*提高层级 */
-  top: 20px;
-  right: 50px;
-  border: 0;
-  cursor: pointer;
-  /* 将鼠标指针设置为手型 */
-  outline: none;
-  /* 移除焦点时的边框 */
-}
-
-.left {
-  position: absolute;
-  width: 320px;
-  top: 10px;
-  left: 80px;
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: rgb(222, 201, 162);
-  border-radius: 25px;
-  text-align: left;
-}
-
-.right {
-  position: absolute;
-  /* background-color: rgb(222, 201, 162); */
-  padding: 20px;
-  border-radius: 25px;
-  left: 450px;
-  top: 115px;
-  width: 700px;
-  height: 450px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.text {
-  margin-left: -25px;
-}
-
-.text label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.text textarea {
-  width: 350px;
-  height: 400px;
-  padding: 8px;
-  border-radius: 4px;
-  resize: none;
-  outline: none;
-  border: 0;
-}
-
-.left ::v-deep .el-input__inner {
-  height: 35px;
-  border: 1px solid #1296db;
-  background-color: rgba(0, 0, 0, 0.1) !important;
-  color: #666;
-}
-
-.selectPage ::v-deep .el-input__inner,
-::v-deep .el-textarea__inner {
-  height: 35px;
-  border-radius: 10px;
-  border: 1px solid #1296db;
-  background-color: rgba(222, 201, 162, 0.6) !important;
-  color: #b00f0f;
-}
-
-::v-deep .el-input__inner,
-::v-deep .el-textarea__inner {
-  height: 35px;
-  border: 1px solid #1296db;
-  background-color: rgba(0, 0, 0, 0.1) !important;
-  color: #666;
 }
 
 ::v-deep .el-dialog {

@@ -4,14 +4,12 @@
     <p v-show="showWord">{{ paragraphs[currentParagraph] }}</p>
     <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showWord">继续</a>
     <el-carousel :interval="4000" type="card" height="400px" v-show="showCarousel" :autoplay="false">
-      <el-carousel-item v-for="(status, index) in lockStatus" :key="index" :style="{ height: '400px', width: '300px' }" style="margin-left: 130px;">
-        <div
-          v-if="lockStatus[index-1] === 1 || index === 0"
-          @click="openpage(index)"
+  <el-carousel-item v-for="(status, index) in lockStatus" :key="index" :class="'carousel-item-' + index" style="height: 400px; width: 300px; margin-left: 130px;">
+        <div v-if="lockStatus[index - 1] === 1 || index === 0" @click="openpage(index)"
           style="height: 100%; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
           <h3 class="medium">{{ index + 1 }}</h3>
         </div>
-        <div v-if="lockStatus[index-1] === 0" class="locked">
+        <div v-if="lockStatus[index - 1] === 0" class="locked">
           <p class="locked-text">您未解锁</p>
         </div>
       </el-carousel-item>
@@ -21,8 +19,9 @@
 
 <script>
 import { Message } from 'element-ui'
-import { userLoginPage, startAnswer } from '@/api/know'
-
+// import { userLoginPage, startAnswer } from '@/api/know'
+import { userLoginPage, allAnswerToFront } from '@/api/know'
+import CryptoJS from 'crypto-js'
 export default {
   name: 'GameKnow',
   data() {
@@ -63,26 +62,66 @@ export default {
           Message.error(res.msg)
         }
       } catch (error) {
-        console.error('获取题库信息失败:', error)
+        // console.error('获取题库信息失败:', error)
         Message.error('获取题库信息失败')
       }
     },
     openpage(index) {
       if (this.lockStatus[index - 1] === 1 || index === 0) {
-        this.Answer(index + 1)
+        this.allAnswerToFront(index + 1)
       } else if (this.lockStatus[index - 1] === 0) {
         Message.warning('您还未解锁此题库')
       }
     },
-    async Answer(setId) {
-      await startAnswer(setId).then(res => {
-        this.$router.push({
-          path: '/question',
-          query: {
-            questions: JSON.stringify(res.data.questions)
-          }
-        })
+    async allAnswerToFront(setId) {
+      await allAnswerToFront(setId).then(res => {
+        const secretKey = 'qiaopiqiaopiqiaopiqiaopiqiaopinb'
+
+        // 示例用法
+        const encryptedQuestions = res.data // 替换成你的加密字符串
+
+        try {
+          const content = this.decryptQuestions(encryptedQuestions, secretKey)
+          // 这里拿去用就可以了,记得删掉log
+          this.$router.push({
+            path: '/question',
+            query: {
+              questions: content
+            }
+          })
+          console.log('Decrypted Questions:', content)
+        } catch (error) {
+          console.error('Decryption failed:', error)
+        }
       })
+    },
+    // 解密函数
+    decrypt(encryptedData, secretKey) {
+      // 解码Base64字符串
+      const bytes = CryptoJS.enc.Base64.parse(encryptedData)
+
+      // 创建密钥
+      const key = CryptoJS.enc.Utf8.parse(secretKey)
+
+      // 解密
+      const decrypted = CryptoJS.AES.decrypt({ ciphertext: bytes }, key, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+      })
+
+      // 返回解密后的字符串
+      return decrypted.toString(CryptoJS.enc.Utf8)
+    },
+
+    // 解密列表中的每个字符串
+    decryptList(list, secretKey) {
+      return list.map(item => this.decrypt(item, secretKey))
+    },
+
+    // 解密并解析JSON字符串到对象数组
+    decryptQuestions(encryptedQuestions, secretKey) {
+      const decryptedJson = this.decrypt(encryptedQuestions, secretKey)
+      return JSON.parse(decryptedJson)
     }
   }
 }
@@ -125,28 +164,50 @@ p {
 }
 
 .el-carousel__item {
-  background-image: url(../../assets/imgss/war.webp);
+  /* background-image: url(../../assets/imgss/war.webp); */
   background-position: center center;
   background-size: cover;
 }
+
 .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;
 }
+
 .el-carousel__item:nth-child(2n+1) {
   background-color: #d3dce6;
 }
+
 .el-carousel {
   margin-top: 100px;
 }
+
 .locked {
   position: relative;
   cursor: not-allowed;
 }
+
 .locked-text {
   position: absolute;
   top: 50px;
   left: 50%;
   transform: translateX(-50%);
   color: rgb(0, 0, 0);
+}
+.carousel-item-0 {
+  background-image: url(../../assets/imgs/pic1.png);
+  background-size: cover;
+  background-position: center center;
+}
+
+.carousel-item-1 {
+  background-image: url(../../assets/imgs/pic2.png);
+  background-size: cover;
+  background-position: center center;
+}
+
+.carousel-item-2 {
+  background-image: url(../../assets/imgs/pic3.png);
+  background-size: cover;
+  background-position: center center;
 }
 </style>
