@@ -3,18 +3,22 @@
     <div class="login-wrapper">
       <div class="header">找回密码</div>
       <div class="form-wrapper">
-        <input v-model="email" type="text" name="username" placeholder="邮箱号" class="input-item" autocomplete="off">
+        <input v-model="email" type="text" name="username" placeholder="邮箱号" class="input-item" autocomplete="off"
+          ref="usernameInput" @keyup.enter="sendCode">
         <span class="alert" v-if="isMistake">请输入正确的邮箱号</span>
-        <input v-model="password" type="password" name="password" placeholder="新密码:长度必须为6-20个字符" class="input-item">
-        <input v-model="confirmPassword" type="password" name="repassword" placeholder="再次确认密码" class="input-item">
+        <input v-model="password" type="password" name="password" placeholder="新密码:长度必须为6-20个字符" class="input-item"
+          @keyup.enter="sendCode">
+        <input v-model="confirmPassword" type="password" name="repassword" placeholder="再次确认密码" class="input-item"
+          @keyup.enter="sendCode">
         <span class="isSame" v-if="isSame">两次密码不一致请重新输入</span>
         <span class="isSame" v-if="isEmpty">请输入长度为6-20个字符的密码</span>
-        <input type="text" v-model="code" name="repassword" placeholder="邮箱验证码" class="email">
-        <button @click="sendCode" v-if="!loading" :disabled="second !== totalSecond" class="code">{{ second ===
-          totalSecond ? '获取验证码' :
-          second + '秒后重新发送' }}</button>
-        <button @click="sendCode" v-else :disabled="second !== totalSecond" class="code"><i
-            class="el-icon-loading"></i></button>
+        <input type="text" v-model="code" name="repassword" placeholder="邮箱验证码" class="email" @keyup.enter="register">
+        <button @click="sendCode" v-if="!loading" :disabled="second !== totalSecond" class="code">
+          {{ second === totalSecond ? '获取验证码' : second + '秒后重新发送' }}
+        </button>
+        <button @click="sendCode" v-else :disabled="second !== totalSecond" class="code">
+          <i class="el-icon-loading"></i>
+        </button>
         <button @click="register" class="btn">重置密码</button>
         <p>已有账号？<router-link to="/login">去登录</router-link></p>
       </div>
@@ -25,6 +29,7 @@
 <script>
 import { Message } from 'element-ui'
 import axios from 'axios'
+
 export default {
   name: 'ForgetCode',
   data() {
@@ -47,7 +52,7 @@ export default {
   methods: {
     // 校验邮箱是否合法
     validFn() {
-      if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/.test(this.email)) {
+      if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.email)) {
         this.isMistake = true
         return false
       } else {
@@ -104,7 +109,7 @@ export default {
         if (response.data.code === 200) {
           this.responseMessage = response.data.msg || '验证码已发送，请检查您的邮箱。'
           Message.success(this.responseMessage)
-          this.startCountdown()// 开始倒计时
+          this.startCountdown() // 开始倒计时
         } else {
           this.responseMessage = response.data.msg
           Message.error(this.responseMessage)
@@ -133,7 +138,7 @@ export default {
           confirmPassword: this.confirmPassword
         })
         if (response.data.code === 200) {
-          this.responseMessage = response.data.dmsg || '重置成功'
+          this.responseMessage = response.data.msg || '重置成功'
           Message.success(this.responseMessage)
           this.$router.push('/login')
         } else {
@@ -146,6 +151,10 @@ export default {
         Message.error(this.responseMessage)
       }
     }
+  },
+  mounted() {
+    // 页面加载完成后，将焦点设置到输入框
+    this.$refs.usernameInput.focus()
   }
   // computed: {
   //   // 计算属性，用于判断表单是否有效
@@ -172,7 +181,7 @@ body {
 
 .container {
   position: relative;
-  height: 1000px;
+  height: 50rem;
   width: 100%;
   background-image: url(../../assets/imgss/loginbgd.webp);
   background-position: center center;
@@ -228,7 +237,6 @@ body {
 .input-item::placeholder {
   text-transform: uppercase;
   font-family: '方正姚体', sans-serif;
-  /* 设置 placeholder 的字体 */
   font-size: 20px;
   color: #000000;
 }
@@ -236,7 +244,6 @@ body {
 .email::placeholder {
   text-transform: uppercase;
   font-family: '方正姚体', sans-serif;
-  /* 设置 placeholder 的字体 */
   font-size: 20px;
   color: #000000;
 }
@@ -272,7 +279,6 @@ p {
   bottom: 30px;
   left: 150px;
   font-family: '方正姚体', sans-serif;
-  /* 设置 placeholder 的字体 */
   font-size: 20px;
 }
 

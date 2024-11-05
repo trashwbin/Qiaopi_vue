@@ -49,16 +49,24 @@
     </div>
     <div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')">写漂流瓶</div>
     <div class="friend" v-if="activeButton === 'smallbtn4'">
-      <div v-for="request in friendRequests" :key="request.id" class="request-content">
-        <div class="content">
-          <img :src="request.senderAvatar" alt="Avatar" class="avatar" />
-          <div class="username">{{ request.senderName }}：</div>
-          <div class="context">{{ request.content }}</div>
-          <div class="time">{{ new Date(request.createTime).toLocaleString() }}</div>
-        </div>
-        <button @click="acceptFriendRequest(request.id)" class="button1">接受</button>
-        <button @click="rejectFriendRequest(request.id)" class="button2">拒绝</button>
+     <div class="friendquest" >
+  <!-- 如果有好友申请，显示每个申请 -->
+    <div v-if="friendRequests && friendRequests.length > 0">
+    <div v-for="request in friendRequests" :key="request.id" class="request-content">
+      <div class="content">
+        <img :src="request.senderAvatar" alt="Avatar" class="avatar" />
+        <div class="username">{{ request.senderName }}：</div>
+        <div class="context">{{ request.content }}</div>
+        <div class="time">{{ new Date(request.createTime).toLocaleString() }}</div>
       </div>
+      <button @click="acceptFriendRequest(request.id)" class="button1">接受</button>
+      <button @click="rejectFriendRequest(request.id)" class="button2">拒绝</button>
+    </div>
+    </div>
+     <div v-else class="no-requests">
+    您还没有收到好友申请哦
+  </div>
+</div>
     </div>
   </div>
 </template>
@@ -233,7 +241,7 @@ export default {
           Message.error(response.msg)
         }
       } catch (error) {
-        console.error('Accept friend request failed:', error)
+        // console.error('Accept friend request failed:', error)
         Message.error('接受好友请求失败')
       }
     },
@@ -247,7 +255,7 @@ export default {
           Message.error(response.msg)
         }
       } catch (error) {
-        console.error('Reject friend request failed:', error)
+        // console.error('Reject friend request failed:', error)
         Message.error('拒绝好友请求失败')
       }
     }
@@ -542,14 +550,26 @@ button:hover {
   /* display: inline-block; */
   position: relative;
 }
-
+.friendquest {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%,-50%);
+  width: 800px;
+  height: 650px;
+  padding-top: 25px;
+  padding-left: 25px;
+  background-color: #ccc;
+  overflow-y: auto; /* 当内容超出容器高度时显示竖直滚动条 */
+}
 .content {
-  width: 280px;
+  position: relative;
+  width: 650px;
   height: 70px;
   border: 1px solid #000;
   background-color: white;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .time {
@@ -561,14 +581,14 @@ button:hover {
 
 .button1 {
   position: absolute;
-  top: -45px;
-  left: 290px;
+  top: -33px;
+  left: 500px;
 }
 
 .request-content .button2 {
   position: absolute;
-  top: -45px;
-  left: 350px;
+  top: -33px;
+  left: 570px;
 }
 
 .avatar {
@@ -590,7 +610,13 @@ button:hover {
 .context {
   position: absolute;
   top: 50%;
-  left: 120px;
+  left: 180px;
   transform: translateY(-50%);
+}
+.no-requests {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: #666;
 }
 </style>
