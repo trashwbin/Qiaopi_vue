@@ -1,17 +1,88 @@
 <template>
   <div id="app">
-    <div class="title"><router-view></router-view>
+    <div v-if="isMobile" class="browserupgrade">
+      <div class="logo"></div>
+      <div class="tip">手机端暂未适配<br>请使用电脑端访问以获得最佳体验</div>
+      <div class="tip-author"> -by 侨缘信使 </div>
+      <a @click="isMobile = false">继续访问</a>
+    </div>
+    <div v-else class="title"><router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      isMobile: false
+    }
+  },
+  created() {
+    this.detectDevice()
+  },
+  methods: {
+    detectDevice() {
+      if (/Mobi|Android/i.test(navigator.userAgent)) {
+        this.isMobile = true
+      } else {
+        this.isMobile = false
+      }
+    }
+  }
 }
 </script>
 
 <style>
+.browserupgrade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f19a2a;
+  text-align: center;
+  z-index: 9999;
+  color: #fff;
+}
+
+.browserupgrade .logo {
+  width: 70px;
+  height: 70px;
+  background-image: url(././assets/logo/logo.png);
+  background-size: 100% 100%;
+  background-position: center center;
+  position: absolute;
+  top: 40px;
+  left: 40px;
+}
+
+.browserupgrade .tip {
+  width: 80%;
+  margin: 160px auto 40px;
+  font-size: 24px;
+  text-align: left;
+}
+
+.browserupgrade .tip-author {
+  width: 80%;
+  margin: 0 auto 70px;
+  text-align: right;
+  font-style: italic;
+  font-size: 24px;
+}
+
+.browserupgrade a {
+  display: block;
+  width: 200px;
+  border: 3px solid #fff;
+  padding: 15px 10px;
+  font-size: 25px;
+  color: #fff;
+  margin: 0 auto;
+}
+
 .title {
   text-align: center;
 }
@@ -19,6 +90,17 @@ export default {
 body {
   overflow-x: hidden;
   /* 隐藏水平滚动条 */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
 }

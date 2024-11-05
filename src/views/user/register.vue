@@ -3,18 +3,23 @@
     <div class="login-wrapper">
       <div class="header">注册</div>
       <div class="form-wrapper">
-        <input v-model="email" type="text" name="username" placeholder="邮箱号" class="input-item" autocomplete="off">
+        <input v-model="email" type="text" name="username" placeholder="邮箱号" class="input-item" autocomplete="off"
+          ref="usernameInput" @keyup.enter="sendCode">
         <span class="alert" v-if="isMistake">请输入正确的邮箱号</span>
-        <input v-model="password" type="password" name="password" placeholder="密码:长度必须为6-20个字符" class="input-item">
-        <input v-model="confirmPassword" type="password" name="repassword" placeholder="再次确认密码" class="input-item">
+        <input v-model="password" type="password" name="password" placeholder="密码:长度必须为6-20个字符" @keyup.enter="sendCode"
+          class="input-item">
+        <input v-model="confirmPassword" type="password" name="repassword" placeholder="再次确认密码" @keyup.enter="sendCode"
+          class="input-item">
         <span class="isSame" v-if="isSame">两次密码不一致请重新输入</span>
         <span class="isSame" v-if="isEmpty">请输入长度为6-20个字符的密码</span>
-        <input type="text" v-model="code" name="repassword" placeholder="邮箱验证码" class="email">
-        <button @click="sendCode" v-if="!loading" :disabled="second !== totalSecond" class="code">{{ second ===
-          totalSecond ? '获取验证码' :
-          second + '秒后重新发送' }}</button>
-        <button @click="sendCode" v-else :disabled="second !== totalSecond" class="code"><i
-            class="el-icon-loading"></i></button>
+        <input type="text" v-model="code" name="repassword" placeholder="邮箱验证码" class="email" ref="emailCodeInput"
+          @keyup.enter="register">
+        <button @click="sendCode" v-if="!loading" :disabled="second !== totalSecond" class="code">
+          {{ second === totalSecond ? '获取验证码' : second + '秒后重新发送' }}
+        </button>
+        <button @click="sendCode" v-else :disabled="second !== totalSecond" class="code">
+          <i class="el-icon-loading"></i>
+        </button>
         <button @click="register" class="btn">注册</button>
         <p>已有账号？<router-link to="/login">去登录</router-link></p>
       </div>
@@ -114,6 +119,8 @@ export default {
         Message.error(this.responseMessage)
         this.loading = false
       }
+      // 聚焦到输入框
+      this.$refs.emailCodeInput.focus()
     },
     // 用户注册请求
     async register() {
@@ -133,28 +140,12 @@ export default {
           this.$router.push('/login')
         }
       })
-      // try {
-      //   const response = await axios.post('/api/user/register', {
-      //     username: this.email,
-      //     password: this.password,
-      //     code: this.code,
-      //     confirmPassword: this.confirmPassword
-      //   })
-      //   this.responseMessage = response.data.msg || '注册成功'
-      //   this.$router.push('/login')
-      //   Message.success(this.responseMessage)
-      // } catch (error) {
-      //   this.responseMessage = '注册失败: ' + error.response.data.msg
-      //   Message.success(this.responseMessage)
-      // }
     }
+  },
+  mounted() {
+    // 页面加载完成后，将焦点设置到输入框
+    this.$refs.usernameInput.focus()
   }
-  // computed: {
-  // 计算属性，用于判断表单是否有效
-  // isFormInvalid() {
-  //   return !this.validFn() || !this.validatePassword() || this.isMistake || this.isSame
-  // }
-  // }
 }
 </script>
 
@@ -174,7 +165,7 @@ body {
 
 .container {
   position: relative;
-  height: 1000px;
+  height: 50rem;
   width: 100%;
   background-image: url(../../assets/imgss/loginbgd.webp);
   background-position: center center;
