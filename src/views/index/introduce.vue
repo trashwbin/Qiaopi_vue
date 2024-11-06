@@ -59,8 +59,8 @@
           </div>
         </div>
         <div class="right">
-          <img src="../../assets/imgs/paper4.png" alt="" style="position: absolute;top: 100px;left: 600px;">
-          <img src="../../assets/imgs/paper2.png" alt="">
+          <img src="../../assets/imgs/paper4.png" alt="" style="position: absolute;top: 200px;left: 700px;">
+          <img src="../../assets/imgs/paper2.png" alt="" style="position: absolute;top: 100px;left: 600px;">
           <img src="../../assets/imgs/tree.png" alt="" class="tree">
           <img src="../../assets/imgs/blackboat.png" alt="" class="blackboat" :style="blackboatStyle">
           <p class="first" :class="{ hidden: !showContent }"><span
@@ -250,18 +250,28 @@ export default {
     },
     handleScroll() {
       const scrollPosition = window.pageYOffset
-      if (scrollPosition > this.scrollPosition) {
+      const blackboatElement = document.querySelector('.blackboat')
+      if (blackboatElement) {
+        // 假设当滚动条滑动到距离页面顶部1000px时开始效果
+        const startEffectAt = 1000
+        // 假设当滚动条滑动到距离页面顶部1500px时效果结束
+        const endEffectAt = 1500
+        if (scrollPosition > startEffectAt && scrollPosition < endEffectAt) {
         // 向下滚动
-        this.translateYValue = Math.min(scrollPosition, 150) // 控制向下移动的最大值
-        this.scaleValue = Math.max(0.5, 1 - scrollPosition * 0.0005) // 控制缩放的最小值，假设最小缩放到0.5
-        this.translateXValue = -400
-      } else {
-        // 向上滚动
-        this.translateYValue = -100 // 恢复到原来位置
-        this.scaleValue = 1 // 恢复原始大小
-        this.translateXValue = 0
+          this.translateYValue = Math.min(scrollPosition, 200) // 控制向下移动的最大值
+          this.scaleValue = Math.max(0.5, 1 - scrollPosition * 0.0005) // 控制缩放的最小值，假设最小缩放到0.5
+          this.translateXValue = -400
+        } else if (scrollPosition > endEffectAt) {
+          this.translateYValue = 200 // 恢复到原来位置
+          this.scaleValue = 0.5 // 恢复原始大小
+          this.translateXValue = -400
+        } else {
+          this.translateYValue = 0 // 恢复到原来位置
+          this.scaleValue = 1 // 恢复原始大小
+          this.translateXValue = 0
+        }
+        // this.scrollPosition = scrollPosition // 更新滚动位置
       }
-      this.scrollPosition = scrollPosition // 更新滚动位置
     },
     toggleContent() {
       this.showContent = !this.showContent // 切换内容显示状态
@@ -1749,11 +1759,11 @@ section #text {
 .blackboat {
   position: absolute;
   right: 0px;
-  bottom: -120px;
+  bottom: -50px;
   z-index: 100;
   /* width: 1200px;
   height: 800px; */
-  transition: transform 2s linear;
+  transition: transform 1.5s linear;
   /* 平滑过渡效果 */
 }
 
@@ -1771,6 +1781,6 @@ section #text {
 .right .second,
 .right .third {
   opacity: 0;
-  transition: opacity 2s ease-in-out;
+  transition: opacity 4s ease-in-out;
 }
 </style>
