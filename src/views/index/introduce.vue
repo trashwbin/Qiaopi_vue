@@ -3,13 +3,28 @@
     <div class="banner">
       <section>
         <h2 id="text"><img src="../../assets/imgss/bgdlogo.webp" alt="" class="logo"></h2>
-        <img src="../../assets/imgss/index1.webp" alt="" id="sticker1">
-        <img src="../../assets/imgss/index2.webp" alt="" id="sticker2">
+        <img src="../../assets/imgs/cloud1.png" alt="" class="cloud1">
+        <img src="../../assets/imgs/cloud3.png" alt="" class="cloud2">
+        <img src="../../assets/imgs/cloud2.png" alt="" class="cloud3">
+        <!-- <img src="../../assets/imgss/index1.webp" alt="" id="sticker1">
+        <img src="../../assets/imgss/index2.webp" alt="" id="sticker2"> -->
+        <img src="../../assets/imgs/paper1.png" alt="" class="paper1">
+        <img src="../../assets/imgs/paper2.png" alt="" class="paper2">
+        <img src="../../assets/imgs/paper3.png" alt="" class="paper3">
+        <img src="../../assets/imgs/paper4.png" alt="" class="paper4">
+        <img src="../../assets/imgs/paper5.png" alt="" class="paper5">
+        <img src="../../assets/imgs/paper6.png" alt="" class="paper6">
+        <img src="../../assets/imgs/text1.png" alt="" class="text1">
+        <img src="../../assets/imgs/text2.png" alt="" class="text2">
+        <img src="../../assets/imgs/text3.png" alt="" class="text3">
+        <img src="../../assets/imgs/text4.png" alt="" class="text4">
+        <img src="../../assets/imgs/boat.png" alt="" class="boat">
+        <img src="../../assets/imgs/boatsea.jpg" alt="" class="boatsea">
       </section>
       <div class="introduce">
         <div class="left">
-          <img src="../../assets/imgss/qiaopiIntroduce.webp" alt="" class="title">
-          <img src="../../assets/imgss/bell.webp" alt="" class="bell">
+          <img src="../../assets/imgss/qiaopiIntroduce.webp" alt="" class="title" :class="{ hidden: !showContent }">
+          <img src="../../assets/imgss/bell.webp" alt="" class="bell" @click="toggleContent">
           <div class="imgLoader"></div>
           <div class="container">
             <div class="credit">
@@ -44,10 +59,18 @@
           </div>
         </div>
         <div class="right">
-          <p class="first">侨批，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的汇款和家书。这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重</p>
+          <img src="../../assets/imgs/paper4.png" alt="" style="position: absolute;top: 100px;left: 600px;">
+          <img src="../../assets/imgs/paper2.png" alt="">
+          <img src="../../assets/imgs/tree.png" alt="" class="tree">
+          <img src="../../assets/imgs/blackboat.png" alt="" class="blackboat" :style="blackboatStyle">
+          <p class="first" :class="{ hidden: !showContent }"><span
+              class="red">侨批</span>，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的<span class="yellow">汇款和家书</span>。</p>
           <p class="second">
-            要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是华侨与家乡之间情感和经济联系的纽带。<br><span>侨批的传递往往依赖于专门的“水客”或“侨批局”，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。</span>
+            这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是<span class="yellow">华侨与家乡之间情感和经济联系的纽带</span>。</p>
+          <p class="third">
+            侨批的传递往往依赖于专门的<span class="blue">“水客”</span>或<span class="yellow">“侨批局”</span>，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。
           </p>
+          <img src="../../assets/imgs/facai.png" alt="" class="facai">
         </div>
       </div>
       <div class="history">
@@ -152,7 +175,19 @@ export default {
       marginTop: 0,
       isVisible: false,
       showFootButton: false,
-      myNotReadLetter: {}
+      myNotReadLetter: {},
+      scrollPosition: 0, // 滚动条的垂直位置
+      translateYValue: 0, // 图片的下移距离，初始为0
+      scaleValue: 1, // 图片的缩放比例，初始为1（原始大小）
+      showContent: false, // 控制内容显示的数据属性
+      translateXValue: 0
+    }
+  },
+  computed: {
+    blackboatStyle() {
+      return {
+        transform: `translateY(${this.translateYValue}px) translateX(${this.translateXValue}px) scale(${this.scaleValue})`
+      }
     }
   },
   methods: {
@@ -210,12 +245,46 @@ export default {
       }, 301) // 假设动画持续时间为300ms
       this.marginLeft = 0
       this.marginTop = 0
+    },
+    handleScroll() {
+      const scrollPosition = window.pageYOffset
+      if (scrollPosition > this.scrollPosition) {
+        // 向下滚动
+        this.translateYValue = Math.min(scrollPosition, 150) // 控制向下移动的最大值
+        this.scaleValue = Math.max(0.5, 1 - scrollPosition * 0.0005) // 控制缩放的最小值，假设最小缩放到0.5
+        this.translateXValue = -400
+      } else {
+        // 向上滚动
+        this.translateYValue = -100 // 恢复到原来位置
+        this.scaleValue = 1 // 恢复原始大小
+        this.translateXValue = 0
+      }
+      this.scrollPosition = scrollPosition // 更新滚动位置
+    },
+    toggleContent() {
+      this.showContent = !this.showContent // 切换内容显示状态
     }
   },
   mounted() {
+    window.addEventListener('scroll', this.handleScroll)
     this.getMyNotReadLetter()
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1
+          observer.unobserve(entry.target)
+        }
+      })
+    })
+
+    document.querySelector('.right .second') && observer.observe(document.querySelector('.right .second'))
+    document.querySelector('.right .third') && observer.observe(document.querySelector('.right .third'))
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 }
+
 </script>
 <style scoped>
 * {
@@ -375,7 +444,7 @@ export default {
 
 .contain {
   width: 100%;
-  height: 3000px;
+  height: 3700px;
   background-image: url(../../assets/imgss/background.webp);
   background-size: 100% 100%;
   background-position: center center;
@@ -423,9 +492,10 @@ section .logo {
   top: 220px;
   left: 0;
   width: 100%;
+  z-index: 10;
 }
 
-#sticker1 {
+/* #sticker1 {
   position: absolute;
   top: 220px;
   left: 0;
@@ -450,7 +520,7 @@ section .logo {
   top: 220px;
   right: 0;
   width: 50%;
-  animation: moveleft 1.5s forwards;
+  animation: moveleft 2s forwards;
 }
 
 @keyframes moveleft {
@@ -463,7 +533,7 @@ section .logo {
     top: 220px;
     right: 0;
   }
-}
+} */
 
 section #text {
   position: absolute;
@@ -529,9 +599,11 @@ section #text {
   position: absolute;
   top: -10px;
   left: 0;
+  z-index: 0;
   width: 200px;
   height: 250px;
   animation: swing 3s linear infinite;
+  cursor: pointer;
 }
 
 .left .introduce {
@@ -548,41 +620,54 @@ section #text {
   width: 900px;
   height: 900px;
   margin-top: 20px;
-  background-image: url(../../assets/imgss/right.webp);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+  /* background-image: url(../../assets/imgss/right.webp); */
 }
 
 .right .first {
   position: absolute;
-  top: 110px;
-  left: 540px;
-  right: 20px;
+  top: 350px;
+  left: 230px;
+  right: 120px;
   text-indent: 2em;
   z-index: 1;
-  color: #000;
-  font-size: 27px;
-  font-family: "KaiTi", "楷体", serif;
+  color: #5C555D;
+  font-size: 35px;
+  text-align: left;
+  font-family: "华文隶书", "楷体", serif;
 }
-
+.right .red {
+  color: #C00000;
+}
+.right .yellow {
+  color: #B58B02;
+}
+.right .blue {
+  color: #2E54A1;
+}
 .right .second {
   position: absolute;
-  top: 330px;
-  left: 180px;
-  right: 15px;
+  top: 950px;
+  left: -150px;
+  right: 300px;
+  text-indent: 2em;
   z-index: 1;
-  color: #000;
-  font-size: 27px;
-  font-family: "KaiTi", "楷体", serif;
+  font-family: "华文隶书", "楷体", serif;
+  color: #5C555D;
+  font-size: 35px;
   text-align: left;
 }
-
-.right .second span {
-  display: block;
+.right .third {
+  position: absolute;
+  top: 1200px;
+  left: 100px;
+  right: 200px;
   text-indent: 2em;
+  z-index: 1;
+  font-family: "华文隶书", "楷体", serif;
+  color: #5C555D;
+  font-size: 35px;
+  text-align: left;
 }
-
 /* .right .third {
     position: absolute;
     top: 620px;
@@ -624,7 +709,7 @@ section #text {
   height: 300px;
   background-color: #bbb;
   position: absolute;
-  top: 70px;
+  top: 120px;
   right: 50%;
   transform-origin: 100% 100%;
   border: solid #555 2px;
@@ -685,7 +770,7 @@ section #text {
   transform: rotateX(60deg);
   transform-origin: bottom;
   position: absolute;
-  top: 70px;
+  top: 120px;
   left: calc(50% - 5px);
 }
 
@@ -710,7 +795,7 @@ section #text {
   width: 32px;
   height: 300px;
   position: absolute;
-  top: 70px;
+  top: 120px;
   transform-origin: 100% 100%;
   right: 100%;
   border: solid #555;
@@ -1104,7 +1189,7 @@ section #text {
 /* 侨批历史 */
 .history {
   width: 100%;
-  margin-top: 950px;
+  margin-top: 1650px;
 }
 
 .history h1 {
@@ -1350,5 +1435,297 @@ section #text {
   transform: translate(-50%,-50%);
   font-size: 18px;
   color: rgba(255, 255, 255, 0.6);
+}
+.cloud1 {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  /* z-index: -1; */
+  animation: cloud1move 4s forwards infinite;
+}
+.cloud2 {
+  position: absolute;
+  top: 270px;
+  left: 430px;
+  animation: cloud2move 4s forwards infinite;
+}
+.cloud3 {
+  position: absolute;
+  top: 120px;
+  right: 150px;
+  animation: cloud3move 4s forwards infinite;
+}
+@keyframes cloud1move {
+  0% {
+    left: 0px;
+    top: 20px;
+  }
+  25% {
+      left: 20px;
+      top: 20px;
+  }
+  50% {
+    top: 40px;
+    left: 20px;
+  }
+  75%{
+    top: 40px;
+    left: 0px;
+  }
+  100% {
+    left: 0px;
+    top: 20px;
+  }
+}
+@keyframes cloud2move {
+  0% {
+    left: 430px;
+    top: 270px;
+  }
+
+  50% {
+    top: 270px;
+    left:450px;
+  }
+
+  100% {
+    left: 430px;
+    top: 270px;
+  }
+}
+@keyframes cloud3move {
+  0% {
+    right: 150px;
+    top: 120px;
+  }
+
+  25% {
+    right: 170px;
+    top: 120px;
+  }
+
+  50% {
+    right: 150px;
+    top: 120px;
+  }
+
+  75% {
+    right: 150px;
+    top: 140px;
+  }
+
+  100% {
+    right: 150px;
+    top: 120px;
+  }
+}
+.paper1 {
+  position: absolute;
+  top: 30px;
+  left: 180px;
+  animation: paper1move 4s forwards;
+}
+.paper2 {
+  position: absolute;
+  top: 400px;
+  left: 300px;
+  animation: paper2move 4s linear forwards;
+}
+.paper3 {
+  position: absolute;
+  top: 30px;
+  left: 500px;
+  animation: paper3move 4s forwards;
+}
+.paper4 {
+  position: absolute;
+  top: 100px;
+  left: 700px;
+  animation: paper4move 4s forwards;
+}
+.paper5 {
+  position: absolute;
+  top: 100px;
+  right: 200px;
+  animation: paper5move 4s forwards;
+}
+.paper6 {
+  position: absolute;
+  top: 250px;
+  right: 270px;
+  animation: paper6move 4s forwards;
+}
+@keyframes paper1move {
+  0% {
+    left: 180px;
+    top: -100px;
+  }
+
+  50% {
+    left: 200px;
+    top: 0px;
+  }
+
+  100% {
+      top: 30px;
+      left: 180px;
+  }
+}
+@keyframes paper2move {
+  0% {
+      top: -100px;
+      left: 300px;
+  }
+
+  25% {
+    left: 270px;
+    top: 100px;
+  }
+  50% {
+    left: 330px;
+    top: 200px;
+  }
+  75%{
+    left: 330px;
+    top: 300px;
+  }
+  100% {
+    top: 400px;
+    left: 300px;
+  }
+}
+@keyframes paper3move {
+  0% {
+      top: -100px;
+      left: 500px;
+  }
+
+  50% {
+      top: 0px;
+      left: 450px;
+  }
+
+  100% {
+    top: 30px;
+    left: 500px;
+  }
+}
+@keyframes paper4move {
+  0% {
+    top: -100px;
+    left: 900px;
+  }
+
+  100% {
+    top: 100px;
+    left: 700px;
+  }
+}
+@keyframes paper5move {
+  0% {
+    top: 100px;
+    right: -100px;
+  }
+
+  100% {
+    top: 100px;
+    right: 200px;
+  }
+}
+@keyframes paper6move {
+  0% {
+    top: 100px;
+    right: -100px;
+  }
+
+  100% {
+    top: 250px;
+    right: 270px;
+  }
+}
+.text1 {
+  position: absolute;
+  top: 400px;
+  right: 300px;
+  width: 480px;
+  height: 60px;
+}
+.text2 {
+  position: absolute;
+  top: 450px;
+  right: 50px;
+  width: 600px;
+  height: 60px;
+}
+.text3 {
+  position: absolute;
+  top: 500px;
+  right: 270px;
+  width: 600px;
+  height: 60px;
+}
+.text4 {
+  position: absolute;
+  top: 550px;
+  right: 30px;
+  width: 700px;
+  height: 60px;
+}
+.boat {
+  position: absolute;
+  bottom: 90px;
+  left: -30px;
+  width: 780px;
+  height: 500px;
+}
+.boatsea {
+  position: absolute;
+  bottom: -20px;
+  left: -50px;
+  width: 1600px;
+  height: 230px;
+  animation: seamove 4s infinite forwards;
+}
+@keyframes seamove {
+  0% {
+  bottom: 0px;
+  left: -50px;
+  }
+
+  100% {
+  bottom: -20px;
+    left: -50px;
+  }
+}
+.tree {
+  position: absolute;
+  left: -30px;
+  top: 0px;
+  width: 700px;
+  height: 400px;
+}
+.blackboat {
+  position: absolute;
+  right: 0px;
+  bottom: -120px;
+  z-index: 100;
+  /* width: 1200px;
+  height: 800px; */
+  transition: transform 2s linear;
+    /* 平滑过渡效果 */
+}
+.hidden {
+  visibility: hidden;
+}
+.facai {
+  position: absolute;
+  top: 1150px;
+  left: -500px;
+  width: 400px;
+}
+.right .second,
+.right .third {
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
 }
 </style>
