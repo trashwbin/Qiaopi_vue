@@ -95,29 +95,23 @@
         <div class="images-container">
           <div class="top-row">
             <router-link to="/drifting"><img src="../../assets/imgss/function1.webp" alt="" class="function-img"
-                title="这是漂流瓶"></router-link>
+                title="漂流瓶"></router-link>
             <router-link to="/shop"><img src="../../assets/imgss/function2.webp" alt="" class="function-img"
-                title="这是兑换商城"></router-link>
+                title="兑换商城"></router-link>
             <router-link to=""><img src="../../assets/imgss/function3.webp" alt="" class="function-img"
-                title="这是故事线探索"></router-link>
+                title="故事线探索"></router-link>
           </div>
           <div class="bottom-row">
             <router-link to=""><img src="../../assets/imgss/function4.webp" alt="" class="function-img"
-                title="这是游戏翻翻乐"></router-link>
+                title="游戏翻翻乐"></router-link>
             <router-link to="/write"><img src="../../assets/imgss/function5.webp" alt="" class="function-img"
-                title="这是写信"></router-link>
+                title="写一封侨批"></router-link>
             <router-link to="/receive"><img src="../../assets/imgss/function6.webp" alt="" class="function-img"
-                title="这是收信"></router-link>
+                title="查看收信"></router-link>
             <router-link to=""><img src="../../assets/imgss/function7.webp" alt="" class="function-img"
-                title="这是知识问答"></router-link>
+                title="知识问答"></router-link>
           </div>
         </div>
-      </div>
-      <div class="bottom">
-        <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
-        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
-        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
-        <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
       </div>
     </div>
 
@@ -151,6 +145,18 @@
         </div>
       </div>
     </transition>
+    <div class="bottom">
+      <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
+        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
+        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
+      <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
+    </div>
+    <el-backtop :bottom="100" :visibility-height="1200">
+      <div style="height: 100%; width: 100%;box-shadow: 0 0 6px rgba(0,0,0, .12);text-align: center;line-height: 20px;">
+        <img style="width: 40px; height: 40px;" src="../../assets/logo/backtop.png" alt="">
+        <span style="font-size: 14px; color: #A52328;">回顶部</span>
+      </div>
+    </el-backtop>
   </div>
 </template>
 
@@ -257,7 +263,7 @@ export default {
         // 假设当滚动条滑动到距离页面顶部1500px时效果结束
         const endEffectAt = 1500
         if (scrollPosition > startEffectAt && scrollPosition < endEffectAt) {
-        // 向下滚动
+          // 向下滚动
           this.translateYValue = Math.min(scrollPosition, 200) // 控制向下移动的最大值
           this.scaleValue = Math.max(0.5, 1 - scrollPosition * 0.0005) // 控制缩放的最小值，假设最小缩放到0.5
           this.translateXValue = -400
@@ -301,9 +307,16 @@ export default {
 <style scoped>
 * {
   margin: 0;
-  padding: 0;
+  /* padding: 0; */
   list-style: none;
   box-sizing: border-box;
+}
+
+::v-deep .el-backtop {
+  width: 50px;
+  height: 75px;
+  padding-top: 5px;
+  border-radius: 10px;
 }
 
 .target {
@@ -456,8 +469,7 @@ export default {
 
 .contain {
   width: 100%;
-  height: 3700px;
-  background-image: url(../../assets/imgss/background.webp);
+  height: 100%;
   background-size: 100% 100%;
   background-position: center center;
   background-size: cover;
@@ -466,7 +478,7 @@ export default {
 .banner {
   position: relative;
   width: 1440px;
-  height: 700px;
+  height: 100%;
   margin: 0 auto;
 }
 
