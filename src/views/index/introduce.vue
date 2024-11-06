@@ -66,9 +66,11 @@
           <p class="first" :class="{ hidden: !showContent }"><span
               class="red">侨批</span>，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的<span class="yellow">汇款和家书</span>。</p>
           <p class="second">
-            这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是<span class="yellow">华侨与家乡之间情感和经济联系的纽带</span>。</p>
+            这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是<span
+              class="yellow">华侨与家乡之间情感和经济联系的纽带</span>。</p>
           <p class="third">
-            侨批的传递往往依赖于专门的<span class="blue">“水客”</span>或<span class="yellow">“侨批局”</span>，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。
+            侨批的传递往往依赖于专门的<span class="blue">“水客”</span>或<span
+              class="yellow">“侨批局”</span>，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。
           </p>
           <img src="../../assets/imgs/facai.png" alt="" class="facai">
         </div>
@@ -93,25 +95,30 @@
         <div class="images-container">
           <div class="top-row">
             <router-link to="/drifting"><img src="../../assets/imgss/function1.webp" alt="" class="function-img"
-                title="漂流瓶"></router-link>
+                title="这是漂流瓶"></router-link>
             <router-link to="/shop"><img src="../../assets/imgss/function2.webp" alt="" class="function-img"
-                title="兑换商城"></router-link>
+                title="这是兑换商城"></router-link>
             <router-link to=""><img src="../../assets/imgss/function3.webp" alt="" class="function-img"
-                title="故事线探索"></router-link>
+                title="这是故事线探索"></router-link>
           </div>
           <div class="bottom-row">
             <router-link to=""><img src="../../assets/imgss/function4.webp" alt="" class="function-img"
-                title="游戏翻翻乐"></router-link>
+                title="这是游戏翻翻乐"></router-link>
             <router-link to="/write"><img src="../../assets/imgss/function5.webp" alt="" class="function-img"
-                title="写一封侨批"></router-link>
+                title="这是写信"></router-link>
             <router-link to="/receive"><img src="../../assets/imgss/function6.webp" alt="" class="function-img"
-                title="查看收信"></router-link>
+                title="这是收信"></router-link>
             <router-link to=""><img src="../../assets/imgss/function7.webp" alt="" class="function-img"
-                title="知识问答"></router-link>
+                title="这是知识问答"></router-link>
           </div>
         </div>
       </div>
-
+      <div class="bottom">
+        <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
+        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
+        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
+        <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
+      </div>
     </div>
 
     <transition name="el-fade-in-linear">
@@ -144,18 +151,6 @@
         </div>
       </div>
     </transition>
-    <div class="bottom">
-      <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
-        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
-        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
-      <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
-    </div>
-    <el-backtop :bottom="100" :visibility-height="1200">
-      <div style="height: 100%; width: 100%;box-shadow: 0 0 6px rgba(0,0,0, .12);text-align: center;line-height: 20px;">
-        <img style="width: 40px; height: 40px;" src="../../assets/logo/backtop.png" alt="">
-        <span style="font-size: 14px; color: #A52328;">回顶部</span>
-      </div>
-    </el-backtop>
   </div>
 </template>
 
@@ -296,16 +291,9 @@ export default {
 <style scoped>
 * {
   margin: 0;
-  /* padding: 0; */
+  padding: 0;
   list-style: none;
   box-sizing: border-box;
-}
-
-::v-deep .el-backtop {
-  width: 50px;
-  height: 75px;
-  padding-top: 5px;
-  border-radius: 10px;
 }
 
 .target {
@@ -458,7 +446,7 @@ export default {
 
 .contain {
   width: 100%;
-  height: 100%;
+  height: 3700px;
   background-image: url(../../assets/imgss/background.webp);
   background-size: 100% 100%;
   background-position: center center;
@@ -467,8 +455,8 @@ export default {
 
 .banner {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 1440px;
+  height: 700px;
   margin: 0 auto;
 }
 
@@ -495,7 +483,7 @@ export default {
 section {
   position: relative;
   width: 100%;
-  height: 900px;
+  height: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -630,15 +618,11 @@ section #text {
 
 .right {
   position: relative;
-  float: right;
+  float: left;
   width: 900px;
   height: 900px;
   margin-top: 20px;
-  margin-right: 100px;
-  background-image: url(../../assets/imgss/right.webp);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+  /* background-image: url(../../assets/imgss/right.webp); */
 }
 
 .right .first {
@@ -653,15 +637,19 @@ section #text {
   text-align: left;
   font-family: "华文隶书", "楷体", serif;
 }
+
 .right .red {
   color: #C00000;
 }
+
 .right .yellow {
   color: #B58B02;
 }
+
 .right .blue {
   color: #2E54A1;
 }
+
 .right .second {
   position: absolute;
   top: 950px;
@@ -674,6 +662,7 @@ section #text {
   font-size: 35px;
   text-align: left;
 }
+
 .right .third {
   position: absolute;
   top: 1200px;
@@ -686,6 +675,7 @@ section #text {
   font-size: 35px;
   text-align: left;
 }
+
 /* .right .third {
     position: absolute;
     top: 620px;
@@ -1416,12 +1406,11 @@ section #text {
   position: relative;
   width: 100%;
   height: 70px;
-  /* margin-top: 50px; */
+  margin-top: 50px;
   background-image: url(../../assets/imgss/logobgd.webp);
   background-repeat: repeat-x;
   font-size: 0;
   line-height: 60px;
-  margin-top: 200px;
 }
 
 .online {
@@ -1455,6 +1444,7 @@ section #text {
   font-size: 18px;
   color: rgba(255, 255, 255, 0.6);
 }
+
 .cloud1 {
   position: absolute;
   top: 20px;
@@ -1462,40 +1452,48 @@ section #text {
   /* z-index: -1; */
   animation: cloud1move 4s forwards infinite;
 }
+
 .cloud2 {
   position: absolute;
   top: 270px;
   left: 430px;
   animation: cloud2move 4s forwards infinite;
 }
+
 .cloud3 {
   position: absolute;
   top: 120px;
   right: 150px;
   animation: cloud3move 4s forwards infinite;
 }
+
 @keyframes cloud1move {
   0% {
     left: 0px;
     top: 20px;
   }
+
   25% {
-      left: 20px;
-      top: 20px;
+    left: 20px;
+    top: 20px;
   }
+
   50% {
     top: 40px;
     left: 20px;
   }
-  75%{
+
+  75% {
     top: 40px;
     left: 0px;
   }
+
   100% {
     left: 0px;
     top: 20px;
   }
 }
+
 @keyframes cloud2move {
   0% {
     left: 430px;
@@ -1504,7 +1502,7 @@ section #text {
 
   50% {
     top: 270px;
-    left:450px;
+    left: 450px;
   }
 
   100% {
@@ -1512,6 +1510,7 @@ section #text {
     top: 270px;
   }
 }
+
 @keyframes cloud3move {
   0% {
     right: 150px;
@@ -1538,42 +1537,49 @@ section #text {
     top: 120px;
   }
 }
+
 .paper1 {
   position: absolute;
   top: 30px;
   left: 180px;
   animation: paper1move 4s forwards;
 }
+
 .paper2 {
   position: absolute;
   top: 400px;
   left: 300px;
   animation: paper2move 4s linear forwards;
 }
+
 .paper3 {
   position: absolute;
   top: 30px;
   left: 500px;
   animation: paper3move 4s forwards;
 }
+
 .paper4 {
   position: absolute;
   top: 100px;
   left: 700px;
   animation: paper4move 4s forwards;
 }
+
 .paper5 {
   position: absolute;
   top: 100px;
   right: 200px;
   animation: paper5move 4s forwards;
 }
+
 .paper6 {
   position: absolute;
   top: 250px;
   right: 270px;
   animation: paper6move 4s forwards;
 }
+
 @keyframes paper1move {
   0% {
     left: 180px;
@@ -1586,42 +1592,47 @@ section #text {
   }
 
   100% {
-      top: 30px;
-      left: 180px;
+    top: 30px;
+    left: 180px;
   }
 }
+
 @keyframes paper2move {
   0% {
-      top: -100px;
-      left: 300px;
+    top: -100px;
+    left: 300px;
   }
 
   25% {
     left: 270px;
     top: 100px;
   }
+
   50% {
     left: 330px;
     top: 200px;
   }
-  75%{
+
+  75% {
     left: 330px;
     top: 300px;
   }
+
   100% {
     top: 400px;
     left: 300px;
   }
 }
+
 @keyframes paper3move {
   0% {
-      top: -100px;
-      left: 500px;
+    top: -100px;
+    left: 500px;
   }
 
   50% {
-      top: 0px;
-      left: 450px;
+    top: 0px;
+    left: 450px;
   }
 
   100% {
@@ -1629,6 +1640,7 @@ section #text {
     left: 500px;
   }
 }
+
 @keyframes paper4move {
   0% {
     top: -100px;
@@ -1640,6 +1652,7 @@ section #text {
     left: 700px;
   }
 }
+
 @keyframes paper5move {
   0% {
     top: 100px;
@@ -1651,6 +1664,7 @@ section #text {
     right: 200px;
   }
 }
+
 @keyframes paper6move {
   0% {
     top: 100px;
@@ -1662,6 +1676,7 @@ section #text {
     right: 270px;
   }
 }
+
 .text1 {
   position: absolute;
   top: 400px;
@@ -1669,6 +1684,7 @@ section #text {
   width: 480px;
   height: 60px;
 }
+
 .text2 {
   position: absolute;
   top: 450px;
@@ -1676,6 +1692,7 @@ section #text {
   width: 600px;
   height: 60px;
 }
+
 .text3 {
   position: absolute;
   top: 500px;
@@ -1683,6 +1700,7 @@ section #text {
   width: 600px;
   height: 60px;
 }
+
 .text4 {
   position: absolute;
   top: 550px;
@@ -1690,6 +1708,7 @@ section #text {
   width: 700px;
   height: 60px;
 }
+
 .boat {
   position: absolute;
   bottom: 90px;
@@ -1697,6 +1716,7 @@ section #text {
   width: 780px;
   height: 500px;
 }
+
 .boatsea {
   position: absolute;
   bottom: -20px;
@@ -1705,17 +1725,19 @@ section #text {
   height: 230px;
   animation: seamove 4s infinite forwards;
 }
+
 @keyframes seamove {
   0% {
-  bottom: 0px;
-  left: -50px;
+    bottom: 0px;
+    left: -50px;
   }
 
   100% {
-  bottom: -20px;
+    bottom: -20px;
     left: -50px;
   }
 }
+
 .tree {
   position: absolute;
   left: -30px;
@@ -1723,6 +1745,7 @@ section #text {
   width: 700px;
   height: 400px;
 }
+
 .blackboat {
   position: absolute;
   right: 0px;
@@ -1731,17 +1754,20 @@ section #text {
   /* width: 1200px;
   height: 800px; */
   transition: transform 2s linear;
-    /* 平滑过渡效果 */
+  /* 平滑过渡效果 */
 }
+
 .hidden {
   visibility: hidden;
 }
+
 .facai {
   position: absolute;
   top: 1150px;
   left: -500px;
   width: 400px;
 }
+
 .right .second,
 .right .third {
   opacity: 0;
