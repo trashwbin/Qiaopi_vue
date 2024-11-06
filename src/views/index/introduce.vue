@@ -93,30 +93,25 @@
         <div class="images-container">
           <div class="top-row">
             <router-link to="/drifting"><img src="../../assets/imgss/function1.webp" alt="" class="function-img"
-                title="这是漂流瓶"></router-link>
+                title="漂流瓶"></router-link>
             <router-link to="/shop"><img src="../../assets/imgss/function2.webp" alt="" class="function-img"
-                title="这是兑换商城"></router-link>
+                title="兑换商城"></router-link>
             <router-link to=""><img src="../../assets/imgss/function3.webp" alt="" class="function-img"
-                title="这是故事线探索"></router-link>
+                title="故事线探索"></router-link>
           </div>
           <div class="bottom-row">
             <router-link to=""><img src="../../assets/imgss/function4.webp" alt="" class="function-img"
-                title="这是游戏翻翻乐"></router-link>
+                title="游戏翻翻乐"></router-link>
             <router-link to="/write"><img src="../../assets/imgss/function5.webp" alt="" class="function-img"
-                title="这是写信"></router-link>
+                title="写一封侨批"></router-link>
             <router-link to="/receive"><img src="../../assets/imgss/function6.webp" alt="" class="function-img"
-                title="这是收信"></router-link>
+                title="查看收信"></router-link>
             <router-link to=""><img src="../../assets/imgss/function7.webp" alt="" class="function-img"
-                title="这是知识问答"></router-link>
+                title="知识问答"></router-link>
           </div>
         </div>
       </div>
-      <div class="bottom">
-        <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
-        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
-        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
-        <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
-      </div>
+
     </div>
 
     <transition name="el-fade-in-linear">
@@ -149,6 +144,18 @@
         </div>
       </div>
     </transition>
+    <div class="bottom">
+      <!-- <img src="../../assets/imgss/online.webp" alt="" class="online">
+        <img src="../../assets/imgss/oversees.webp" alt="" class="oversees">
+        <img src="../../assets/imgss/logo.webp" alt="" class="logo1"> -->
+      <p class="contact"> &copy;2024 侨缘信使 . 版权所有 . </p>
+    </div>
+    <el-backtop :bottom="100" :visibility-height="1200">
+      <div style="height: 100%; width: 100%;box-shadow: 0 0 6px rgba(0,0,0, .12);text-align: center;line-height: 20px;">
+        <img style="width: 40px; height: 40px;" src="../../assets/logo/backtop.png" alt="">
+        <span style="font-size: 14px; color: #A52328;">回顶部</span>
+      </div>
+    </el-backtop>
   </div>
 </template>
 
@@ -289,9 +296,16 @@ export default {
 <style scoped>
 * {
   margin: 0;
-  padding: 0;
+  /* padding: 0; */
   list-style: none;
   box-sizing: border-box;
+}
+
+::v-deep .el-backtop {
+  width: 50px;
+  height: 75px;
+  padding-top: 5px;
+  border-radius: 10px;
 }
 
 .target {
@@ -444,7 +458,7 @@ export default {
 
 .contain {
   width: 100%;
-  height: 3700px;
+  height: 100%;
   background-image: url(../../assets/imgss/background.webp);
   background-size: 100% 100%;
   background-position: center center;
@@ -453,8 +467,8 @@ export default {
 
 .banner {
   position: relative;
-  width: 1440px;
-  height: 700px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
 }
 
@@ -481,7 +495,7 @@ export default {
 section {
   position: relative;
   width: 100%;
-  height: 800px;
+  height: 900px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -616,11 +630,15 @@ section #text {
 
 .right {
   position: relative;
-  float: left;
+  float: right;
   width: 900px;
   height: 900px;
   margin-top: 20px;
-  /* background-image: url(../../assets/imgss/right.webp); */
+  margin-right: 100px;
+  background-image: url(../../assets/imgss/right.webp);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 }
 
 .right .first {
@@ -1398,11 +1416,12 @@ section #text {
   position: relative;
   width: 100%;
   height: 70px;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   background-image: url(../../assets/imgss/logobgd.webp);
   background-repeat: repeat-x;
   font-size: 0;
   line-height: 60px;
+  margin-top: 200px;
 }
 
 .online {
@@ -1432,7 +1451,7 @@ section #text {
   right: 180px; */
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   font-size: 18px;
   color: rgba(255, 255, 255, 0.6);
 }

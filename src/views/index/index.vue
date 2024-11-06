@@ -3,17 +3,21 @@
     <nav>
       <div class="banner">
         <router-link to="/introduce"><img src="../../assets/imgss/logo.webp" alt="侨缘信使" class="logo"></router-link>
-        <router-link to="/introduce" class="slider" :class="{ active: isActive('/introduce') }"
+        <router-link ref="slider1" to="/introduce" class="slider" :class="{ active: isActive('/introduce') }"
           @click.native="navigateAndSetActive('/introduce')">首页</router-link>
-        <router-link to="/letter" class="slider" :class="{ active: isActive('/letter') }"
+        <router-link ref="slider2" to="/letter" class="slider" :class="{ active: isActive('/letter') }"
           @click.native="navigateAndSetActive('/letter')">信海归舟</router-link>
-        <router-link to="/game" class="slider" :class="{ active: isActive('/game') }"
+        <router-link ref="slider3" to="/game" class="slider" :class="{ active: isActive('/game') }"
           @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
-        <router-link to="/shop" class="slider" :class="{ active: isActive('/shop') }"
+        <router-link ref="slider4" to="/shop" class="slider" :class="{ active: isActive('/shop') }"
           @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
         <div class="animation" :style="animationStyle"></div>
-        <div class="money" v-if="isLoggedIn"><img src="../../assets/imgss/pigmoney.webp" alt="猪仔钱"></div>
-        <p class="pig" v-if="isLoggedIn">猪仔钱：{{ money }}</p>
+        <div class="money" v-if="isLoggedIn">
+          <span class="pig" v-if="isLoggedIn">
+            <img src="../../assets/imgss/pigmoney.webp" alt="猪仔钱" style="vertical-align: middle;" title="猪仔钱">
+            <span style="vertical-align: middle;">猪仔钱: {{ money }}</span>
+          </span>
+        </div>
         <div v-if="isLoggedIn" class="avatar-container">
           <el-dropdown style="height: 40px;" @command="handleCommand" placement="bottom">
             <el-avatar :src="userAvatar" shape="square" fit="fill"></el-avatar>
@@ -76,6 +80,14 @@ export default {
     }
   },
   methods: {
+    updatePositions() {
+      this.positions = [
+        this.$refs.slider1?.$el?.offsetLeft || 0,
+        this.$refs.slider2?.$el?.offsetLeft || 0,
+        this.$refs.slider3?.$el?.offsetLeft || 0,
+        this.$refs.slider4?.$el?.offsetLeft || 0
+      ]
+    },
     handleCommand(command) {
       if (command === 'logout') {
         const userStore = useUserStore()
@@ -103,6 +115,7 @@ export default {
     },
     navigateAndSetActive(path) {
       if (this.currentRoute !== path) {
+        this.activeIndex = ['/', '/introduce', '/letter', '/game', '/shop'].indexOf(path)
         this.currentRoute = path
         this.$router.push(path).catch(err => {
           // 忽略 NavigationDuplicated 错误
@@ -146,6 +159,15 @@ export default {
   beforeRouteUpdate(to, from, next) {
     this.updateActiveIndex()
     next()
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updatePositions)
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.updatePositions()
+    })
+    window.addEventListener('resize', this.updatePositions)
   }
 }
 </script>
@@ -175,7 +197,7 @@ body {
 
 .banner {
   position: relative;
-  width: 1200px;
+  width: 100%;
   height: 60px;
   box-sizing: border-box;
   padding: 10px;
@@ -272,19 +294,20 @@ nav .slider:nth-child(4):hover~.animation {
   position: absolute;
   top: 10px;
   right: 180px;
-  width: 30px;
-  height: 20px;
+  width: 200px;
+  height: 30px;
+  line-height: 30px;
 }
 
 .money img {
-  width: 100%;
+  width: 30px;
   height: 100%;
 }
 
 .pig {
   position: absolute;
   top: 0;
-  left: 1020px;
+  right: 7%;
   font-size: 12px;
   color: #ffffff;
 }
@@ -306,7 +329,7 @@ nav .slider:nth-child(4):hover~.animation {
   /* 头像容器的宽度 */
   position: absolute;
   top: 10px;
-  right: 30px;
+  right: 150px;
   display: inline-block;
 }
 
