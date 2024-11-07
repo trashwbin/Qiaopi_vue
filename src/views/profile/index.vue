@@ -292,6 +292,23 @@ export default {
     }
   },
   methods: {
+    loadRouterParams() {
+      const command = this.$route.query.command
+      if (command) {
+        if (command === 'friends') {
+          this.showFriendsModal = true
+        } else if (command === 'address') {
+          this.showAddressesModal = true
+        } else if (command === 'cangku') {
+          this.showEnvelopeImage()
+        } else if (command === 'password') {
+          this.showEditPasswordDialog()
+        }
+      }
+      setTimeout(() => {
+        this.$router.push({ query: null }) // 清除 URL 中的参数
+      }, 500)
+    },
     editFriendRemark(friendId) {
       this.isEditingAnyFriend = true
       const friend = this.friends.find(f => f.id === friendId)
@@ -552,6 +569,13 @@ export default {
         Message.error(response.data.msg || '修改密码失败')
       }
     }
+  },
+  mounted() {
+    this.loadRouterParams()
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.loadRouterParams()
+    next()
   }
 }
 </script>

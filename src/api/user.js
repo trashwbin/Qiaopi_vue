@@ -7,6 +7,18 @@ export function getMyFunctionCard() {
     method: 'get'
   })
 }
+export function getSignList() {
+  return request({
+    url: '/user/getSignList',
+    method: 'get'
+  })
+}
+export function sign() {
+  return request({
+    url: '/user/sign',
+    method: 'post'
+  })
+}
 export function updateFriendRemark(friendId, remark) {
   return request({
     url: '/user/updateFriendRemark',

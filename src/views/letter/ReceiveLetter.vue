@@ -132,7 +132,7 @@
 import { getMyReceiveLetter, readLetter } from '@/api/letter'
 
 export default {
-  name: 'WriteLetter',
+  name: 'ReceiveLetter',
   data() {
     return {
       letterStatusMap: {
@@ -506,7 +506,7 @@ export default {
             }
           })
         }, { once: true })
-      }, 1500)
+      }, 500)
     }
   },
   mounted() {

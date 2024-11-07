@@ -205,7 +205,7 @@
             <el-popover placement="right" v-model="showMyAddresses" width="250">
               <div class="AddressDialog">
                 <i class="el-icon-close closeIcon" @click="showMyAddresses = false"></i>
-                <div class="addressTip">选择地址</div>
+                <div class="addressTip">选择我的地址</div>
                 <div class="addressContent">
                   <div class="UserAddress beautify-scroll-bar ">
                     <div class="userAddressItem " :class="{ isSelected: selectedMyAddressId === address.id }"
