@@ -16,6 +16,7 @@ import DriftingBottle from '@/views/letter/DriftingBottle.vue'
 import GameKown from '@/views/game/know.vue'
 import questionPage from '@/views/game/question.vue'
 import MemoryCardGame from '@/views/game/fanfanle.vue'
+import Marketing from '@/views/index/marketing.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -70,6 +71,11 @@ const router = new VueRouter({
         path: '/shop',
         name: 'Shop',
         component: Shop
+      },
+      {
+        path: '/marketing',
+        name: 'Marketing',
+        component: Marketing
       },
       {
         path: '/write',
