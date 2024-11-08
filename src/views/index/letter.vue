@@ -70,6 +70,16 @@ export default {
   box-shadow: 0 15px 15px rgba(0, 0, 0, 0.5);
 }
 
+/* .banner:before {
+  content: "";
+  width: 100%;
+  display: block;
+  position: absolute;
+  background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/bannerbg.png) 0 0 / auto 100% repeat-x;
+  height: 100%;
+  top: 0;
+} */
+
 .image-container {
   position: absolute;
   top: 0;
