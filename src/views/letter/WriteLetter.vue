@@ -973,23 +973,11 @@ export default {
       }
     },
     initWebSocket() {
-      if ('WebSocket' in window) {
-        // 这里记得要改成你自己的ip
-        this.websocket = new WebSocket('/ws/letterGen', useUserStore().token)
-        // 偷个懒,竟然用这种方式判断
-        if (this.websocket === null) {
-          this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
-        }
-        if (this.websocket === null) {
-          this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/letterGen', useUserStore().token)
-        }
-        this.websocket.onerror = this.onError
-        this.websocket.onopen = this.onOpen
-        this.websocket.onmessage = this.onMessage
-        this.websocket.onclose = this.onClose
-      } else {
-        alert('Not support websocket')
-      }
+      this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
+      this.websocket.onerror = this.onError
+      this.websocket.onopen = this.onOpen
+      this.websocket.onmessage = this.onMessage
+      this.websocket.onclose = this.onClose
     },
     addUnloadListener() {
       window.addEventListener('beforeunload', this.handleBeforeUnload)
