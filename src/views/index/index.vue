@@ -45,11 +45,11 @@
 
               <div class="grid cols-3 gap-2 mb-2">
                 <a href="/receive" :title="myStatistics.receiveLetterCount" class="channel-info-item">
-                  <div class="num">{{ myStatistics.receiveLetterCount ? myStatistics.receiveLetterCount : '--' }}</div>
+                  <div class="num">{{ myStatistics.receiveLetterCount ? myStatistics.receiveLetterCount : '—' }}</div>
                   <div>我的收信</div>
                 </a>
                 <a href="/profile?command=friends" :title="myStatistics.friendCount" class="channel-info-item">
-                  <div class="num">{{ myStatistics.friendCount ? myStatistics.friendCount : '--' }}</div>
+                  <div class="num">{{ myStatistics.friendCount ? myStatistics.friendCount : '—' }}</div>
                   <div>我的好友</div>
                 </a>
                 <a href="/profile" :title="myStatistics.collectionCount" class="channel-info-item">
