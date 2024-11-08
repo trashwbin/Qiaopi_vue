@@ -283,7 +283,7 @@ export default {
       await this.getMyFriends(token)
 
       // 获取好友地址
-      await this.updateFriendsAddresses(token)
+      // await this.updateFriendsAddresses(token)
 
       // 获取我的地址
       await this.fetchAddresses(token)
@@ -292,6 +292,23 @@ export default {
     }
   },
   methods: {
+    loadRouterParams() {
+      const command = this.$route.query.command
+      if (command) {
+        if (command === 'friends') {
+          this.showFriendsModal = true
+        } else if (command === 'address') {
+          this.showAddressesModal = true
+        } else if (command === 'cangku') {
+          this.showEnvelopeImage()
+        } else if (command === 'password') {
+          this.showEditPasswordDialog()
+        }
+      }
+      setTimeout(() => {
+        this.$router.push({ query: null }) // 清除 URL 中的参数
+      }, 500)
+    },
     editFriendRemark(friendId) {
       this.isEditingAnyFriend = true
       const friend = this.friends.find(f => f.id === friendId)
@@ -456,31 +473,31 @@ export default {
         this.addresses = res.data
       })
     },
-    async getFriendAddress(friendId, token) {
-      try {
-        const response = await axios.get('/api/user/getFriendAddress', {
-          params: { friendId },
-          headers: { Authorization: token }
-        })
-        if (response.data.code === 200 && response.data.data.length > 0) {
-          return response.data.data[0].formattedAddress
-        } else {
-          // console.error('获取好友地址失败:', response.data.msg)
-          return null
-        }
-      } catch (error) {
-        // console.error('获取好友地址错误:', error)
-        return null
-      }
-    },
-    async updateFriendsAddresses(token) {
-      for (const friend of this.friends) {
-        const address = await this.getFriendAddress(friend.id, token)
-        if (address) {
-          this.$set(friend, 'address', address)
-        }
-      }
-    },
+    // async getFriendAddress(friendId, token) {
+    //   try {
+    //     const response = await axios.get('/api/user/getFriendAddress', {
+    //       params: { friendId },
+    //       headers: { Authorization: token }
+    //     })
+    //     if (response.data.code === 200 && response.data.data.length > 0) {
+    //       return response.data.data[0].formattedAddress
+    //     } else {
+    //       // console.error('获取好友地址失败:', response.data.msg)
+    //       return null
+    //     }
+    //   } catch (error) {
+    //     // console.error('获取好友地址错误:', error)
+    //     return null
+    //   }
+    // },
+    // async updateFriendsAddresses(token) {
+    //   for (const friend of this.friends) {
+    //     const address = await this.getFriendAddress(friend.id, token)
+    //     if (address) {
+    //       this.$set(friend, 'address', address)
+    //     }
+    //   }
+    // },
     showEditUsernameDialog() {
       this.editUsernameDialogVisible = true
     },
@@ -552,6 +569,13 @@ export default {
         Message.error(response.data.msg || '修改密码失败')
       }
     }
+  },
+  mounted() {
+    this.loadRouterParams()
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.loadRouterParams()
+    next()
   }
 }
 </script>

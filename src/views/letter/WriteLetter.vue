@@ -205,7 +205,7 @@
             <el-popover placement="right" v-model="showMyAddresses" width="250">
               <div class="AddressDialog">
                 <i class="el-icon-close closeIcon" @click="showMyAddresses = false"></i>
-                <div class="addressTip">选择地址</div>
+                <div class="addressTip">选择我的地址</div>
                 <div class="addressContent">
                   <div class="UserAddress beautify-scroll-bar ">
                     <div class="userAddressItem " :class="{ isSelected: selectedMyAddressId === address.id }"
@@ -639,7 +639,8 @@ export default {
       newLayout: false, // 控制表单布局
       showTip: true,
       disabled: false,
-      fontPaperLimitList: []
+      fontPaperLimitList: [],
+      timeOutCount: 0
     }
   },
 
@@ -975,14 +976,20 @@ export default {
     initWebSocket() {
       if ('WebSocket' in window) {
         // 这里记得要改成你自己的ip
-        this.websocket = new WebSocket('/ws/letterGen', useUserStore().token)
-        // 偷个懒,竟然用这种方式判断
-        if (this.websocket === null) {
+        if (this.timeOutCount === 0) {
+          this.websocket = new WebSocket('/ws/letterGen', useUserStore().token)
+          this.websocketTimeout = setTimeout(() => {
+            if (this.websocket.readyState !== WebSocket.OPEN) {
+              this.websocket.close()
+              this.onError()
+            }
+          }, 2000) // 设置超时时间为3000毫秒
+        } else if (this.timeOutCount === 1) {
           this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
-        }
-        if (this.websocket === null) {
+        } else if (this.timeOutCount === 2) {
           this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/letterGen', useUserStore().token)
         }
+        // 为了方便写了这一坨屎删代码，有效解决各环境下不能调用的问题
         this.websocket.onerror = this.onError
         this.websocket.onopen = this.onOpen
         this.websocket.onmessage = this.onMessage
@@ -1003,8 +1010,13 @@ export default {
       }
     },
     onError() {
-      this.$message.error('连接失败，请刷新页面重试')
-      this.websocket = null
+      if (this.timeOutCount < 3) {
+        this.initWebSocket()
+        this.timeOutCount++
+      } else {
+        this.$message.error('连接失败，请刷新页面重试')
+        this.websocket = null
+      }
     },
     onOpen() {
       // this.$message.success('开始写信吧!')
@@ -1015,7 +1027,11 @@ export default {
     },
     onClose() {
       // this.$message.warning('连接关闭')
-      this.websocket = null
+      // console.log('连接关闭')
+      if (this.timeOutCount > 3) {
+        this.websocket = null
+      }
+      // this.websocket = null
     },
     onMessage(event) {
       if (event.data === 'success') {
