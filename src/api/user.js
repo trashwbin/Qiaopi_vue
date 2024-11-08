@@ -7,6 +7,12 @@ export function getMyFunctionCard() {
     method: 'get'
   })
 }
+export function getMyStatistics() {
+  return request({
+    url: '/user/getUserStatistics',
+    method: 'get'
+  })
+}
 export function getSignList() {
   return request({
     url: '/user/getSignList',

@@ -11,6 +11,8 @@
           @click.native="navigateAndSetActive('/game')">侨趣乐园</router-link>
         <router-link ref="slider4" to="/shop" class="slider" :class="{ active: isActive('/shop') }"
           @click.native="navigateAndSetActive('/shop')">侨礼批坊</router-link>
+        <router-link ref="slider5" to="/marketing" class="slider" :class="{ active: isActive('/marketing') }"
+          @click.native="navigateAndSetActive('/marketing')">文创商店</router-link>
         <div class="animation" :style="animationStyle"></div>
         <div class="money" v-if="isLoggedIn">
           <span class="pig" v-if="isLoggedIn">
@@ -42,16 +44,16 @@
               </div>
 
               <div class="grid cols-3 gap-2 mb-2">
-                <a href="/receive" title="184" class="channel-info-item">
-                  <div class="num">184</div>
+                <a href="/receive" :title="myStatistics.receiveLetterCount" class="channel-info-item">
+                  <div class="num">{{ myStatistics.receiveLetterCount ? myStatistics.receiveLetterCount : '--' }}</div>
                   <div>我的收信</div>
                 </a>
-                <a href="/profile?command=friends" title="0" class="channel-info-item">
-                  <div class="num">0</div>
+                <a href="/profile?command=friends" :title="myStatistics.friendCount" class="channel-info-item">
+                  <div class="num">{{ myStatistics.friendCount ? myStatistics.friendCount : '--' }}</div>
                   <div>我的好友</div>
                 </a>
-                <a href="/profile" title="117" class="channel-info-item">
-                  <div class="num">117</div>
+                <a href="/profile" :title="myStatistics.collectionCount" class="channel-info-item">
+                  <div class="num">{{ myStatistics.collectionCount ? myStatistics.collectionCount : '—' }}</div>
                   <div>我的收藏</div>
                 </a>
               </div>
@@ -218,7 +220,7 @@
 </template>
 
 <script>
-import { getUserMoney, sign, getSignList } from '@/api/user'
+import { getUserMoney, sign, getSignList, getMyStatistics } from '@/api/user'
 import useUserStore from '@/store/modules/user'
 
 export default {
@@ -234,6 +236,9 @@ export default {
       signList: [],
       isSignToday: false,
       signedDays: 0,
+      myStatistics: {},
+      myStatisticsFetched: false,
+      signListFetched: false,
       positions: [150, 250, 350, 450] // 初始位置
     }
   },
@@ -257,14 +262,19 @@ export default {
       return {
         left: this.activeIndex >= 0 ? `${this.positions[this.activeIndex]}px` : '150px',
         backgroundColor: this.activeIndex === 0
-          ? '#D3BF9E'
+          ? '#E6D4B0'
           : this.activeIndex === 1
-            ? '#C7A981'
-            : this.activeIndex === 2 ? '#B68C5C' : this.activeIndex === 3 ? '#B68C5C' : 'transparent'
+            ? '#D3BF9E'
+            : this.activeIndex === 2 ? '#C7A981' : this.activeIndex === 3 ? '#CFAA7F' : this.activeIndex === 4 ? '#B8966A' : 'transparent'
       }
     }
   },
   methods: {
+    getMyStatistics() {
+      getMyStatistics().then(res => {
+        this.myStatistics = res.data
+      })
+    },
     hideSignPopover() {
       setTimeout(() => {
         this.showSignPopover = false
@@ -281,6 +291,7 @@ export default {
         })
         this.getSignList()
         this.getUserMoney()
+        this.getMyStatistics()
       })
     },
     getSignList() {
@@ -292,8 +303,13 @@ export default {
     },
     onHover(isHovered) {
       this.isHovered = isHovered
-      if (isHovered) {
+      if (isHovered && !this.signListFetched) {
         this.getSignList()
+        this.signListFetched = true
+      }
+      if (isHovered && !this.myStatisticsFetched) {
+        this.getMyStatistics()
+        this.myStatisticsFetched = true
       }
     },
     updatePositions() {
@@ -301,7 +317,8 @@ export default {
         this.$refs.slider1?.$el?.offsetLeft || 0,
         this.$refs.slider2?.$el?.offsetLeft || 0,
         this.$refs.slider3?.$el?.offsetLeft || 0,
-        this.$refs.slider4?.$el?.offsetLeft || 0
+        this.$refs.slider4?.$el?.offsetLeft || 0,
+        this.$refs.slider5?.$el?.offsetLeft || 0
       ]
     },
     handleCommand(router, command = '') {
@@ -337,7 +354,7 @@ export default {
     },
     navigateAndSetActive(path) {
       if (this.currentRoute !== path) {
-        this.activeIndex = ['/', '/introduce', '/letter', '/game', '/shop'].indexOf(path)
+        this.activeIndex = ['/', '/introduce', '/letter', '/game', '/shop', '/marketing'].indexOf(path)
         this.currentRoute = path
         this.$router.push(path).catch(err => {
           // 忽略 NavigationDuplicated 错误
@@ -356,6 +373,7 @@ export default {
         '/letter': 1,
         '/game': 2,
         '/shop': 3,
+        '/marketing': 4,
         '/write': 1,
         '/drifting': 1,
         '/receive': 1,
@@ -413,7 +431,7 @@ body {
   width: 100%;
   background-image: url(../../assets/imgss/background.webp);
   /* background: url(https://www.taoyuantudigong.org.tw/main/wp-content/themes/project-theme/src/img/yellow.png) 0 0 / 400px auto repeat, #f9f9f9; */
-  background-size: 100% 100%;
+  /* background-size: 100% 100%; */
   background-position: center center;
 }
 
@@ -1021,9 +1039,10 @@ a {
   margin-top: 12px;
   padding: 12px 12px 9px;
   position: relative;
-  width: 65px;
+  width: 60px;
   --un-shadow: var(--bew-shadow-edge-glow-1), var(--bew-shadow-1);
   box-shadow: var(--un-ring-offset-shadow), var(--un-ring-shadow), var(--un-shadow);
+  flex: 1;
 }
 
 .signAwardContent .signAwardContentItem:nth-of-type(4n) {
@@ -1033,6 +1052,7 @@ a {
 .signAwardContent .signAwardContentItem:last-child {
   margin-right: 0;
   width: 170px;
+  flex: 2.5;
 }
 
 .signAwardContent .signAwardContentItem:hover {
@@ -1101,7 +1121,7 @@ a {
   margin-left: 0px;
   background-color: var(--bew-fill-alt);
   transform: translate3d(0, -50%, 0);
-  top: 46.5%;
+  top: 41.5%;
   right: 97%;
   border-radius: var(--bew-radius);
   filter: drop-shadow(0 2px 12px rgba(0, 0, 0, .03));

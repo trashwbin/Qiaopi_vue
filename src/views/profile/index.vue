@@ -283,7 +283,7 @@ export default {
       await this.getMyFriends(token)
 
       // 获取好友地址
-      await this.updateFriendsAddresses(token)
+      // await this.updateFriendsAddresses(token)
 
       // 获取我的地址
       await this.fetchAddresses(token)
@@ -473,31 +473,31 @@ export default {
         this.addresses = res.data
       })
     },
-    async getFriendAddress(friendId, token) {
-      try {
-        const response = await axios.get('/api/user/getFriendAddress', {
-          params: { friendId },
-          headers: { Authorization: token }
-        })
-        if (response.data.code === 200 && response.data.data.length > 0) {
-          return response.data.data[0].formattedAddress
-        } else {
-          // console.error('获取好友地址失败:', response.data.msg)
-          return null
-        }
-      } catch (error) {
-        // console.error('获取好友地址错误:', error)
-        return null
-      }
-    },
-    async updateFriendsAddresses(token) {
-      for (const friend of this.friends) {
-        const address = await this.getFriendAddress(friend.id, token)
-        if (address) {
-          this.$set(friend, 'address', address)
-        }
-      }
-    },
+    // async getFriendAddress(friendId, token) {
+    //   try {
+    //     const response = await axios.get('/api/user/getFriendAddress', {
+    //       params: { friendId },
+    //       headers: { Authorization: token }
+    //     })
+    //     if (response.data.code === 200 && response.data.data.length > 0) {
+    //       return response.data.data[0].formattedAddress
+    //     } else {
+    //       // console.error('获取好友地址失败:', response.data.msg)
+    //       return null
+    //     }
+    //   } catch (error) {
+    //     // console.error('获取好友地址错误:', error)
+    //     return null
+    //   }
+    // },
+    // async updateFriendsAddresses(token) {
+    //   for (const friend of this.friends) {
+    //     const address = await this.getFriendAddress(friend.id, token)
+    //     if (address) {
+    //       this.$set(friend, 'address', address)
+    //     }
+    //   }
+    // },
     showEditUsernameDialog() {
       this.editUsernameDialogVisible = true
     },
