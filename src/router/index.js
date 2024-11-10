@@ -42,6 +42,11 @@ const router = new VueRouter({
     component: Impact
   },
   {
+    path: '/chat',
+    name: 'Chat',
+    component: () => import('@/views/chat.vue')
+  },
+  {
     path: '/',
     redirect: '/introduce',
     name: 'Index',

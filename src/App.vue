@@ -6,14 +6,20 @@
       <div class="tip-author"> -by 侨缘信使 </div>
       <a @click="isMobile = false">继续访问</a>
     </div>
-    <div v-else class="title"><router-view></router-view>
+    <div v-else class="title">
+      <router-view></router-view>
+      <qiaobao></qiaobao>
     </div>
   </div>
 </template>
 
 <script>
+import Qiaobao from './views/ai/Qiaobao.vue'
 export default {
   name: 'App',
+  components: {
+    Qiaobao
+  },
   data() {
     return {
       isMobile: false

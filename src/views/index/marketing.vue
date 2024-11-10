@@ -3,8 +3,8 @@
     <div class="content" data-spm="item" style="">
       <div class="contentInner " v-infinite-scroll="list" infinite-scroll-immediate="false"
         infinite-scroll-disabled="disabledLoad" style="transform: translate3d(-4px, 0px, 0px);">
-        <a class="doubleCardbanner--_6NpK_ey" v-for="item in data" :key="item.id" :href="item.link" data-spm="1"
-          data-appeared="false" data-has-appeared="true" data-before-current-y="-414.22222900390625"
+        <a class="doubleCardbanner--_6NpK_ey" v-for="item in data" :key="item.id" :href="item.link" target="_blank"
+          data-spm="1" data-appeared="false" data-has-appeared="true" data-before-current-y="-414.22222900390625"
           style="min-height: 370px;" data-has-disappeared="true">
           <div class="doubleCard--gO3Bz6bu">
             <div class="mainPicAndDesc--Q5PYrWux">

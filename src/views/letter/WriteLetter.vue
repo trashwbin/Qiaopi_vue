@@ -974,23 +974,29 @@ export default {
       }
     },
     initWebSocket() {
-      // if ('WebSocket' in window) {
-      //   // 这里记得要改成你自己的ip
-      //   this.websocket = new WebSocket('/ws/letterGen', useUserStore().token)
-      //   // 偷个懒,竟然用这种方式判断
-      //   if (this.websocket === null) {
-      this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
-      // }
-      // if (this.websocket === null) {
-      //   this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/letterGen', useUserStore().token)
-      // }
-      this.websocket.onerror = this.onError
-      this.websocket.onopen = this.onOpen
-      this.websocket.onmessage = this.onMessage
-      this.websocket.onclose = this.onClose
-      // } else {
-      //   alert('Not support websocket')
-      // }
+      if ('WebSocket' in window) {
+        // 这里记得要改成你自己的ip
+        if (this.timeOutCount === 0) {
+          this.websocket = new WebSocket('/ws/letterGen', useUserStore().token)
+          this.websocketTimeout = setTimeout(() => {
+            if (this.websocket.readyState !== WebSocket.OPEN) {
+              this.websocket.close()
+              this.onError()
+            }
+          }, 2000) // 设置超时时间为3000毫秒
+        } else if (this.timeOutCount === 1) {
+          this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
+        } else if (this.timeOutCount === 2) {
+          this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/letterGen', useUserStore().token)
+        }
+        // 为了方便写了这一坨屎删代码，有效解决各环境下不能调用的问题
+        this.websocket.onerror = this.onError
+        this.websocket.onopen = this.onOpen
+        this.websocket.onmessage = this.onMessage
+        this.websocket.onclose = this.onClose
+      } else {
+        alert('Not support websocket')
+      }
     },
     addUnloadListener() {
       window.addEventListener('beforeunload', this.handleBeforeUnload)
