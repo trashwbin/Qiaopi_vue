@@ -1,11 +1,15 @@
 <template>
   <div class="banner">
     <img src="../../assets/imgss/storebgd.webp" alt="">
-   <div class="tag1" :class="{'tag-active': activeTag === 'paper'}" @click="showDetails('paper')"><img src="../../assets/imgss/tag1.webp" alt=""><span>信纸</span></div>
-<div class="tag2" :class="{'tag-active': activeTag === 'ink'}" @click="showDetails('ink')"><img src="../../assets/imgss/tag2.webp" alt=""><span>墨水</span></div>
-<div class="tag3" :class="{'tag-active': activeTag === 'font'}" @click="showDetails('font')"><img src="../../assets/imgss/tag3.webp" alt=""><span>字体</span></div>
-<div class="tag4" :class="{'tag-active': activeTag === 'card'}" @click="showDetails('card')"><img src="../../assets/imgss/tag4.webp" alt=""><span>功能卡</span></div>
-  <div class="details" v-if="showDetailsArea">
+    <div class="tag1" :class="{'tag-active': activeTag === 'paper'}" @click="showDetails('paper')"><img
+        src="../../assets/imgss/tag1.webp" alt=""><span>信纸</span></div>
+    <div class="tag2" :class="{'tag-active': activeTag === 'ink'}" @click="showDetails('ink')"><img
+        src="../../assets/imgss/tag2.webp" alt=""><span>墨水</span></div>
+    <div class="tag3" :class="{'tag-active': activeTag === 'font'}" @click="showDetails('font')"><img
+        src="../../assets/imgss/tag3.webp" alt=""><span>字体</span></div>
+    <div class="tag4" :class="{'tag-active': activeTag === 'card'}" @click="showDetails('card')"><img
+        src="../../assets/imgss/tag4.webp" alt=""><span>功能卡</span></div>
+    <div class="details" v-if="showDetailsArea">
       <!-- 根据当前选中的类别显示不同的内容 -->
       <el-collapse-transition>
         <div v-if="selectedCategory === 'paper'">
@@ -240,9 +244,13 @@ export default {
   /* background-image: url(../../assets/imgs/storebgd.png); */
   background-position: center center;
   background-size: cover;
-  z-index: 1;
+  z-index: 2;
 }
 .banner img {
+  /* position: absolute;
+  top: 0;
+  height: 0;
+  z-index: 2; */
   width: 100%;
   height: 100%;
 }
@@ -469,5 +477,8 @@ export default {
   background-color: #956b3c;
   border: 0;
   color: rgb(235, 221, 190);
+}
+button {
+  cursor: pointer;
 }
 </style>

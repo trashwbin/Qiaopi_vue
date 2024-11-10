@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <canvas-animation></canvas-animation>
     <div v-if="isMobile" class="browserupgrade">
       <div class="logo"></div>
       <div class="tip">手机端暂未适配<br>请使用电脑端访问以获得最佳体验</div>
@@ -152,4 +153,10 @@ body,
 ::-webkit-scrollbar-track:hover {
   background: #e1e1e1;
 }
+/* body, html {
+  padding: 0;
+  margin: 0;
+  overscroll-behavior: none;
+  overflow: hidden;
+} */
 </style>

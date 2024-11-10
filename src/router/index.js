@@ -16,6 +16,7 @@ import DriftingBottle from '@/views/letter/DriftingBottle.vue'
 import GameKown from '@/views/game/know.vue'
 import questionPage from '@/views/game/question.vue'
 import MemoryCardGame from '@/views/game/fanfanle.vue'
+import QiaopiExplore from '@/views/game/explore.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -100,6 +101,11 @@ const router = new VueRouter({
         path: 'memory',
         name: 'MemoryCardGame',
         component: MemoryCardGame
+      },
+      {
+        path: 'explore',
+        name: 'QiaopiExplore',
+        component: QiaopiExplore
       }
     ]
   }
