@@ -23,7 +23,7 @@
       </section>
       <div class="introduce">
         <div class="left">
-          <img src="../../assets/imgss/qiaopiIntroduce.webp" alt="" class="title" :class="{ hidden: !showContent }">
+          <img src="../../assets/imgss/qiaopiIntroduce.webp" alt="" class="title">
           <img src="../../assets/imgss/bell.webp" alt="" class="bell" @click="toggleContent">
           <div class="imgLoader"></div>
           <div class="container">
@@ -63,8 +63,8 @@
           <img src="../../assets/imgs/paper2.png" alt="" style="position: absolute;top: 100px;left: 600px;">
           <img src="../../assets/imgs/tree.png" alt="" class="tree">
           <img src="../../assets/imgs/blackboat.png" alt="" class="blackboat" :style="blackboatStyle">
-          <p class="first" :class="{ hidden: !showContent }"><span
-              class="red">侨批</span>，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的<span class="yellow">汇款和家书</span>。</p>
+          <p class="first"><span class="red">侨批</span>，又称“银信”，是19世纪末至20世纪初中国东南沿海地区华侨通过民间渠道寄回国内的<span
+              class="yellow">汇款和家书</span>。</p>
           <p class="second">
             这些侨批不仅承载着华侨对家乡亲人的思念和关怀，也是他们经济支持的重要方式。侨批的内容通常包括家庭近况、生活琐事、乡情问候以及汇款金额等，它们是<span
               class="yellow">华侨与家乡之间情感和经济联系的纽带</span>。</p>
@@ -139,7 +139,6 @@
         <div class="letter-title">
           <h1 class=" floating-title" style="max-width: 1000px;">好友来信</h1>
         </div>
-
         <div class="letter-text">
           <div class="target animationClass">您的好友给您写了一封侨批哦,快来看看吧</div>
         </div>

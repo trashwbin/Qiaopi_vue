@@ -9,13 +9,10 @@
         <label :for="'option-' + index">{{ getLetter(index) }}: {{ option }}</label>
       </div>
       <el-button @click="goToPreviousQuestion">上一题</el-button>
-     <el-button
-  @click="goToNextQuestion"
-  :disabled="!hasSubmittedAnswer"
-  :class="{'btn--disabled': currentQuestionIndex !== contents.length - 1}"
->
-  {{ currentQuestionIndex === contents.length - 1 ? '查看获得的猪仔钱' : '下一题' }}
-</el-button>
+      <el-button @click="goToNextQuestion" :disabled="!hasSubmittedAnswer"
+        :class="{'btn--disabled': currentQuestionIndex !== contents.length - 1}">
+        {{ currentQuestionIndex === contents.length - 1 ? '查看获得的猪仔钱' : '下一题' }}
+      </el-button>
       <el-button @click="checkAnswer">提交答案</el-button>
       <div v-if="showExplanation" class="explanation">
         <h3>正确答案： {{ currentQuestion.correctAnswer }}</h3>
@@ -27,7 +24,8 @@
     <div v-if="showResults" class="results">
       <h2>答对题数：{{ pigMoney / 5 }}</h2>
       <h2>获得猪仔钱：{{ pigMoney }}</h2>
-</div>
+      <el-button @click="restartQuiz">再答一次</el-button>
+    </div>
   </div>
 </template>
 
@@ -173,6 +171,9 @@ export default {
       this.showResults = true
       this.pigMoney = data.pigMoney
       this.currentQuestion = null
+    },
+    restartQuiz() {
+      this.$router.push('/know')
     }
   }
 }

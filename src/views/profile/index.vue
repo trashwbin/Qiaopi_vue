@@ -992,6 +992,15 @@ export default {
   cursor: pointer;
   animation: float 2.7s ease-in-out infinite;
 }
+.ink:hover {
+  animation: big 0.5s linear forwards;
+}
+.pen:hover {
+  animation: big 0.5s linear forwards;
+}
+.envelope:hover {
+  animation: big 0.5s linear forwards;
+}
 
 .pen {
   position: absolute;
@@ -1010,7 +1019,16 @@ export default {
   cursor: pointer;
   animation: float 2.5s ease-in-out infinite;
 }
+@keyframes big{
 
+  0%
+  {
+    transform: scale(1);
+  }
+  100%{
+    transform: scale(1.2);
+  }
+}
 @keyframes float {
 
   0%,

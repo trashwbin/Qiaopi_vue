@@ -121,6 +121,8 @@ body {
   position: relative;
   height: 50rem;
   /* height: 100%; */
+  /* max-height: 100vh; */
+  height: 850px;
   width: 100%;
   background-image: url(../../assets/imgss/loginbgd.webp);
   background-position: center center;

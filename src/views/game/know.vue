@@ -56,7 +56,6 @@ export default {
         const res = await userLoginPage()
         if (res.code === 200) {
           this.lockStatus = res.data
-          Message.success(res.msg)
           this.showCarousel = true
         } else {
           Message.error(res.msg)
