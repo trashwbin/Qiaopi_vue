@@ -1,7 +1,11 @@
 <template>
   <div class="banner">
     <div class="pick" v-if="activeButton === 'smallbtn1'">
-      <button class="bigbtn" @click="showDriftBottle(); select('smallbtn2')">漂流瓶</button>
+      <!-- <button class="bigbtn" @click="showDriftBottle(); select('smallbtn2')">漂流瓶</button> -->
+      <button class="bigbtn"
+      @click="showDriftBottle();">
+        漂流瓶
+      </button>
     </div>
     <div class="letter" v-if="activeButton === 'smallbtn2'" :style="'background-image: url(' + letter.url + ');'">
       <div class="friend-modal" v-if="isFriendModalVisible">
@@ -43,12 +47,12 @@
     </div>
     <div class="friend" v-if="activeButton === 'smallbtn5'"></div>
     <div class="smallbtn1" @click="select('smallbtn1')" :class="activeButtonClass('smallbtn1')">捡漂流瓶</div>
-    <div class="smallbtn2" @click="select('smallbtn4');" :class="activeButtonClass('smallbtn4')">
-      新消息
-      <div v-if="hasUnreadRequests" class="red-dot"></div>
-    </div>
-    <div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')">写漂流瓶</div>
-    <!-- haha  -->
+<div class="smallbtn2" @click="select('smallbtn4');" :class="activeButtonClass('smallbtn4')">
+  新消息
+  <div v-if="hasUnreadRequests" class="red-dot"></div>
+</div>
+<div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')">写漂流瓶</div>
+ <!-- haha  -->
     <div class="friend" v-if="activeButton === 'smallbtn4'">
   <div class="friendquest">
     <!-- 如果有好友申请，显示每个申请 -->
@@ -114,7 +118,7 @@ export default {
   },
   methods: {
     select(button) {
-      this.activeButton = button
+      this.activeButton = button// 更新选中的按钮
     },
     newmessage() {
       if (this.activeButton === 4) {
@@ -142,6 +146,9 @@ export default {
     //   }
     // },
     async showDriftBottle() {
+      // 睡眠一秒钟
+      await new Promise(resolve => setTimeout(resolve, 500))
+      this.select('smallbtn2')
       const response = await showDriftBottle()
       if (response.code === 200) {
         this.letter.url = response.data
@@ -188,6 +195,8 @@ export default {
       }
     },
     async throwBottle() {
+      // 睡眠一秒钟
+      await new Promise(resolve => setTimeout(resolve, 1000))
       await throwBackBottle()
       this.activeButton = 'smallbtn1'
     },
@@ -303,6 +312,11 @@ export default {
 }
 </script>
 <style scoped>
+/* 样式示例 */
+.active-button {
+  color: #ff6347; /* 设置激活状态的字体颜色 */
+}
+
 .banner {
   margin-top: 40px;
   width: 1200px;
@@ -332,7 +346,7 @@ export default {
   position: relative;
   left: 11px;
   top: 10px;
-  width: 1700px;
+  width: 1300px;
   height: 642px;
   background-image: url(../../assets/imgs/10.jpg);
   background-position: center center;
@@ -340,16 +354,6 @@ export default {
   border-radius: 25px; /* 添加这一行来设置圆角 */
 }
 
-.banner .bigbtn {
-  position: absolute;
-  bottom: -10px;
-  left: 200px;
-  width: 180px;
-  height: 70px;
-  background-color: brown;
-  border: 0;
-  border-radius: 25px;
-}
 .banner .bigbtn {
   position: absolute; /* 使用绝对定位 */
   bottom: 60px;
@@ -441,63 +445,46 @@ export default {
   font-size: 24px; /* 将字体大小设置为 24px */
 }
 
-/* 按钮样式 */
-.banner .smallbtn1 {
-  position: absolute;
-  width: 120px;
-  height: 50px;
-  background-color: rgba(199, 43, 43, 0.3) !important; /* 半透明白色背景，模拟玻璃质感 */
-  border: 2px solid rgba(255, 255, 255, 0.5); /* 半透明白色边框 */
-  border-radius: 25px; /* 圆角效果 */
-  backdrop-filter: blur(10px); /* 模糊效果，增加玻璃感 */
-  color: #fff; /* 深灰色文本 */
-  font-size: 18px; /* 字体大小 */
-  font-weight: bold;
-  text-align: center;
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-  right: 50px;
-  top: 50px;
-}
-.banner .smallbtn2 {
-  position: absolute;
-  width: 120px;
-  height: 50px;
-  background-color: rgba(199, 43, 43, 0.3) !important; /* 半透明白色背景，模拟玻璃质感 */
-  border: 2px solid rgba(255, 255, 255, 0.5); /* 半透明白色边框 */
-  border-radius: 25px; /* 圆角效果 */
-  backdrop-filter: blur(10px); /* 模糊效果，增加玻璃感 */
-  color: #fff; /* 深灰色文本 */
-  font-size: 18px; /* 字体大小 */
-  font-weight: bold;
-  text-align: center;
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-  right: 50px;
-  top: 120px;
-}
-
+.banner .smallbtn1,
+.banner .smallbtn2,
 .banner .smallbtn3 {
   position: absolute;
   width: 120px;
   height: 50px;
-  background-color: rgba(199, 43, 43, 0.3) !important; /* 半透明白色背景，模拟玻璃质感 */
-  border: 2px solid rgba(255, 255, 255, 0.5); /* 半透明白色边框 */
+  background-color: rgba(199, 43, 43, 0.3); /* 默认的半透明红色背景 */
+  border: 2px solid rgba(255, 255, 255, 0.5); /* 默认的半透明白色边框 */
   border-radius: 25px; /* 圆角效果 */
   backdrop-filter: blur(10px); /* 模糊效果，增加玻璃感 */
-  color: #fff; /* 深灰色文本 */
-  font-size: 18px; /* 字体大小 */
+  color: #fff; /* 白色文本 */
+  font-size: 18px;
   font-weight: bold;
   text-align: center;
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
   right: 50px;
-  top: 190px;
+  cursor: pointer;
+  transition: background-color 0.3s ease,
+              border-color 0.3s ease,
+              transform 0.3s ease, /* 添加平滑过渡效果 */
+              box-shadow 0.3s ease; /* 添加阴影过渡效果 */
 }
 
+.banner .smallbtn1 { top: 50px; }
+.banner .smallbtn2 { top: 120px; }
+.banner .smallbtn3 { top: 190px; }
+
+/* 激活状态的样式 */
+.banner .smallbtn1.active,
+.banner .smallbtn2.active,
+.banner .smallbtn3.active {
+  background-color: rgba(199, 43, 43, 0.8); /* 激活时的背景颜色 */
+  border-color: rgba(255, 255, 255, 1); /* 激活时的边框颜色 */
+  transform: scale(1.1); /* 激活时略微放大按钮 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 激活时的阴影效果 */
+}
+
+/* 写漂流瓶 */
 .write .left {
   position: absolute;
   width: 420px;
@@ -505,54 +492,63 @@ export default {
   left: 5%;
   padding: 20px;
   box-sizing: border-box;
-  background-color: rgba(245, 228, 193, 0.8); /* 半透明背景色，适当增加透明度 */
+  background-color: rgba(240, 222, 200, 0.88); /* 更和谐的背景色 */
   border-radius: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* 柔和的阴影效果 */
   font-family: Arial, sans-serif;
+  height: 400px;
+  transition: all 0.3s ease;
 }
 
 .write .left h2 {
-  color: rgb(98, 62, 45);
-  font-size: 24px;
+  color: rgb(92, 58, 42); /* 更柔和的深色 */
+  font-size: 26px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .write .left .map avue-input-map {
   width: 100%;
-  border-radius: 5px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .write .left .form-group label {
-  color: rgb(98, 62, 45);
+  color: rgb(92, 58, 42);
   font-weight: bold;
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
 }
 
 .write .left .form-group textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   font-size: 14px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid rgba(200, 200, 200, 0.5); /* 柔和的边框颜色 */
   resize: vertical;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* 内阴影增加层次感 */
 }
 
 .write .left button {
   display: block;
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   font-size: 16px;
-  color: white;
-  background-color: rgb(98, 62, 45);
+  color: #fff;
+  background-image: linear-gradient(135deg, rgba(98, 62, 45, 0.95), rgba(79, 50, 35, 0.95)); /* 高级渐变色 */
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  margin-top: 100px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .write .left button:hover {
-  background-color: rgb(79, 50, 35);
+  background-image: linear-gradient(135deg, rgba(79, 50, 35, 0.95), rgba(98, 62, 45, 0.95)); /* 悬停时反向渐变 */
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
 .write .right {
@@ -564,8 +560,16 @@ export default {
   background-position: center;
   background-size: cover;
   border-radius: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* 加深阴影效果 */
+  transition: all 0.3s ease;
 }
+
+.write .right:hover {
+  transform: scale(1.02); /* 悬停时略微放大效果 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* 增加悬停阴影 */
+}
+
+/* end */
 
 h2 {
   height: 30px;
