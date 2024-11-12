@@ -42,6 +42,11 @@ export default {
 </script>
 
 <style>
+img,
+a {
+  -webkit-user-drag: none;
+}
+
 .browserupgrade {
   position: absolute;
   left: 0;
@@ -159,6 +164,7 @@ body,
 ::-webkit-scrollbar-track:hover {
   background: #e1e1e1;
 }
+
 /* body, html {
   padding: 0;
   margin: 0;
