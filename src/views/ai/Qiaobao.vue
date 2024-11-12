@@ -4,18 +4,17 @@
     <img class="qiaobao_icon" src="../../assets/ai/qiaobao8.gif" alt="侨宝" @mousedown="startDrag" @mousemove="dragImage"
       @mouseup="endDrag" @click="clickQiaobao" />
     <transition name="trivia">
-      <div class="hp_trivia_inner" v-show="openDialog" :class="{ focusin: openDialog }">
-        <!-- <el-collapse-transition> -->
+      <div class="hp_trivia_inner" v-show="openDialog" :class="{ focusin: focusin }">
         <div class="trivia" v-show="openDialog">
           <div id="k-chat-segments" class="outContainer___COldu">
             <div id="scroll-list" ref="chatContainer" @scroll="onScroll" class="scrollContainer___yynON"
-              style="flex-direction: column-reverse; max-height: 100%">
+              :style="{ display: openDialog ? 'flex' : 'none', flexDirection: 'column-reverse', maxHeight: '100%' }">
               <div class="header___X8m95">
                 <div class=" css-13wylk3" style="height: 12px"></div>
               </div>
               <div>
                 <div class="chatItemBox___WntvB  css-jdjpte">
-                  <div class="segmentItem" style="visibility: visible">
+                  <div class="segmentItem" style="visibility: visible ;margin-top: 14px;">
                     <div class="QiaoBaoZone___oXTWt zone-container normal normal">
                       <div class="conetntleft-hole">
                         <div class=" css-yxq2hw">
@@ -45,7 +44,7 @@
                       </div>
                     </div>
                   </div>
-                  <div style="padding-top: 24px;" v-for="segment in segments" :key="segment.id">
+                  <div class="segments" v-for="segment in segments" :key="segment.id">
                     <div v-if="segment.user" class="segmentItem  " :id="'chat-segment-user-' + segment.id">
                       <div class=" css-1r9wej0">
                         <div class="user-default-segment-component segmentComponent___NiCMo right___a75c4"
@@ -60,7 +59,8 @@
                                   <div class="popcontent-hole">
                                     <div class="pop-content">
                                       <div class="userContent___uG9aZ  ">
-                                        <p class="MuiTypography-root MuiTypography-text css-p94avn">
+                                        <p class="MuiTypography-root MuiTypography-text css-p94avn"
+                                          :id="'chat-segment-user-content-' + segment.id">
                                           {{ segment.user.content }}
                                         </p>
                                       </div>
@@ -68,7 +68,7 @@
                                   </div>
                                   <div class="actions">
                                     <div class="MuiStack-root chatSegmentActions___Len3_ css-1xhj18k">
-                                      <button
+                                      <button @click="copyContent('user', segment.id)"
                                         class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium iconButton___3OzVF css-1uviwf"
                                         tabindex="0" type="button" data-testid="msh-chat-segment-copy" aria-label="复制">
                                         <span role="img" class="anticon icon___N21Rh  "><svg t="1731317284899"
@@ -174,7 +174,8 @@
                                           <span class="thinking-style">🤔侨宝正在思考中</span>🥰
                                         </div>
                                         <div class=" css-v48vqp" v-else-if="segment.qiaobao.status > 1">
-                                          <button @click="copyContent"
+                                          <button @click="copyContent('qiaobao', segment.id)"
+                                            v-show="segment.qiaobao.status === 2"
                                             class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium iconButton___3OzVF css-1uviwf"
                                             tabindex="0" type="button" data-testid="msh-chat-segment-copy">
                                             <span role="img" class="anticon icon___N21Rh  "><svg t="1731317284899"
@@ -199,7 +200,7 @@
                                               class="MuiTypography-root MuiTypography-body1 label___TPWYH css-17cnyc1">复制</span><span
                                               class="MuiTouchRipple-root css-w0pj6f"></span>
                                           </button>
-                                          <button
+                                          <button @click="reAnswer(segment.id)" v-show="segment.qiaobao.status >= 2"
                                             class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium iconButton___3OzVF css-1uviwf"
                                             tabindex="0" type="button" data-testid="msh-chat-segment-reAnswer">
                                             <span role="img" class="anticon icon___N21Rh  "><svg t="1731317437585"
@@ -260,8 +261,6 @@
             </div>
           </div>
         </div>
-        <!-- </el-collapse-transition> -->
-        <!-- <el-collapse-transition> -->
         <div v-show="openDialog" class="chatBottom___jS9Jd  css-jdjpte">
           <div class="chatInput___bMC0h">
             <div class="container___hM5mM  css-1satmpw">
@@ -276,7 +275,7 @@
                     <p><br /></p>
                   </div>
                   <div v-show="isEmpty" class="placeholder___a_Pns">
-                    快来和我聊天吧🥳
+                    输入 /help 获取指令列表，快来和我聊天吧🥳
                   </div>
                 </div>
                 <div class="toolbarContainer___luEAj  css-ri750l">
@@ -350,10 +349,12 @@
                     </div>
                     <div class="sendButton___gubKW  " aria-label="请输入你的问题">
                       <button class=" css-1uviwf" tabindex="-1" type="button" data-testid="msh-chatinput-send-button"
-                        id="send-button" :class="{ 'Mui-disabled': isEmpty }" :disabled="isEmpty" @click="handleSend">
+                        id="send-button" :class="{ 'Mui-disabled': isDisabledSend }" :disabled="isDisabledSend"
+                        @click="handleSend">
                         <span role="img" class="anticon  ">
                           <svg t="1731315518743" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" p-id="13629" width="200" height="200" v-if="isEmpty">
+                            xmlns="http://www.w3.org/2000/svg" p-id="13629" width="200" height="200"
+                            v-if="isDisabledSend">
                             <path
                               d="M867.84 397.653333l-597.333333-298.666666a128 128 0 0 0-174.08 166.4l102.4 229.12a45.226667 45.226667 0 0 1 0 34.986666l-102.4 229.12A128 128 0 0 0 213.333333 938.666667a133.973333 133.973333 0 0 0 57.6-13.653334l597.333334-298.666666a128 128 0 0 0 0-228.693334h-0.426667z m-37.973333 152.32l-597.333334 298.666667a42.666667 42.666667 0 0 1-57.6-55.466667l101.973334-229.12a85.333333 85.333333 0 0 0 3.413333-9.386666h293.973333a42.666667 42.666667 0 0 0 0-85.333334H280.32a85.333333 85.333333 0 0 0-3.413333-9.386666L174.933333 230.826667a42.666667 42.666667 0 0 1 57.6-55.466667l597.333334 298.666667a42.666667 42.666667 0 0 1 0 75.946666z"
                               fill="#bfbfbf" p-id="13630"></path>
@@ -379,7 +380,6 @@
             </article>
           </div>
         </div>
-        <!-- </el-collapse-transition> -->
       </div>
     </transition>
   </div>
@@ -426,6 +426,7 @@ export default {
   data() {
     return {
       openDialog: false,
+      focusin: false,
       isDragging: false,
       startX: 0,
       startY: 0,
@@ -442,20 +443,26 @@ export default {
       chatCount: 0,
       linked: false,
       isScrollButtonVisible: false,
-      statusTimeout: null
+      thinking: null
     }
   },
   methods: {
-    async copyContent() {
+    async copyContent(role, id) {
       try {
         // 获取内容
-        const content = this.$refs.qiaobao.querySelector('#chat-segment-ai-content-2').innerText
+        let content = null
+        if (role === 'user') {
+          content = this.$refs.qiaobao.querySelector('#chat-segment-user-content-' + id).innerText
+        } else if (role === 'qiaobao') {
+          content = this.$refs.qiaobao.querySelector('#chat-segment-ai-content-' + id).innerText
+        } else {
+          return
+        }
         // 复制到剪贴板
         await navigator.clipboard.writeText(content)
-        alert('内容已复制到剪贴板')
+        this.$message.success('复制成功')
       } catch (err) {
-        console.error('复制失败:', err)
-        alert('复制失败，请重试')
+        this.$message.error('复制失败')
       }
     },
     handleInput() {
@@ -474,41 +481,17 @@ export default {
         this.handleSend()
       }
     },
-    handleSend() {
-      if (this.text === '') {
-        return
-      }
-      const newSegment = {
-        id: this.segments.length + 1,
-        user: {
-          content: this.text,
-          // 0: 思考中 1: 回复中 2: 回复成功 3: 回复失败
-          status: 0
-        },
-        qiaobao: {
-          content: ''
-        }
-      }
-      if (!this.isLinked) {
-        this.initWebSocket()
-        return
-      }
-      this.segments.push(newSegment)
-      this.setLastSegmentStatus(0)
-      // 清空输入框 以及设置为空
-      this.$refs.qiaobao.querySelector('.editorContentEditable').innerText = ''
-      this.isEmpty = true
-      this.nowAnswer = ''
-      // 之后处理指令也写在这里
-      this.send()
-    },
     setLastSegmentStatus(status) {
       const lastSegment = this.segments[this.segments.length - 1]
       if (lastSegment && lastSegment.qiaobao) {
-        if (this.statusTimeout && status !== 0) {
+        if (this.thinking && status !== 0) {
+          clearTimeout(this.thinking)
           clearTimeout(this.statusTimeout)
         }
         this.$set(lastSegment.qiaobao, 'status', status)
+        if (status === 3) {
+          this.$set(lastSegment.qiaobao, 'content', '看起来侨宝这里有点小忙碌，请再试一次哦，我马上就回来帮您解答问题啦！😊🕒📚')
+        }
       }
     },
     // 点击小侨宝图标
@@ -521,6 +504,13 @@ export default {
       }
       if (!this.isDragging) {
         this.openDialog = !this.openDialog
+        if (this.openDialog) {
+          setTimeout(() => {
+            this.focusin = !this.focusin
+          }, 800)
+        } else {
+          this.focusin = !this.focusin
+        }
       }
     },
     startDrag(event) {
@@ -533,7 +523,7 @@ export default {
         parseFloat(this.$refs.qiaobao.style.top) || window.innerHeight * 0.8
       setTimeout(() => {
         this.isDragging = true
-      }, 100)
+      }, 200)
 
       window.addEventListener('mousemove', this.dragImage)
       window.addEventListener('mouseup', this.endDrag)
@@ -550,7 +540,7 @@ export default {
     endDrag(event) {
       setTimeout(() => {
         this.isDragging = false
-      }, 100)
+      }, 200)
       window.removeEventListener('mousemove', this.dragImage)
       window.removeEventListener('mouseup', this.endDrag)
     },
@@ -558,7 +548,7 @@ export default {
     initWebSocket() {
       if ('WebSocket' in window) {
         // 这里记得要改成你自己的ip
-        if (!this.linked) {
+        if (!this.isLinked) {
           // this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/chat', useUserStore().token)
           this.websocket = new WebSocket('ws://localhost:8080/ws/chat', useUserStore().token)
           this.websocket.onerror = this.onError
@@ -604,7 +594,7 @@ export default {
     },
     onError() {
       if (!this.linked) {
-        this.$message.error('连接超时,请刷新页面重试!')
+        // this.$message.error('连接超时,请刷新页面重试!')
         this.websocket = null
       }
     },
@@ -612,15 +602,28 @@ export default {
       this.linked = true
     },
     onClose() {
-      this.$message.warning('连接已断开')
-      this.initWebSocket()
-      // this.linked = false
+      this.timeOutCount++
+      if (this.timeOutCount > 5) {
+        this.$notify.error({
+          title: '错误',
+          message: '哎呀，亲爱的朋友们，服务器小憩了一下，很快就会回来啦！请稍后再试，或者刷新一下页面。侨宝在这里等你们哦！🌟📶',
+          offset: 100
+        })
+      } else {
+        this.websocket = null
+        this.linked = false
+        this.initWebSocket()
+      }
+      // this.$message.warning('连接已断开')
     },
     setMessageInner(message) {
       this.setLastSegmentStatus(1)
-      this.statusTimeout = setTimeout(() => {
+      this.thinking = setTimeout(() => {
         this.setLastSegmentStatus(0)
       }, 100)
+      this.statusTimeout = setTimeout(() => {
+        this.setLastSegmentStatus(3)
+      }, 30000)
       if (this.segments.length === 0) return
       const nowSegment = this.segments[this.segments.length - 1]
       if (!nowSegment.qiaobao) return
@@ -630,36 +633,159 @@ export default {
       this.scrollToBottom()
     },
     onMessage(event) {
-      try {
+      clearTimeout(this.statusTimeout)
+      // 使用正则表达式判断是否为 JSON 格式
+      const isJson = (str) => {
+        try {
+          if (typeof str === 'string') {
+            const json = JSON.parse(str)
+            return (typeof json === 'object' && json !== null)
+          }
+        } catch (e) {
+          return false
+        }
+        return false
+      }
+
+      if (isJson(event.data)) {
         const response = JSON.parse(event.data)
+        console.log(response)
         if (response.code === 200) {
           this.$message.success(response.msg)
+          const data = response.data
           switch (response.data.code) {
             case '[DONE]':
               this.setLastSegmentStatus(2)
               break
-            case 'image':
+            case 'clean':
               break
-            case 'file':
+            case 'help':
+              this.setMessageInner(data.data)
+              this.setLastSegmentStatus(2)
+              break
+            case 'history':
+              this.segments = data.data
+              break
+            case 'chatting':
+              if (data.data) {
+                this.segments = []
+                for (let i = 0; i < data.data.length; i += 2) {
+                  const newSegment = {
+                    id: this.segments.length + 1,
+                    user: {
+                      content: data.data[i].content
+                    },
+                    qiaobao: {
+                      content: marked(data.data[i + 1].content),
+                      status: 2
+                    }
+                  }
+                  this.segments.push(newSegment)
+                }
+              }
               break
             default:
-              return
           }
           return
         } else if (response.code === 500) {
           this.$message.error(response.msg)
           return
+        } else {
+          this.setMessageInner(event.data)
         }
         console.log(response)
-      } catch (e) {
-        // event.data is not JSON, handle accordingly if needed
+      } else {
+        // 如果不是 JSON，直接调用 setMessageInner
+        this.setMessageInner(event.data)
       }
-      this.setMessageInner(event.data)
     },
-    send: throttle(function () {
+    orderNew() {
+      // 获取所有 class 为 "segments" 的元素
+      const segments = document.querySelectorAll('.segments')
+      if (segments.length > 0) {
+        // 获取最后一个元素
+        const lastSegment = segments[segments.length - 1]
+        // 创建 el-divider 元素
+        const divider = document.createElement('div')
+        divider.innerHTML = '<div class="el-divider el-divider--horizontal"><div class="el-divider__text is-center">新对话</div></div>'
+        // 将 el-divider 添加到最后一个元素的底部
+        lastSegment.appendChild(divider)
+      }
+      this.send('/new')
+    },
+    orderHelp() {
+      const newSegment = {
+        id: this.segments.length + 1,
+        user: {
+          content: this.text
+        },
+        qiaobao: {
+          content: '',
+          // 0: 思考中 1: 回复中 2: 回复成功 3: 回复失败
+          status: 0
+        }
+      }
+      this.segments.push(newSegment)
+      this.send('/help')
+    },
+    defaultSend() {
+      const newSegment = {
+        id: this.segments.length + 1,
+        user: {
+          content: this.text,
+          // 0: 思考中 1: 回复中 2: 回复成功 3: 回复失败
+          status: 0
+        },
+        qiaobao: {
+          content: ''
+        }
+      }
+      this.segments.push(newSegment)
+      this.send(this.text)
+      this.setLastSegmentStatus(0)
+    },
+    cleanInput() {
+      // 清空输入框 以及设置为空
+      this.$refs.qiaobao.querySelector('.editorContentEditable').innerText = ''
+      this.isEmpty = true
+      this.nowAnswer = ''
+      // 之后处理指令也写在这里
+    },
+    handleSend() {
+      if (this.text === '' || this.isDisabledSend) {
+        return
+      } else if (!this.isLinked) {
+        this.initWebSocket()
+        return
+      }
+
+      switch (this.text) {
+        case '/clean':
+          this.segments = []
+          this.send('/clean')
+          break
+        case '/new':
+          this.orderNew()
+          break
+        case '/help':
+          this.orderHelp()
+          break
+        case '/history':
+          this.send('/history')
+          break
+        default:
+          this.defaultSend()
+          break
+      }
+      this.cleanInput()
+    },
+    send: throttle(function (message) {
       this.websocket.send(JSON.stringify({
-        message: this.text
+        message: message
       }))
+      this.statusTimeout = setTimeout(() => {
+        this.setLastSegmentStatus(3)
+      }, 30000)
       this.scrollToBottom()
       // 做了一个50ms的节流,防止频繁发送,这里可以根据实际情况调整,缓解服务器压力
     }, 50),
@@ -707,6 +833,9 @@ export default {
     },
     isLinked() {
       return this.linked && this.websocket
+    },
+    isDisabledSend() {
+      return this.isEmpty || !this.isLinked || (this.segments.length > 0 && this.segments[this.segments.length - 1].qiaobao && this.segments[this.segments.length - 1].qiaobao.status <= 1)
     }
   },
   watch: {
@@ -1440,48 +1569,42 @@ input {
   display: none;
 }
 
-.qiaobao .hp_trivia_inner {
+.hp_trivia_inner {
   border-radius: 2%;
   opacity: 0;
-  width: 100px;
-  height: 120px;
-  /* overflow: hidden; */
+  width: 0;
+  height: 0;
+  background-color: hsl(240 31% 95% / 1);
   position: absolute;
-  /* 使用绝对定位 */
   bottom: 0;
-  /* 初始位置在容器的左下角 */
   left: 5%;
-  transition: all 2s;
-  /* 设置变换原点为左下角 */
-  transform-origin: left bottom;
+}
+
+/* 固定窗口大小的类 */
+.hp_trivia_inner.focusin {
+  width: 680px;
+  height: 520px;
+  opacity: 1;
 }
 
 /* 过渡效果 */
 .trivia-enter-active,
 .trivia-leave-active {
-  transition: all 2s;
+  transition: all 1s ease-in-out;
 }
 
-.trivia-enter,
+.trivia-enter-from,
 .trivia-leave-to {
-  opacity: 1;
-  width: 100px;
-  height: 120px;
+  width: 0;
+  height: 0;
+  opacity: 0;
 }
 
 .trivia-enter-to,
-.trivia-leave {
-  opacity: 1;
+.trivia-leave-from {
   width: 680px;
   height: 520px;
-}
-
-.qiaobao .hp_trivia_inner.focusin,
-.qiaobao .hp_trivia_inner.show {
-  background-color: hsl(240 31% 95% / 1);
   opacity: 1;
-  height: 520px;
-  width: 680px;
 }
 
 .chatBottom___jS9Jd {
@@ -1492,7 +1615,7 @@ input {
   bottom: 0;
   text-align: left;
   opacity: 0;
-  transition: all 2s;
+  transition: all .3s;
   width: 550px;
   transform-origin: bottom left;
 }
@@ -1834,7 +1957,7 @@ input {
   bottom: 0;
   opacity: 0;
   text-align: left;
-  transition: all 1.5s linear;
+  transition: all .3s linear;
 }
 
 .qiaobao .hp_trivia_inner.focusin .trivia {
@@ -2493,5 +2616,9 @@ div {
 .thinking-style::after {
   content: '...';
   animation: thinkingAnimation 1.5s infinite;
+}
+
+.segments {
+  margin-top: 24px;
 }
 </style>
