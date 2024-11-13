@@ -200,7 +200,8 @@
                                               class="MuiTypography-root MuiTypography-body1 label___TPWYH css-17cnyc1">复制</span><span
                                               class="MuiTouchRipple-root css-w0pj6f"></span>
                                           </button>
-                                          <button @click="reAnswer(segment.id)" v-show="segment.qiaobao.status >= 2"
+                                          <button @click="reAnswer(segment.id)"
+                                            v-show="segment.qiaobao.status >= 2 && segment.id === segments[segments.length - 1].id"
                                             class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium iconButton___3OzVF css-1uviwf"
                                             tabindex="0" type="button" data-testid="msh-chat-segment-reAnswer">
                                             <span role="img" class="anticon icon___N21Rh  "><svg t="1731317437585"
@@ -279,73 +280,22 @@
                   </div>
                 </div>
                 <div class="toolbarContainer___luEAj  css-ri750l">
-                  <div class="switchContainer___Rh7mQ checked___qXNHW  css-1ok549f"
-                    data-testid="msh-chatinput-net-button" aria-label="已接入互联网，QiaoBao 会在需要时通过互联网搜集资料">
+                  <div class="switchContainer___Rh7mQ  css-1ok549f" :class="{ checked___qXNHW: isNetSwitchOn }"
+                    @click="isNetSwitchOn = !isNetSwitchOn" data-testid="msh-chatinput-net-button"
+                    aria-label="已接入互联网，QiaoBao 会在需要时通过互联网搜集资料">
                     <div class="switch___Ih0Wl">
                       <div class="circle___rDXMK"></div>
                     </div>
                     <div class="netSwitchText___kyYlZ">联网搜索</div>
                   </div>
                   <div class="toolbar___WUSec  css-jf4p5b">
-                    <button
-                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium icon___zTPKp css-e5woe5"
-                      tabindex="0" type="button" data-testid="msh-chatinput-common-button"
-                      aria-label="输入常用语标题，可快捷调用常用语">
-                      <span role="img" class="anticon  "><svg width="1em" height="1em" fill="currentColor"
-                          aria-hidden="true" focusable="false" class="">
-                          <use xlink:href="#mshd-changyong"></use>
-                        </svg></span><span class="MuiTouchRipple-root css-w0pj6f"></span>
-                    </button>
-                    <div class=" ">
-                      <label
-                        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium btn___tpdor uploadButton___Ix9hl css-1uviwf"
-                        tabindex="0" role="button" data-testid="msh-chatinput-upload-button"><span role="img"
-                          class="anticon  "><svg width="1em" height="1em" fill="currentColor" aria-hidden="true"
-                            focusable="false" class="">
-                            <use xlink:href="#mshd-wenjian"></use>
-                          </svg></span>
-                        <div class="MuiFormControl-root MuiTextField-root MuiFileInput-TextField css-1n1n3u1">
-                          <div
-                            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedStart MuiInputBase-adornedEnd css-1l5u3yp">
-                            <div
-                              class="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-1a6giau">
-                              <span class="notranslate"></span><svg
-                                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false"
-                                aria-hidden="true" viewBox="0 0 24 24" data-testid="AttachFileIcon">
-                                <path
-                                  d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6z">
-                                </path>
-                              </svg>
-                            </div>
-                            <label for=":rj7:" class="css-1fel157"><input aria-invalid="false" id=":rj7:" type="file"
-                                multiple=""
-                                accept="image/*, .md, .pdf, .txt, .csv, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, .pdf, .csv, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .jpg, .jpeg, .png, .bmp, .gif, .webp, .sh, .bash, .bats, .cgi, .command, .fcgi, .ksh, .tmux, .tool, .zsh, .vb, .bas, .cls, .frm, .frx, .vba, .vbhtml, .vbs, .bat, .cmd, .c, .cats, .h, .idc, .cs, .cake, .cshtml, .csx, .cpp, .c++, .cc, .cp, .cxx, .h++, .hh, .hpp, .hxx, .inc, .inl, .ino, .ipp, .re, .tcc, .tpp, .coffee, ._coffee, .cjsx, .iced, .clj, .boot, .cl2, .cljc, .cljs, .cljscm, .cljx, .hic, .css, .d, .di, .dart, .diff, .patch, .dockerfile, .erb, .erl, .app.src, .es, .escript, .hrl, .xrl, .yrl, .src, .f90, .f, .f03, .f08, .f77, .f95, .for, .fpp, .go, .graphql, .gql, .groovy, .grt, .gtpl, .gvy, .hs, .hsc, .http, .icn, .ini, .cfg, .lektorproject, .prefs, .pro, .properties, .java, .js, ._js, .cjs, .bones, .es6, .frag, .gs, .jake, .jsb, .jscad, .jsfl, .jsm, .jss, .mjs, .njs, .pac, .sjs, .ssjs, .xsjs, .xsjslib, .json, .avsc, .geojson, .gltf, .JSON-tmLanguage, .jsonl, .tfstate, .topojson, .webapp, .webmanifest, .yy, .yyp, .kt, .ktm, .kts, .tex, .aux, .bbx, .bib, .cbx, .dtx, .ins, .lbx, .ltx, .mkii, .mkiv, .mkvi, .sty, .toc, .less, .liquid, .lisp, .asd, .cl, .l, .lsp, .ny, .podsl, .sexp, .ls, ._ls, .lua, .nse, .p8, .pd_lua, .rbxs, .wlua, .mak, .make, .mk, .mkfile, .md, .markdown, .mdown, .mdwn, .mkd, .mkdn, .mkdown, .ronn, .workbook, .apib, .blade, .chem, .ecr, .eex, .ejs, .html, .htm, .ipynb, .kit, .latte, .marko, .mask, .mtml, .phtml, .pic, .raml, .rhtml, .vue, .xht, .xhtml, .matlab, .m, .mel, .monkey, .monkey2, .n4jsd, .nasm, .nginxconf, .vhost, .pas, .dfm, .dpr, .lpr, .pascal, .pp, .pl, .al, .perl, .ph, .plx, .pm, .psgi, .t, .php, .aw, .ctp, .php3, .php4, .php5, .phps, .phpt, .pls, .bdy, .ddl, .fnc, .pkb, .pks, .plb, .plsql, .prc, .spc, .sql, .tpb, .tps, .trg, .vw, .ps1, .psd1, .psm1, .proto, .jade, .pug, .py, .bzl, .gyp, .gypi, .lmi, .py3, .pyde, .pyi, .pyp, .pyt, .pyw, .rpy, .spec, .tac, .wsgi, .xpy, .q, .r, .rd, .rsx, .jsx, .tsx, .rst, .rest, .rb, .builder, .eye, .gemspec, .god, .jbuilder, .mspec, .pluginspec, .podspec, .rabl, .rake, .rbuild, .rbw, .rbx, .ru, .ruby, .thor, .watchr, .rs, .sass, .scss, .scala, .kojo, .sbt, .sc, .scm, .sch, .sld, .sls, .sps, .ss, .st, .tpl, .cql, .mysql, .tab, .udf, .viw, .swift, .tcl, .adp, .tm, .textile, .ts, .mts, .cts, .vim, .wast, .wat, .yml, .mir, .reek, .rviz, .sublime-syntax, .syntax, .yaml, .yaml-tmlanguage, .jsp, .asp, .xml, .a, .out, .hql, .sv, .awk, .config, .lib, .war, .ear, .txt, .md, .mobi, .log, .cxx, .cc, .cs, .ini, .conf, .epub"
-                                class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd css-137xkys"
-                                value="" /></label>
-                            <div
-                              class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-1nvf7g0"
-                              style="visibility: hidden">
-                              <span
-                                class="MuiTypography-root MuiTypography-caption MuiFileInput-Typography-size-text css-1a8yg0f"></span><button
-                                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall MuiFileInput-IconButton css-1ocw34v"
-                                tabindex="0" type="button" aria-label="Clear" title="Clear">
-                                <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06" focusable="false"
-                                  aria-hidden="true" viewBox="0 0 24 24" data-testid="CloseIcon">
-                                  <path
-                                    d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
-                                  </path>
-                                </svg><span class="MuiTouchRipple-root css-w0pj6f"></span>
-                              </button>
-                            </div>
-                            <fieldset aria-hidden="true" class="MuiOutlinedInput-notchedOutline css-igs3ac">
-                              <legend class="css-ihdtdm">
-                                <span class="notranslate"></span>
-                              </legend>
-                            </fieldset>
-                          </div>
-                        </div>
-                        <span class="MuiTouchRipple-root css-w0pj6f"></span>
-                      </label>
+                    <div class="icon___zTPKp css-e5woe5" tabindex="0" type="button"
+                      data-testid="msh-chatinput-common-button">
+                      <span role="img" class="anticon  ">
+                        <el-radio-group v-model="chatModel" size="mini">
+                          <el-radio-button label="GLM-4-Flash"></el-radio-button>
+                          <el-radio-button label="GLM-4-Plus"></el-radio-button>
+                        </el-radio-group></span><span class="MuiTouchRipple-root css-w0pj6f"></span>
                     </div>
                     <div class="sendButton___gubKW  " aria-label="请输入你的问题">
                       <button class=" css-1uviwf" tabindex="-1" type="button" data-testid="msh-chatinput-send-button"
@@ -443,7 +393,9 @@ export default {
       chatCount: 0,
       linked: false,
       isScrollButtonVisible: false,
-      thinking: null
+      thinking: null,
+      isNetSwitchOn: true,
+      chatModel: 'GLM-4-Flash'
     }
   },
   methods: {
@@ -464,6 +416,11 @@ export default {
       } catch (err) {
         this.$message.error('复制失败')
       }
+    },
+    reAnswer() {
+      this.setLastSegmentStatus(0)
+      this.send('/retry')
+      this.cleanInput()
     },
     handleInput() {
       const editorContentEditable = this.$refs.qiaobao.querySelector(
@@ -624,7 +581,7 @@ export default {
       this.statusTimeout = setTimeout(() => {
         this.setLastSegmentStatus(3)
       }, 30000)
-      if (this.segments.length === 0) return
+      if (this.segments.length === 0 || this.segments[this.segments.length - 1].qiaobao.status === 2) return
       const nowSegment = this.segments[this.segments.length - 1]
       if (!nowSegment.qiaobao) return
       this.nowAnswer += message
@@ -664,7 +621,22 @@ export default {
               this.setLastSegmentStatus(2)
               break
             case 'history':
-              this.segments = data.data
+              if (data.data) {
+                this.segments = []
+                for (let i = 0; i < data.data.length; i += 2) {
+                  const newSegment = {
+                    id: this.segments.length + 1,
+                    user: {
+                      content: data.data[i].content
+                    },
+                    qiaobao: {
+                      content: marked(data.data[i + 1].content),
+                      status: 2
+                    }
+                  }
+                  this.segments.push(newSegment)
+                }
+              }
               break
             case 'chatting':
               if (data.data) {
@@ -781,7 +753,9 @@ export default {
     },
     send: throttle(function (message) {
       this.websocket.send(JSON.stringify({
-        message: message
+        message: message,
+        isWebSearch: this.isNetSwitchOn,
+        chatModel: this.chatModel
       }))
       this.statusTimeout = setTimeout(() => {
         this.setLastSegmentStatus(3)
@@ -1735,17 +1709,17 @@ input {
   background: var(--msh-chat-net-switch-bg);
 }
 
-.checked___qXNHW .circle___rDXMK {
-  background: var(--msh-chat-net-switch-checked-circle);
-  transform: translate(12px);
-}
-
 .switchContainer___Rh7mQ .circle___rDXMK {
   width: 12px;
   height: 12px;
   border-radius: 18px;
   background: #848a99;
   transition: all 0.2s ease-in-out;
+}
+
+.checked___qXNHW .circle___rDXMK {
+  background: var(--msh-chat-net-switch-checked-circle);
+  transform: translate(12px);
 }
 
 .switchContainer___Rh7mQ .netSwitchText___kyYlZ {
@@ -1789,7 +1763,6 @@ input {
   text-align: center;
   color: rgba(0, 0, 0, 0.54);
   font-size: 24px;
-  width: 36px;
   height: 36px;
   outline: 0px;
   border-width: 0px;
