@@ -44,20 +44,21 @@
               </el-select>
             </el-form-item>
             <el-form-item label="款式" prop="letterType" style="margin-left: -20px; ">
-              <el-select v-model="letterGen.letterType" placeholder="请选择信件款式" @change="handleChange"
+              <el-select v-model="letterGen.letterType" placeholder="请选择信件款式" @change="handleLetterTypeChange"
                 style=" width: 200px; height: 10px;margin-top:10px;margin-left: 10px" height="10">
                 <el-option v-for=" item in letterTypes" :key="item.id" :label="item.label" :value="item.id" />
               </el-select>
             </el-form-item>
             <el-form-item label=" 寄信人" prop="senderName" style="margin-left: -20px; " label-width="75px">
-              <el-input :maxlength="15" show-word-limit v-model="letterGen.senderName" placeholder="请输入寄信人"
+              <el-input :maxlength="15" show-word-limit v-model="letterGen.senderName" placeholder="请输入寄信人姓名"
                 @input="handleChange" style="margin-top:10px;height: 10px; width: 200px;" />
             </el-form-item>
             <el-form-item label="收信人" prop="recipientName" style="margin-left: -20px;" label-width="75px">
               <!-- <el-input v-model="letterGen.recipientName" placeholder="请输入收信人" @input="handleCheckFriend"
                 style="margin-top:10px;" /> -->
-              <el-select v-model="selectedFriendId" filterable allow-create default-first-option placeholder="请输入收信人"
-                style="margin-top:10px; height: 10px;width: 200px;" @change="handleChangeFriend">
+              <el-select v-model="selectedFriendId" filterable allow-create default-first-option placeholder="请输入收信人姓名"
+                no-data-text="没有好友哦，直接输入名字吧" style="margin-top:10px; height: 10px;width: 200px;"
+                @change="handleChangeFriend">
                 <el-option v-for="item in friends" :key="item.id" :label="item.remark || item.name" :value="item.id">
                   <span v-if="item.remark" style="float: left">{{ item.name + '(' + item.remark + ')' }}</span>
                   <span v-else style="float: left">{{ item.name }}</span>
@@ -422,6 +423,7 @@ export default {
   data() {
     // eslint-disable-next-line
     var validateAddress = (rule, value, callback) => {
+      this.setAddressByCountryId()
       // 定义市级以上城市列表,以及省、市、自治区、特别行政区等关键字列表
       const cities = [
         '北京', '上海', '天津', '重庆',
@@ -432,7 +434,6 @@ export default {
 
       // 定义需要包含的关键字列表
       const requiredKeywords = ['省', '市', '自治区', '特别行政区']
-
       const name = value.formattedAddress
 
       if (value.length === 0 || name === '') {
@@ -560,10 +561,10 @@ export default {
           { pattern: /^([a-zA-Z0-9]+[-_]?)+@[a-zA-Z0-9]+\.[a-z]+$/, message: '请输入正确的邮箱格式', trigger: 'blur' }
         ],
         senderAddress: [
-          { required: true, validator: validateAddress, trigger: 'blur' }
+          { required: true, validator: validateAddress }
         ],
         recipientAddress: [
-          { required: true, validator: validateAddress, trigger: 'blur' }
+          { required: true, validator: validateAddress }
         ],
         letterType: [
           { required: true, message: '请选择信件款式', trigger: 'change' }
@@ -1040,6 +1041,10 @@ export default {
         this.letterUrl = 'data:image/jpg;base64,' + event.data
       }
     },
+    handleLetterTypeChange() {
+      this.letterGen.paperId = this.repository.papers.find(paper => paper.type === this.letterGen.letterType).id
+      this.handleChange()
+    },
     // websocket
     handleChange() {
       const content = this.letterGen.letterContent
@@ -1073,10 +1078,10 @@ export default {
             this.loading = false
           }
         } else {
-          if (this.letterGen.letterContent === '') {
-            this.activeTab = 'letter'
-          } else {
+          if (this.letterGen.recipientName === '' || this.letterGen.senderName === '') {
             this.activeTab = 'information'
+          } else {
+            this.activeTab = 'letter'
           }
           return false
         }
@@ -1174,18 +1179,22 @@ export default {
         this.showSend()
       }
     },
-    submitPre() {
-      this.sendLoading = true
-      if (this.letter.recipientAddress.countryId === 1) {
+    setAddressByCountryId() {
+      if (this.letter.recipientAddress.countryId === 1 || this.letter.recipientAddress.countryId === '' || this.letter.recipientAddress.countryId === null) {
         this.letter.recipientAddress.longitude = this.recipientAddress[0]
         this.letter.recipientAddress.latitude = this.recipientAddress[1]
         this.letter.recipientAddress.formattedAddress = this.recipientAddress[2]
       }
-      if (this.letter.senderAddress.countryId === 1) {
+      if (this.letter.senderAddress.countryId === 1 || this.letter.senderAddress.countryId === '' || this.letter.senderAddress.countryId === null) {
         this.letter.senderAddress.longitude = this.senderAddress[0]
         this.letter.senderAddress.latitude = this.senderAddress[1]
         this.letter.senderAddress.formattedAddress = this.senderAddress[2]
       }
+    },
+    submitPre() {
+      this.sendLoading = true
+      // console.log(this.letter)
+      this.setAddressByCountryId()
       this.letter.letterContent = this.letterGen.letterContent
       this.letter.senderName = this.letterGen.senderName
       this.letter.letterType = this.letterGen.letterType
