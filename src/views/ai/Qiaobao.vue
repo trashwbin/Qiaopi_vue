@@ -2,7 +2,7 @@
   <!-- 这里放置你的侨宝图标 -->
   <div class="qiaobao" style="transition: transform 0.3s ease;" @mousedown="startDrag" @mousemove="dragImage"
     @mouseup="endDrag">
-    <img src="../../assets/ai/qiaobao8.gif" alt="侨宝">
+     <img src="../../assets/ai/qiaobao8.gif" alt="侨宝">
   </div>
 
 </template>
