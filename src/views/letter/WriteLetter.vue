@@ -1142,7 +1142,7 @@ export default {
             type: 'warning'
           }).then(() => {
             useCard(this.useCardDto).then(res => {
-              this.letterVo = res.data
+              Object.assign(this.letterVo, res.data)
               this.$notify({
                 title: '使用成功',
                 message: '侨批很快就要送达了!🥳',
@@ -1158,7 +1158,7 @@ export default {
       }
       if (this.useCardDto.cardId !== '') {
         useCard(this.useCardDto).then(res => {
-          this.letterVo = res.data
+          Object.assign(this.letterVo, res.data)
           this.$notify({
             title: '使用成功',
             message: '侨批很快就要送达了!🥳',
@@ -1181,11 +1181,13 @@ export default {
     },
     setAddressByCountryId() {
       if (this.letter.recipientAddress.countryId === 1 || this.letter.recipientAddress.countryId === '' || this.letter.recipientAddress.countryId === null) {
+        this.letter.recipientAddress.countryId = 1
         this.letter.recipientAddress.longitude = this.recipientAddress[0]
         this.letter.recipientAddress.latitude = this.recipientAddress[1]
         this.letter.recipientAddress.formattedAddress = this.recipientAddress[2]
       }
       if (this.letter.senderAddress.countryId === 1 || this.letter.senderAddress.countryId === '' || this.letter.senderAddress.countryId === null) {
+        this.letter.senderAddress.countryId = 1
         this.letter.senderAddress.longitude = this.senderAddress[0]
         this.letter.senderAddress.latitude = this.senderAddress[1]
         this.letter.senderAddress.formattedAddress = this.senderAddress[2]
