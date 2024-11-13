@@ -18,6 +18,7 @@ import questionPage from '@/views/game/question.vue'
 import MemoryCardGame from '@/views/game/fanfanle.vue'
 import Marketing from '@/views/index/marketing.vue'
 import QiaopiExplore from '@/views/game/explore.vue'
+import QiaopiImportStory from '@/views/game/import.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -117,6 +118,11 @@ const router = new VueRouter({
         path: 'explore',
         name: 'QiaopiExplore',
         component: QiaopiExplore
+      },
+      {
+        path: 'import',
+        name: 'QiaopiImportStory',
+        component: QiaopiImportStory
       }
     ]
   }
