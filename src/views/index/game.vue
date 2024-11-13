@@ -32,7 +32,7 @@
           </div>
         </div>
       </div>
-      <button>敬请期待</button>
+      <router-link to='/explore'><button>开始探索</button></router-link>
     </div>
     <div class="card">
       <div class="box">

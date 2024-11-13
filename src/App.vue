@@ -1,19 +1,26 @@
 <template>
   <div id="app">
+    <canvas-animation></canvas-animation>
     <div v-if="isMobile" class="browserupgrade">
       <div class="logo"></div>
       <div class="tip">手机端暂未适配<br>请使用电脑端访问以获得最佳体验</div>
       <div class="tip-author"> -by 侨缘信使 </div>
       <a @click="isMobile = false">继续访问</a>
     </div>
-    <div v-else class="title"><router-view></router-view>
+    <div v-else class="title">
+      <router-view></router-view>
+      <qiaobao></qiaobao>
     </div>
   </div>
 </template>
 
 <script>
+import Qiaobao from './views/ai/Qiaobao.vue'
 export default {
   name: 'App',
+  components: {
+    Qiaobao
+  },
   data() {
     return {
       isMobile: false
@@ -35,6 +42,11 @@ export default {
 </script>
 
 <style>
+img,
+a {
+  -webkit-user-drag: none;
+}
+
 .browserupgrade {
   position: absolute;
   left: 0;
@@ -152,4 +164,11 @@ body,
 ::-webkit-scrollbar-track:hover {
   background: #e1e1e1;
 }
+
+/* body, html {
+  padding: 0;
+  margin: 0;
+  overscroll-behavior: none;
+  overflow: hidden;
+} */
 </style>

@@ -1,16 +1,21 @@
 <template>
   <div class="banner">
     <div class="content" data-spm="item" style="">
-      <div class="contentInner " infinite-scroll-distance="100px" v-infinite-scroll="list"
-        style="transform: translate3d(-4px, 0px, 0px);">
-        <a class="doubleCardbanner--_6NpK_ey" v-for="item in data" :key="item.id" :href="item.link" data-spm="1"
-          data-appeared="false" data-has-appeared="true" data-before-current-y="-414.22222900390625"
+      <div class="contentInner " v-infinite-scroll="list" infinite-scroll-immediate="false"
+        infinite-scroll-disabled="disabledLoad" style="transform: translate3d(-4px, 0px, 0px);">
+        <a class="doubleCardbanner--_6NpK_ey" v-for="item in data" :key="item.id" :href="item.link" target="_blank"
+          data-spm="1" data-appeared="false" data-has-appeared="true" data-before-current-y="-414.22222900390625"
           style="min-height: 370px;" data-has-disappeared="true">
           <div class="doubleCard--gO3Bz6bu">
             <div class="mainPicAndDesc--Q5PYrWux">
               <div class=" mainPicbanner--qRLTAeii" data-name="itemExp" data-aplus-ae="x1_29da46f"
-                data-spm-anchor-id="a21n57.1.1.i0.4330523cXUTEuN"><img :src="item.image" height="240" width="240"
-                  class="mainPic--Ds3X7I8z">
+                data-spm-anchor-id="a21n57.1.1.i0.4330523cXUTEuN">
+                <el-image :src="item.image" height="240" width="240" lazy class="mainPic--Ds3X7I8z">
+                  <div slot="placeholder" class="mainPic--Ds3X7I8z">
+                    <img :src="item.image" height="240" width="240" class="mainPic--Ds3X7I8z">
+                  </div>
+                </el-image>
+
                 <!-- 广告标签 -->
                 <img class="mainP4pPic--jbnK3QAX"
                   src="https://img.alicdn.com/imgextra/i3/O1CN01njPHBL1iDAvy7mi2J_!!6000000004378-2-tps-42-27.png">
@@ -37,8 +42,16 @@
             </div>
           </div>
         </a>
+        <p v-if="loading" style="width: 100%; color: #ff6200; margin-top: -2px; font-size: 18px;"><i
+            class="el-icon-loading"></i>加载中...
+        </p>
+        <p v-if="noMore" style="width: 100%; color: #ff6200; margin-top: -2px; font-size: 18px;"><i
+            class="el-icon-shopping-cart-2"></i>没有更多了</p>
       </div>
     </div>
+    <!-- <vue-lazyload v-if="data.length">
+      <img v-lazy="item.image" height="240" width="240" class="mainPic--Ds3X7I8z">
+    </vue-lazyload> -->
   </div>
 </template>
 
@@ -52,29 +65,38 @@ export default {
       data: [],
       page: 1,
       limit: 20,
+      noMore: false,
       loading: false
+    }
+  },
+  computed: {
+    disabledLoad() {
+      return this.loading || this.noMore
     }
   },
   methods: {
     list() {
       this.loading = true
-      list({
-        page: this.page,
-        limit: this.limit
-      }).then(res => {
+      list(
+        this.page,
+        this.limit
+      ).then(res => {
+        console.log(res.data.records.length)
         if (res.data.records.length === 0) {
           this.loading = false
+          this.noMore = true
           return
         }
-        const newData = res.data.records.filter(record => !this.data.some(item => item.id === record.id))
-        this.data = [...this.data, ...newData]
+        const ids = res.data.records.map(record => record.id)
+        console.log(ids.join(', '))
+        this.data = [...this.data, ...res.data.records]
         this.page++
         this.loading = false
       })
     }
   },
   mounted() {
-    // this.list()
+    this.list()
   }
 }
 </script>
@@ -118,7 +140,7 @@ export default {
   justify-content: space-between;
   transform: translate3d(-4px, 0px, 0px);
   overflow-y: scroll;
-  height: 100%;
+  height: 75vh;
   /* Adjust height to account for padding */
 }
 
@@ -178,8 +200,8 @@ a {
 
 .mainPic--Ds3X7I8z {
   height: 240px;
-  -o-object-fit: cover;
-  object-fit: cover;
+  /* -o-object-fit: cover; */
+  /* object-fit: cover; */
   width: 240px;
 }
 

@@ -17,6 +17,7 @@ import GameKown from '@/views/game/know.vue'
 import questionPage from '@/views/game/question.vue'
 import MemoryCardGame from '@/views/game/fanfanle.vue'
 import Marketing from '@/views/index/marketing.vue'
+import QiaopiExplore from '@/views/game/explore.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -40,6 +41,11 @@ const router = new VueRouter({
     path: '/impact',
     name: 'Impact',
     component: Impact
+  },
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: () => import('@/views/chat.vue')
   },
   {
     path: '/',
@@ -106,6 +112,11 @@ const router = new VueRouter({
         path: 'memory',
         name: 'MemoryCardGame',
         component: MemoryCardGame
+      },
+      {
+        path: 'explore',
+        name: 'QiaopiExplore',
+        component: QiaopiExplore
       }
     ]
   }
