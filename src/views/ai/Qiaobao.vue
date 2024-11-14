@@ -9,8 +9,9 @@
         <span class="content-after"></span>
         <br>
         <div>
-          <p :class="{ systemMessageContent: !systemMessageData }" :style="{ opacity: focusinSystemMessage ? 1 : 0 }">{{
-            systemMessageContent }}
+          <p :class="{ systemMessageContent: !systemMessageData && systemMessageContent.length < 40 }"
+            :style="{ opacity: focusinSystemMessage ? 1 : 0 }">{{
+              systemMessageContent }}
           </p>
           <el-button size="mini" style="background-color: #7E3F11; color: aliceblue;"
             :style="{ opacity: focusinSystemMessage ? 1 : 0 }" plain v-if="systemMessageData" @click="handleToRouter"
@@ -146,9 +147,7 @@
                                   <div class=" css-5nczy5">
                                     <div class="img____tAMC">
                                       <div class="lowImage___hU90c">
-                                        <img
-                                          src="https://avatar.moonshot.cn/avatar/crgk03egi3pthlog35og/1726038062.jpeg"
-                                          class="image___tZVx_ loaded___iq7pZ loaded" alt="" />
+                                        <img :src="userAvatar" class="image___tZVx_ loaded___iq7pZ loaded" alt="" />
                                       </div>
                                     </div>
                                   </div>
@@ -409,7 +408,6 @@ export default {
       marginLeft: 0,
       marginTop: 0,
       isEmpty: true,
-      userAvatar: useUserStore().avatar,
       segments: [],
       text: '',
       nowAnswer: '',
@@ -553,7 +551,7 @@ export default {
     initWebSocket() {
       if ('WebSocket' in window) {
         // 这里记得要改成你自己的ip
-        if (!this.isLinked) {
+        if (!this.isLinked && this.isTokenAvailable) {
           // this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/chat', useUserStore().token)
           this.websocket = new WebSocket('ws://localhost:8080/ws/chat', useUserStore().token)
           this.websocket.onerror = this.onError
@@ -722,6 +720,9 @@ export default {
             this.systemMessageContent = response.msg
             this.systemMessageData = data.data
             this.showSystemMessage()
+            setTimeout(() => {
+              this.closeSystemMessage()
+            }, 8000)
           }
         } else if (response.code === 500) {
           this.$message.error(response.msg)
@@ -863,6 +864,13 @@ export default {
     this.initWebSocket()
   },
   computed: {
+    userAvatar() {
+      const userStore = useUserStore()
+      if (!userStore.avatar && this.isTokenAvailable) {
+        userStore.getUserInfo()
+      }
+      return userStore.avatar || require('@/assets/default-avatar.webp') // 使用默认头像
+    },
     isTokenAvailable() {
       // 登录了
       return !!useUserStore().token

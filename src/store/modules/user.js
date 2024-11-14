@@ -1,6 +1,6 @@
 import { getUserInfo, login } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import defAva from '@/assets/default-avatar.png'
+import defAva from '@/assets/default-avatar.webp'
 import { defineStore } from 'pinia'
 
 // eslint-disable-next-line

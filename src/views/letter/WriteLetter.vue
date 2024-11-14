@@ -641,7 +641,8 @@ export default {
       showTip: true,
       disabled: false,
       fontPaperLimitList: [],
-      timeOutCount: 0
+      timeOutCount: 0,
+      linked: false
     }
   },
 
@@ -725,7 +726,7 @@ export default {
             }
           })
         }, { once: true })
-      }, 1500)
+      }, 2500)
     },
     writeMore() {
       this.closeImageViewer()
@@ -977,24 +978,35 @@ export default {
     initWebSocket() {
       if ('WebSocket' in window) {
         // 这里记得要改成你自己的ip
-        if (this.timeOutCount === 0) {
-          this.websocket = new WebSocket('/ws/letterGen', useUserStore().token)
+        if (!this.isLinked) {
+          // this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/chat', useUserStore().token)
+          this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
+          this.websocket.onerror = this.onError
+          this.websocket.onopen = this.onOpen
+          this.websocket.onmessage = this.onMessage
+          this.websocket.onclose = this.onClose
           this.websocketTimeout = setTimeout(() => {
             if (this.websocket.readyState !== WebSocket.OPEN) {
               this.websocket.close()
-              this.onError()
             }
           }, 2000) // 设置超时时间为3000毫秒
-        } else if (this.timeOutCount === 1) {
-          this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
-        } else if (this.timeOutCount === 2) {
-          this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/letterGen', useUserStore().token)
         }
-        // 为了方便写了这一坨屎删代码，有效解决各环境下不能调用的问题
-        this.websocket.onerror = this.onError
-        this.websocket.onopen = this.onOpen
-        this.websocket.onmessage = this.onMessage
-        this.websocket.onclose = this.onClose
+        // setTimeout(() => {
+        //   if (!this.linked) {
+        //     this.websocket = new WebSocket('ws://localhost:8080/ws/chat', useUserStore().token)
+        //     // 为了方便写了这一坨屎删代码，有效解决各环境下不能调用的问题
+        //     this.websocket.onerror = this.onError
+        //     this.websocket.onopen = this.onOpen
+        //     this.websocket.onmessage = this.onMessage
+        //     this.websocket.onclose = this.onClose
+        //     this.websocketTimeout = setTimeout(() => {
+        //       if (this.websocket.readyState !== WebSocket.OPEN) {
+        //         this.websocket.close()
+        //         this.onError()
+        //       }
+        //     }, 2000)
+        //   } // 设置超时时间为3000毫秒
+        // }, 2500)
       } else {
         alert('Not support websocket')
       }
@@ -1011,28 +1023,31 @@ export default {
       }
     },
     onError() {
-      if (this.timeOutCount < 3) {
-        this.initWebSocket()
-        this.timeOutCount++
-      } else {
-        this.$message.error('连接失败，请刷新页面重试')
+      if (!this.linked) {
+        // this.$message.error('连接超时,请刷新页面重试!')
         this.websocket = null
       }
     },
     onOpen() {
-      // this.$message.success('开始写信吧!')
-      // this.send()
+      this.linked = true
       setTimeout(() => {
         this.websocket.send(JSON.stringify(this.letterGen))
       }, 500)
     },
     onClose() {
-      // this.$message.warning('连接关闭')
-      // console.log('连接关闭')
-      if (this.timeOutCount > 3) {
+      this.timeOutCount++
+      if (this.timeOutCount > 5) {
+        this.$notify.error({
+          title: '错误',
+          message: '哎呀，亲爱的朋友们，服务器小憩了一下，很快就会回来啦！请稍后再试，或者刷新一下页面。侨宝在这里等你们哦！🌟📶',
+          offset: 100
+        })
+      } else {
         this.websocket = null
+        this.linked = false
+        this.initWebSocket()
       }
-      // this.websocket = null
+      // this.$message.warning('连接已断开')
     },
     onMessage(event) {
       if (event.data === 'success') {
@@ -1434,6 +1449,9 @@ export default {
     this.closeWebSocket()
   },
   computed: {
+    isLinked() {
+      return this.linked && this.websocket
+    },
     innerTextBackground() {
       if (this.letterVo.deliveryProgress / 100 <= 40) {
         return require('@/assets/imgs/car1.png')
