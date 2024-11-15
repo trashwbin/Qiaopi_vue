@@ -233,7 +233,8 @@ img {
 .title--qJ7Xg_90 {
   -webkit-box-orient: vertical;
   word-wrap: break-word;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 2; /* 兼容旧版Webkit内核浏览器 */
+  line-clamp: 2; /* 标准属性，提高兼容性 */
   color: #11192d;
   display: -webkit-box;
   font-family: PingFangSC-Medium;

@@ -21,7 +21,7 @@
                 <label for="friendContent" style="margin-bottom: 20px;">内容:</label>
                 <textarea id="friendContent" v-model="friendRequest.context" style="width: 100%; max-width: 500px; margin: 0 auto; height: 100px;"></textarea>
               </div>
-              <button type="submit" @click="sendFriendRequest">发送</button>
+              <button type="submit" @click="sendFriendRequest" style="position: absolute;bottom: 120px;">发送</button>
             </form>
         </div>
       </div>
@@ -40,7 +40,7 @@
             <label for="letterContent">信件内容：</label>
             <textarea id="letterContent" v-model="letter.content" required style="margin-top:20px"></textarea>
           </div>
-          <button type="submit" @click="generateDriftBottle">发送</button>
+          <button type="submit" @click="generateDriftBottle" style="width: 40%;">发送</button>
         </form>
       </div>
       <div class="right" :style="{ 'background-image': `url(${bottleImageUrl})` }"></div>
@@ -624,9 +624,8 @@ button:hover {
 .modal-content {
   border-radius: 10px;
   width: 35%; /* 调整宽度 */
-  max-width: 700px; /* 最大宽度 */
   height: 70%; /* 调整高度 */
-  max-height: 600px; /* 最大高度 */
+  max-height: 400px; /* 最大高度 */
   background-color: #fff;
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -873,7 +872,7 @@ button:hover {
 
 .avatar {
   position: absolute;
-  left: 20px;
+  left: 5px;
   width: 45px;
   height: 45px;
   border-radius: 50%;

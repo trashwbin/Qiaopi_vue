@@ -3,6 +3,30 @@
   <div class="qiaobao" ref="qiaobao" v-show="isTokenAvailable">
     <img class="qiaobao_icon" src="../../assets/ai/qiaobao8.gif" alt="侨宝" @mousedown="startDrag" @mousemove="dragImage"
       @mouseup="endDrag" @click="clickQiaobao" />
+    <transition name="triviaMessage">
+      <div class="systemMessage" alt="侨宝" v-show="systemMessage" :class="{ focusinMessage: focusinSystemMessage }">
+        <span class="content-before"></span>
+        <span class="content-after"></span>
+        <br>
+        <div>
+          <p :class="{ systemMessageContent: !systemMessageData }" :style="{ opacity: focusinSystemMessage ? 1 : 0 }">{{
+            systemMessageContent }}
+          </p>
+          <el-button size="mini" style="background-color: #7E3F11; color: aliceblue;"
+            :style="{ opacity: focusinSystemMessage ? 1 : 0 }" plain v-if="systemMessageData" @click="handleToRouter"
+            round>去看看</el-button>
+        </div>
+        <span class="closeSystemMessage" :style="{ opacity: focusinSystemMessage ? 1 : 0 }" @click="closeSystemMessage">
+          <svg t="1731515418992" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="1474" width="16" height="16">
+            <path
+              d="M312.13091 310.48787a46.545021 46.545021 0 0 1 65.814659 0l133.816935 133.933298 133.58421-133.351485a46.312296 46.312296 0 0 1 65.628479 0 45.381395 45.381395 0 0 1-0.9309 64.813942l-133.11876 133.77039 133.11876 133.118759a46.545021 46.545021 0 0 1 0 65.81466 45.497758 45.497758 0 0 1-64.930304-1.023991l-133.11876-132.653309-133.118759 133.910025a46.568293 46.568293 0 1 1-65.931022-65.81466L446.36675 509.677287l-134.23584-133.49112a46.545021 46.545021 0 0 1 0-65.698297zM511.995229 1023.999767a508.248355 508.248355 0 0 1-293.349994-93.299494 46.405386 46.405386 0 0 1-34.21059-44.68322l-0.418905-4.305414a46.405386 46.405386 0 0 1 80.592703-31.557525 420.534263 420.534263 0 1 0-132.653309-160.161416l-7.540293 7.540293a46.545021 46.545021 0 0 1 29.02082 43.077417l0.442178 4.328687a46.428658 46.428658 0 0 1-91.088606 12.776608A511.995229 511.995229 0 1 1 511.995229 1023.999767z"
+              fill="#7E3F11" p-id="1475"></path>
+          </svg>
+        </span>
+      </div>
+    </transition>
+
     <transition name="trivia">
       <div class="hp_trivia_inner" v-show="openDialog" :class="{ focusin: focusin }">
         <div class="trivia" v-show="openDialog">
@@ -395,10 +419,34 @@ export default {
       isScrollButtonVisible: false,
       thinking: null,
       isNetSwitchOn: true,
-      chatModel: 'GLM-4-Flash'
+      chatModel: 'GLM-4-Flash',
+      systemMessageData: {
+        code: '',
+        type: 1,
+        data: ''
+      },
+      systemMessage: false,
+      focusinSystemMessage: false,
+      systemMessageContent: ''
     }
   },
   methods: {
+    handleToRouter() {
+      if (this.systemMessageData) {
+        this.$router.push('/' + this.systemMessageData)
+      }
+      this.closeSystemMessage()
+    },
+    showSystemMessage() {
+      this.systemMessage = true
+      setTimeout(() => {
+        this.focusinSystemMessage = true
+      }, 800)
+    },
+    closeSystemMessage() {
+      this.systemMessage = false
+      this.focusinSystemMessage = false
+    },
     async copyContent(role, id) {
       try {
         // 获取内容
@@ -480,7 +528,7 @@ export default {
         parseFloat(this.$refs.qiaobao.style.top) || window.innerHeight * 0.8
       setTimeout(() => {
         this.isDragging = true
-      }, 200)
+      }, 150)
 
       window.addEventListener('mousemove', this.dragImage)
       window.addEventListener('mouseup', this.endDrag)
@@ -497,7 +545,7 @@ export default {
     endDrag(event) {
       setTimeout(() => {
         this.isDragging = false
-      }, 200)
+      }, 150)
       window.removeEventListener('mousemove', this.dragImage)
       window.removeEventListener('mouseup', this.endDrag)
     },
@@ -505,9 +553,9 @@ export default {
     initWebSocket() {
       if ('WebSocket' in window) {
         // 这里记得要改成你自己的ip
-        if (!this.isLinked) {
-          // this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/chat', useUserStore().token)
-          this.websocket = new WebSocket('ws://localhost:8080/ws/chat', useUserStore().token)
+        if (!this.isLinked && this.isTokenAvailable) {
+          this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/chat', useUserStore().token)
+          // this.websocket = new WebSocket('ws://localhost:8080/ws/chat', useUserStore().token)
           this.websocket.onerror = this.onError
           this.websocket.onopen = this.onOpen
           this.websocket.onmessage = this.onMessage
@@ -606,66 +654,80 @@ export default {
 
       if (isJson(event.data)) {
         const response = JSON.parse(event.data)
-        console.log(response)
         if (response.code === 200) {
-          this.$message.success(response.msg)
+          // this.$message.success(response.msg)
           const data = response.data
-          switch (response.data.code) {
-            case '[DONE]':
-              this.setLastSegmentStatus(2)
-              break
-            case 'clean':
-              break
-            case 'help':
-              this.setMessageInner(data.data)
-              this.setLastSegmentStatus(2)
-              break
-            case 'history':
-              if (data.data) {
-                this.segments = []
-                for (let i = 0; i < data.data.length; i += 2) {
-                  const newSegment = {
-                    id: this.segments.length + 1,
-                    user: {
-                      content: data.data[i].content
-                    },
-                    qiaobao: {
-                      content: marked(data.data[i + 1].content),
-                      status: 2
+          if (data.type === 1) {
+            switch (data.code) {
+              case 'connect':
+                this.systemMessageContent = response.msg
+                this.systemMessageData = data.data
+                this.showSystemMessage()
+                setTimeout(() => {
+                  this.closeSystemMessage()
+                }, 5000)
+                break
+              case '[DONE]':
+                this.setLastSegmentStatus(2)
+                break
+              case 'chatting':
+                if (data.data) {
+                  this.segments = []
+                  for (let i = 0; i < data.data.length; i += 2) {
+                    const newSegment = {
+                      id: this.segments.length + 1,
+                      user: {
+                        content: data.data[i].content
+                      },
+                      qiaobao: {
+                        content: marked(data.data[i + 1].content),
+                        status: 2
+                      }
                     }
+                    this.segments.push(newSegment)
                   }
-                  this.segments.push(newSegment)
                 }
-              }
-              break
-            case 'chatting':
-              if (data.data) {
-                this.segments = []
-                for (let i = 0; i < data.data.length; i += 2) {
-                  const newSegment = {
-                    id: this.segments.length + 1,
-                    user: {
-                      content: data.data[i].content
-                    },
-                    qiaobao: {
-                      content: marked(data.data[i + 1].content),
-                      status: 2
+                break
+              default:
+            }
+          } else if (data.type === 2) {
+            switch (data.code) {
+              case 'clean':
+                break
+              case 'help':
+                this.setMessageInner(data.data)
+                this.setLastSegmentStatus(2)
+                break
+              case 'history':
+                if (data.data) {
+                  this.segments = []
+                  for (let i = 0; i < data.data.length; i += 2) {
+                    const newSegment = {
+                      id: this.segments.length + 1,
+                      user: {
+                        content: data.data[i].content
+                      },
+                      qiaobao: {
+                        content: marked(data.data[i + 1].content),
+                        status: 2
+                      }
                     }
+                    this.segments.push(newSegment)
                   }
-                  this.segments.push(newSegment)
                 }
-              }
-              break
-            default:
+                break
+              default:
+            }
+          } else if (data.type === 3) {
+            this.systemMessageContent = response.msg
+            this.systemMessageData = data.data
+            this.showSystemMessage()
           }
-          return
         } else if (response.code === 500) {
           this.$message.error(response.msg)
-          return
         } else {
           this.setMessageInner(event.data)
         }
-        console.log(response)
       } else {
         // 如果不是 JSON，直接调用 setMessageInner
         this.setMessageInner(event.data)
@@ -798,7 +860,7 @@ export default {
     this.closeWebSocket()
   },
   created() {
-    // this.initWebSocket()
+    this.initWebSocket()
   },
   computed: {
     isTokenAvailable() {
@@ -814,6 +876,7 @@ export default {
   },
   watch: {
     isLinked(newVal) {
+      console.log('重新连接')
       if (!newVal && this.isTokenAvailable) {
         setTimeout(() => {
           this.initWebSocket()
@@ -2593,5 +2656,74 @@ div {
 
 .segments {
   margin-top: 24px;
+}
+
+.systemMessage {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: 1000;
+  position: absolute;
+  background-image: url('@/assets/ai/systemMessage.png');
+  background-size: 100% 100%;
+  left: 30%;
+  bottom: 80%;
+  border-radius: 25%;
+}
+
+.content-before {
+  float: left;
+  width: 50%;
+  height: 100%;
+  shape-outside: radial-gradient(farthest-side ellipse at right, transparent 98%, red);
+}
+
+.content-after {
+  float: right;
+  width: 50%;
+  height: 100%;
+  shape-outside: radial-gradient(farthest-side ellipse at left, transparent 86%, red);
+}
+
+.systemMessageContent {
+  padding-top: 10px;
+}
+
+/* 固定窗口大小的类 */
+.systemMessage.focusinMessage {
+  width: 260px;
+  height: 170px;
+  opacity: 1;
+}
+
+/* 过渡效果 */
+.triviaMessage-enter-active,
+.triviaMessage-leave-active {
+  transition: all 1s ease-in-out;
+}
+
+.triviaMessage-enter-from,
+.triviaMessage-leave-to {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.triviaMessage-enter-to,
+.triviaMessage-leave-from {
+  width: 260px;
+  height: 170px;
+  opacity: 1;
+}
+
+.closeSystemMessage {
+  position: absolute;
+  right: 0%;
+  top: 30%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 40px;
 }
 </style>
