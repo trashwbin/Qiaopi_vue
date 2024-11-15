@@ -18,8 +18,8 @@
         <img src="../../assets/imgs/text2.png" alt="" class="text2">
         <img src="../../assets/imgs/text3.png" alt="" class="text3">
         <img src="../../assets/imgs/text4.png" alt="" class="text4">
-        <img src="../../assets/imgs/boat.png" alt="" class="boat">
-        <img src="../../assets/imgs/boatsea.jpg" alt="" class="boatsea">
+        <img src="../../assets/imgss/boat.webp" alt="" class="boat">
+        <img src="../../assets/imgss/boatsea.webp" alt="" class="boatsea">
       </section>
       <div class="introduce">
         <div class="left">
@@ -72,7 +72,7 @@
             侨批的传递往往依赖于专门的<span class="blue">“水客”</span>或<span
               class="yellow">“侨批局”</span>，这些信使和机构在没有现代化通信手段的时代，扮演了至关重要的角色。侨批的往来不仅反映了当时社会的经济状况，也展现了华侨群体的生活状态和文化特色。如今，侨批已成为研究华侨历史和文化的珍贵资料，它们见证了一段段跨越山海的家国情怀。
           </p>
-          <img src="../../assets/imgs/facai.png" alt="" class="facai">
+          <img src="../../assets/imgss/facai.webp" alt="" class="facai">
         </div>
       </div>
       <div class="history">
@@ -1738,26 +1738,45 @@ section #text {
   left: -30px;
   width: 780px;
   height: 500px;
+  animation: boatmove 6s infinite forwards;
+}
+
+@keyframes boatmove {
+
+  0%,
+  100% {
+    bottom: 90px;
+    left: -30px;
+  }
+
+  50% {
+    bottom: 88px;
+    left: -40px;
+  }
 }
 
 .boatsea {
   position: absolute;
   bottom: -20px;
-  left: -50px;
+  /*left: -50px;
   width: 1600px;
+  */
+  width: 100vw;
   height: 230px;
-  animation: seamove 4s infinite forwards;
+  animation: seamove 8s infinite forwards;
 }
 
 @keyframes seamove {
-  0% {
+
+  0%,
+  100% {
     bottom: 0px;
-    left: -50px;
+    /* left: -50px; */
   }
 
-  100% {
+  50% {
     bottom: -20px;
-    left: -50px;
+    /* left: -50px; */
   }
 }
 
