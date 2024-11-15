@@ -31,12 +31,17 @@ export default {
 </script>
 
 <style scoped>
+.banner {
+  margin: 0;
+  padding: 0;
+}
 .left {
   position: relative;
 }
 .title {
   position: absolute;
   left: 0;
+  top: 20px;
 }
 .point {
   position: absolute;
@@ -52,10 +57,17 @@ export default {
   cursor: pointer;
 }
 .right {
+  width: 900px;
+  height: 750px;
   position: relative;
-  right: -400px;
+  top: 0;
+  right: -600px;
 }
 .right img {
-  width: 700px;
+  position: absolute;
+  right: 0;
+  width: 730px;
+  height: 745px;
+  margin: 0;
 }
 </style>

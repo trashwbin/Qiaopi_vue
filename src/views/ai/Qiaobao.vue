@@ -536,7 +536,7 @@ export default {
         parseFloat(this.$refs.qiaobao.style.top) || window.innerHeight * 0.8
       setTimeout(() => {
         this.isDragging = true
-      }, 200)
+      }, 150)
 
       window.addEventListener('mousemove', this.dragImage)
       window.addEventListener('mouseup', this.endDrag)
@@ -553,7 +553,7 @@ export default {
     endDrag(event) {
       setTimeout(() => {
         this.isDragging = false
-      }, 200)
+      }, 150)
       window.removeEventListener('mousemove', this.dragImage)
       window.removeEventListener('mouseup', this.endDrag)
     },

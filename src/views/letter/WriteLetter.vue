@@ -71,8 +71,8 @@
           <div v-show="activeTab === 'letter'" class="text">
             <el-form-item label="信的内容：" prop="letterContent" style=" text-align: center;" label-width="100px">
               <el-input v-model="letterGen.letterContent" :maxlength="currentMaxlength" show-word-limit
-                placeholder="请开始写信吧" required type="textarea" :autosize="{ minRows: 15, maxRows: 20 }"
-                style="width: 500px;margin-left: -20px;" resize="none" @input="handleChange"></el-input>
+                placeholder="请开始写信吧" required type="textarea" :autosize="{ minRows: 20, maxRows: 30 }"
+                style="width: 300px; margin-left: -20px;" resize="none" @input="handleChange"></el-input>
             </el-form-item>
           </div>
         </el-form>
@@ -117,10 +117,11 @@
           </template>
           <template>
             <!-- <img crossorigin="anonymous" :src="backImageUrl" style="max-width: 100%; max-height: 640px;" /> -->
-            <el-image crossorigin="anonymous" :src="letterUrl" style="max-width: 100%; max-height: 640px;">
+            <el-image crossorigin="anonymous" :src="letterUrl"
+              style="max-width: 100%; max-height: 640px;margin-left: 100px;">
               <div slot="placeholder" style="width: 100% ;height: 100%;">
                 <img crossorigin="anonymous" :src="backImageUrl"
-                  style="max-width: 100%; max-height: 640px; margin-top: 13px" />
+                  style="max-width: 100%; max-height: 640px; margin-top: 13px;" />
                 <!-- <i class="el-icon-loading" style="line-height: 250px; color: #A52328; font-size: 30px;"></i> -->
               </div>
               <div slot="error" class="image-slot" style="width: 100%; height: 100%; color: #A52328;">
@@ -372,7 +373,7 @@
               <i v-else class="el-icon-arrow-right"></i>
             </div>
           </div>
-          <div class="progress" v-show="letterVo.deliveryProgress > 100">
+          <div class="progress">
             <div style="width: 100%; margin-top: 10px ;margin-left: 55px">
               <el-progress ref="progress" :text-inside="true" :stroke-width="24"
                 :percentage="letterVo.deliveryProgress / 100" style="height: 45px; width: 80%; line-height: 60px;">
@@ -1157,7 +1158,7 @@ export default {
             type: 'warning'
           }).then(() => {
             useCard(this.useCardDto).then(res => {
-              this.letterVo = res.data
+              Object.assign(this.letterVo, res.data)
               this.$notify({
                 title: '使用成功',
                 message: '侨批很快就要送达了!🥳',
@@ -1173,7 +1174,7 @@ export default {
       }
       if (this.useCardDto.cardId !== '') {
         useCard(this.useCardDto).then(res => {
-          this.letterVo = res.data
+          Object.assign(this.letterVo, res.data)
           this.$notify({
             title: '使用成功',
             message: '侨批很快就要送达了!🥳',
@@ -1196,11 +1197,13 @@ export default {
     },
     setAddressByCountryId() {
       if (this.letter.recipientAddress.countryId === 1 || this.letter.recipientAddress.countryId === '' || this.letter.recipientAddress.countryId === null) {
+        this.letter.recipientAddress.countryId = 1
         this.letter.recipientAddress.longitude = this.recipientAddress[0]
         this.letter.recipientAddress.latitude = this.recipientAddress[1]
         this.letter.recipientAddress.formattedAddress = this.recipientAddress[2]
       }
       if (this.letter.senderAddress.countryId === 1 || this.letter.senderAddress.countryId === '' || this.letter.senderAddress.countryId === null) {
+        this.letter.senderAddress.countryId = 1
         this.letter.senderAddress.longitude = this.senderAddress[0]
         this.letter.senderAddress.latitude = this.senderAddress[1]
         this.letter.senderAddress.formattedAddress = this.senderAddress[2]
