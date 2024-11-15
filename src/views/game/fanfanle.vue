@@ -2,7 +2,10 @@
 <template>
   <div class="memory-game">
     <h1>翻翻乐</h1>
-    <div class="game-board">
+    <div v-if="!canPlay" class="game-disabled">
+      游戏已禁用，您没有剩余的翻翻乐次数。
+    </div>
+    <div v-else class="game-board">
       <div
         v-for="(card, index) in cards"
         :key="index"
@@ -18,27 +21,31 @@
         </div>
       </div>
     </div>
-    <button @click="resetGame" class="reset-button">重置游戏</button>
+    <button v-if="canPlay" @click="resetGame" class="reset-button">重置游戏</button>
   </div>
 </template>
 
 <script>
+import { Message } from 'element-ui'
+import { getFflLimit, winFfl } from '@/api/fanfanle'
 export default {
   name: 'MemoryCardGame',
   data() {
     return {
+      canPlay: true,
       cards: [],
       flippedCards: [],
       canFlip: true,
+      winLimit: null, // 翻翻乐的次数
       images: [
-        '/placeholder.svg?height=100&width=100&text=1',
-        '/placeholder.svg?height=100&width=100&text=2',
-        '/placeholder.svg?height=100&width=100&text=3',
-        '/placeholder.svg?height=100&width=100&text=4',
-        '/placeholder.svg?height=100&width=100&text=5',
-        '/placeholder.svg?height=100&width=100&text=6',
-        '/placeholder.svg?height=100&width=100&text=7',
-        '/placeholder.svg?height=100&width=100&text=8'
+        require('../../assets/imgss/ffl-doubleFish.webp'),
+        require('../../assets/imgss/ffl-fish.webp'),
+        require('../../assets/imgss/ffl-heteroideusMoney.webp'),
+        require('../../assets/imgss/ffl-pangxie.webp'),
+        require('../../assets/imgss/ffl-rabbit.webp'),
+        require('../../assets/imgss/ffl-realMoney.webp'),
+        require('../../assets/imgss/ffl-rectangleMoney.webp'),
+        require('../../assets/imgss/ffl-wangba.webp')
       ]
     }
   },
@@ -55,7 +62,7 @@ export default {
         }))
     },
     flipCard(index) {
-      if (!this.canFlip || this.cards[index].flipped || this.cards[index].matched) return
+      if (!this.canPlay || !this.canFlip || this.cards[index].flipped || this.cards[index].matched) return
 
       this.cards[index].flipped = true
       this.flippedCards.push(index)
@@ -75,6 +82,7 @@ export default {
         card2.matched = true
         this.flippedCards = []
         this.canFlip = true
+        this.checkWin()
       } else {
         setTimeout(() => {
           card1.flipped = false
@@ -88,10 +96,41 @@ export default {
       this.initializeCards()
       this.flippedCards = []
       this.canFlip = true
+    },
+    checkWin() {
+      const allMatched = this.cards.every(card => card.matched)
+      if (allMatched) {
+        console.log('游戏胜利')
+        this.winFfl()
+        this.getFflLimit()
+      }
+    },
+    async winFfl() {
+      const res = await winFfl()
+      if (res.code === 200) {
+        Message.success('恭喜你获得10猪仔钱')
+      } else {
+        Message.error(res.msg)
+      }
+    },
+    async getFflLimit() {
+      const res = await getFflLimit()
+      if (res.code === 200) {
+        this.winLimit = res.data
+        console.log(this.winLimit)
+        if (this.winLimit <= 0) {
+          this.canPlay = false // 设置一个标志来禁止游戏
+        } else {
+          this.canPlay = true // 允许游戏
+        }
+      } else {
+        Message.error(res.msg)
+      }
     }
   },
   created() {
     this.initializeCards()
+    this.getFflLimit()
   }
 }
 </script>
@@ -179,5 +218,11 @@ export default {
 
 .reset-button:hover {
   background-color: #c0392b;
+}
+.game-disabled {
+  text-align: center;
+  color: rgb(172, 90, 90);
+  font-size: 20px;
+  margin-top: 20px;
 }
 </style>
