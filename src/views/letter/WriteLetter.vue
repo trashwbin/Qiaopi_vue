@@ -980,8 +980,8 @@ export default {
       if ('WebSocket' in window) {
         // 这里记得要改成你自己的ip
         if (!this.isLinked) {
-          // this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/chat', useUserStore().token)
-          this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
+          this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/chat', useUserStore().token)
+          // this.websocket = new WebSocket('ws://localhost:8080/ws/letterGen', useUserStore().token)
           this.websocket.onerror = this.onError
           this.websocket.onopen = this.onOpen
           this.websocket.onmessage = this.onMessage
@@ -990,24 +990,8 @@ export default {
             if (this.websocket.readyState !== WebSocket.OPEN) {
               this.websocket.close()
             }
-          }, 2000) // 设置超时时间为3000毫秒
+          }, 3000) // 设置超时时间为3000毫秒
         }
-        // setTimeout(() => {
-        //   if (!this.linked) {
-        //     this.websocket = new WebSocket('ws://localhost:8080/ws/chat', useUserStore().token)
-        //     // 为了方便写了这一坨屎删代码，有效解决各环境下不能调用的问题
-        //     this.websocket.onerror = this.onError
-        //     this.websocket.onopen = this.onOpen
-        //     this.websocket.onmessage = this.onMessage
-        //     this.websocket.onclose = this.onClose
-        //     this.websocketTimeout = setTimeout(() => {
-        //       if (this.websocket.readyState !== WebSocket.OPEN) {
-        //         this.websocket.close()
-        //         this.onError()
-        //       }
-        //     }, 2000)
-        //   } // 设置超时时间为3000毫秒
-        // }, 2500)
       } else {
         alert('Not support websocket')
       }

@@ -572,7 +572,7 @@ export default {
             if (this.websocket.readyState !== WebSocket.OPEN) {
               this.websocket.close()
             }
-          }, 2000) // 设置超时时间为3000毫秒
+          }, 3000) // 设置超时时间为3000毫秒
         }
         // setTimeout(() => {
         //   if (!this.linked) {
