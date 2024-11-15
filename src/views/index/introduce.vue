@@ -1738,6 +1738,21 @@ section #text {
   left: -30px;
   width: 780px;
   height: 500px;
+  animation: boatmove 6s infinite forwards;
+}
+
+@keyframes boatmove {
+
+  0%,
+  100% {
+    bottom: 90px;
+    left: -30px;
+  }
+
+  50% {
+    bottom: 88px;
+    left: -40px;
+  }
 }
 
 .boatsea {

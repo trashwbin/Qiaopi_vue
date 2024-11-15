@@ -4,7 +4,8 @@
     <p v-show="showWord">{{ paragraphs[currentParagraph] }}</p>
     <a href="#" class="nexttick" @click.prevent="nextTick" v-show="showWord">继续</a>
     <el-carousel :interval="4000" type="card" height="400px" v-show="showCarousel" :autoplay="false">
-  <el-carousel-item v-for="(status, index) in lockStatus" :key="index" :class="'carousel-item-' + index" style="height: 400px; width: 300px; margin-left: 130px;">
+      <el-carousel-item v-for="(status, index) in lockStatus" :key="index" :class="'carousel-item-' + index"
+        style="height: 400px; width: 300px; margin-left: 130px;">
         <div v-if="lockStatus[index - 1] === 1 || index === 0" @click="openpage(index)"
           style="height: 100%; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
           <h3 class="medium">{{ index + 1 }}</h3>
@@ -192,20 +193,21 @@ p {
   transform: translateX(-50%);
   color: rgb(0, 0, 0);
 }
+
 .carousel-item-0 {
-  background-image: url(../../assets/imgs/pic1.png);
+  background-image: url(../../assets/imgss/pic1.webp);
   background-size: cover;
   background-position: center center;
 }
 
 .carousel-item-1 {
-  background-image: url(../../assets/imgs/pic2.png);
+  background-image: url(../../assets/imgss/pic2.webp);
   background-size: cover;
   background-position: center center;
 }
 
 .carousel-item-2 {
-  background-image: url(../../assets/imgs/pic3.png);
+  background-image: url(../../assets/imgss/pic3.webp);
   background-size: cover;
   background-position: center center;
 }

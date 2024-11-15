@@ -1,18 +1,19 @@
 <template>
-    <div class="banner">
-      <div class="left">
-        <img src="../../assets/imgs/exploreTitle.png" alt="" class="title">
-        <div class="point">
-        <router-link to="/explore"><img src="../../assets/imgs/point1.png" alt="" style="margin-bottom: 30px;"></router-link>
+  <div class="banner">
+    <div class="left">
+      <img src="../../assets/imgs/exploreTitle.png" alt="" class="title">
+      <div class="point">
+        <router-link to="/explore"><img src="../../assets/imgs/point1.png" alt=""
+            style="margin-bottom: 30px;"></router-link>
         <img src="../../assets/imgs/point2.png" alt="" @click="unlockWarning">
         <img src="../../assets/imgs/point2.png" alt="" @click="unlockWarning">
         <img src="../../assets/imgs/point2.png" alt="" @click="unlockWarning">
-      </div>
-      </div>
-      <div class="right">
-        <img src="../../assets/imgs/mengmei.png" alt="">
       </div>
     </div>
+    <div class="right">
+      <img src="../../assets/imgss/mengmei.webp" alt="">
+    </div>
+  </div>
 </template>
 
 <script>
@@ -35,14 +36,17 @@ export default {
   margin: 0;
   padding: 0;
 }
+
 .left {
   position: relative;
 }
+
 .title {
   position: absolute;
   left: 0;
   top: 20px;
 }
+
 .point {
   position: absolute;
   top: 100px;
@@ -50,12 +54,14 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .point img {
   width: 400px;
   height: 100px;
   margin-bottom: 50px;
   cursor: pointer;
 }
+
 .right {
   width: 900px;
   height: 750px;
@@ -63,6 +69,7 @@ export default {
   top: 0;
   right: -600px;
 }
+
 .right img {
   position: absolute;
   right: 0;
