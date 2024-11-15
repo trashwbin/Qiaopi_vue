@@ -585,7 +585,7 @@ export default {
         fontId: '',
         fontColorId: '',
         paperId: '',
-        letterContent: '',
+        letterContent: ' ',
         senderName: useUserStore().name,
         recipientName: '',
         letterType: 1
