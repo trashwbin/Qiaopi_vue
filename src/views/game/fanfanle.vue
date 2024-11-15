@@ -146,7 +146,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  max-width: 600px;
+  max-width: 450px;
   margin: 0 auto 20px;
 }
 

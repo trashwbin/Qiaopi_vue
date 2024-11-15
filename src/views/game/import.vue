@@ -61,7 +61,7 @@ export default {
   height: 750px;
   position: relative;
   top: 0;
-  right: -600px;
+  right: -550px;
 }
 .right img {
   position: absolute;
