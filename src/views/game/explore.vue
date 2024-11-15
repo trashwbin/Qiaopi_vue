@@ -176,7 +176,6 @@ export default {
     },
     showAllText() {
       this.displayedTextLength = this.currentScene.text.length
-      this.showChoices = false
     }
   },
   mounted() {
