@@ -470,7 +470,7 @@ export default {
         }
         this.$message.success('复制成功')
       } catch (err) {
-        this.$message.error('复制失败')
+        this.$message.error('浏览器禁用了我们的复制权限，请手动复制')
       }
     },
     reAnswer() {

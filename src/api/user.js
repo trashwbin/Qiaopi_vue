@@ -13,6 +13,19 @@ export function getMyStatistics() {
     method: 'get'
   })
 }
+export function getTask() {
+  return request({
+    url: '/user/getTask',
+    method: 'get'
+  })
+}
+export function finishTask(taskId) {
+  return request({
+    url: '/user/finishTask',
+    method: 'post',
+    params: { taskId }
+  })
+}
 export function getSignList() {
   return request({
     url: '/user/getSignList',

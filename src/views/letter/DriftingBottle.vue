@@ -2,8 +2,7 @@
   <div class="banner">
     <div class="pick" v-if="activeButton === 'smallbtn1'">
       <!-- <button class="bigbtn" @click="showDriftBottle(); select('smallbtn2')">漂流瓶</button> -->
-      <button class="bigbtn"
-      @click="showDriftBottle();">
+      <button class="bigbtn" @click="showDriftBottle();">
         漂流瓶
       </button>
     </div>
@@ -12,17 +11,19 @@
         <div class="modal-content">
           <span class="close" @click="toggleFriendModal">&times;</span>
           <h2>成为好友</h2>
-            <form @submit.prevent="sendFriend">
-              <div class="map">
-                <avue-input-map :autosize="{ minRows: 1, maxRows: 4 }" placeholder="我的地址"
-                  v-model="friendRequest.giveAddresss" style="width: 100%; max-width: 500px; margin: 0 auto;"></avue-input-map>
-              </div>
-              <div class="form-group special">
-                <label for="friendContent" style="margin-bottom: 20px;">内容:</label>
-                <textarea id="friendContent" v-model="friendRequest.context" style="width: 100%; max-width: 500px; margin: 0 auto; height: 100px;"></textarea>
-              </div>
-              <button type="submit" @click="sendFriendRequest" style="position: absolute;bottom: 120px;">发送</button>
-            </form>
+          <form @submit.prevent="sendFriend">
+            <div class="map">
+              <avue-input-map :autosize="{ minRows: 1, maxRows: 4 }" placeholder="我的地址"
+                v-model="friendRequest.giveAddresss"
+                style="width: 100%; max-width: 500px; margin: 0 auto;"></avue-input-map>
+            </div>
+            <div class="form-group special">
+              <label for="friendContent" style="margin-bottom: 20px;">内容:</label>
+              <textarea id="friendContent" v-model="friendRequest.context"
+                style="width: 100%; max-width: 500px; margin: 0 auto; height: 100px;"></textarea>
+            </div>
+            <button type="submit" @click="sendFriendRequest" style="position: absolute;bottom: 120px;">发送</button>
+          </form>
         </div>
       </div>
       <button class="bigbtn1" @click="throwBottle">扔回海里</button>
@@ -47,32 +48,32 @@
     </div>
     <div class="friend" v-if="activeButton === 'smallbtn5'"></div>
     <div class="smallbtn1" @click="select('smallbtn1')" :class="activeButtonClass('smallbtn1')">捡漂流瓶</div>
-<div class="smallbtn2" @click="select('smallbtn4');" :class="activeButtonClass('smallbtn4')">
-  新消息
-  <div v-if="hasUnreadRequests" class="red-dot"></div>
-</div>
-<div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')">写漂流瓶</div>
- <!-- haha  -->
+    <div class="smallbtn2" @click="select('smallbtn4');" :class="activeButtonClass('smallbtn4')">
+      新消息
+      <div v-if="hasUnreadRequests" class="red-dot"></div>
+    </div>
+    <div class="smallbtn3" @click="select('smallbtn3')" :class="activeButtonClass('smallbtn3')">写漂流瓶</div>
+    <!-- haha  -->
     <div class="friend" v-if="activeButton === 'smallbtn4'">
-  <div class="friendquest">
-    <!-- 如果有好友申请，显示每个申请 -->
-    <div v-if="friendRequests && friendRequests.length > 0">
-      <div v-for="request in friendRequests" :key="request.id" class="request-content">
-        <div class="content">
-          <img :src="request.senderAvatar" alt="Avatar" class="avatar" />
-          <div class="username">{{ request.senderName }}：</div>
-          <div class="context">{{ request.content }}</div>
-          <div class="time">{{ new Date(request.createTime).toLocaleString() }}</div>
+      <div class="friendquest">
+        <!-- 如果有好友申请，显示每个申请 -->
+        <div v-if="friendRequests && friendRequests.length > 0">
+          <div v-for="request in friendRequests" :key="request.id" class="request-content">
+            <div class="content">
+              <img :src="request.senderAvatar" alt="Avatar" class="avatar" />
+              <div class="username">{{ request.senderName }}：</div>
+              <div class="context">{{ request.content }}</div>
+              <div class="time">{{ new Date(request.createTime).toLocaleString() }}</div>
+            </div>
+            <button @click="acceptFriendRequest(request.id)" class="button1">接受</button>
+            <button @click="rejectFriendRequest(request.id)" class="button2">拒绝</button>
+          </div>
         </div>
-        <button @click="acceptFriendRequest(request.id)" class="button1">接受</button>
-        <button @click="rejectFriendRequest(request.id)" class="button2">拒绝</button>
+        <div v-else class="no-requests">
+          您还没有收到好友申请哦
+        </div>
       </div>
     </div>
-    <div v-else class="no-requests">
-      您还没有收到好友申请哦
-    </div>
-  </div>
-</div>
     <!-- haha  -->
   </div>
 </template>
@@ -113,7 +114,7 @@ export default {
         },
         content: ''
       },
-      bottleImageUrl: ''
+      bottleImageUrl: 'http://110.41.58.26:9000/qiaopi/qiaopi-images/paper/plp.webp'
     }
   },
   methods: {
@@ -230,7 +231,7 @@ export default {
       const response = await ProcessingFriendRequests()
       if (response.code === 200) {
         this.friendRequests = response.data
-        if (this.friendRequests.length > 0) {
+        if (this.friendRequests && this.friendRequests.length > 0) {
           Message.success('您有新的好友申请')
         }
       } else {
@@ -243,6 +244,7 @@ export default {
         if (response.code === 200) {
           this.requestStatus[requestId] = 'accepted'
           Message.success(response.msg)
+          this.ProcessingFriendRequests()
         } else {
           Message.error(response.msg)
         }
@@ -314,7 +316,8 @@ export default {
 <style scoped>
 /* 样式示例 */
 .active-button {
-  color: #ff6347; /* 设置激活状态的字体颜色 */
+  color: #ff6347;
+  /* 设置激活状态的字体颜色 */
 }
 
 .banner {
@@ -351,43 +354,59 @@ export default {
   background-image: url(../../assets/imgs/10.jpg);
   background-position: center center;
   background-size: cover;
-  border-radius: 25px; /* 添加这一行来设置圆角 */
+  border-radius: 25px;
+  /* 添加这一行来设置圆角 */
 }
 
 .banner .bigbtn {
-  position: absolute; /* 使用绝对定位 */
+  position: absolute;
+  /* 使用绝对定位 */
   bottom: 60px;
   left: 43%;
   width: 180px;
   height: 70px;
-  background: rgba(255, 255, 255, 0.3); /* 半透明的白色背景，模拟玻璃 */
-  border: 2px solid rgba(255, 255, 255, 0.5); /* 边框半透明，增加玻璃感 */
-  border-radius: 35px; /* 圆角，模拟瓶子形状 */
-  backdrop-filter: blur(5px); /* 模糊效果，提升玻璃质感 */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2), /* 模拟瓶子的投影 */
-              inset 0px 4px 6px rgba(255, 255, 255, 0.4); /* 内部的亮光效果，增加立体感 */
-  color: #333; /* 文本颜色 */
+  background: rgba(255, 255, 255, 0.3);
+  /* 半透明的白色背景，模拟玻璃 */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  /* 边框半透明，增加玻璃感 */
+  border-radius: 35px;
+  /* 圆角，模拟瓶子形状 */
+  backdrop-filter: blur(5px);
+  /* 模糊效果，提升玻璃质感 */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2),
+    /* 模拟瓶子的投影 */
+    inset 0px 4px 6px rgba(255, 255, 255, 0.4);
+  /* 内部的亮光效果，增加立体感 */
+  color: #333;
+  /* 文本颜色 */
   font-size: 16px;
   font-weight: bold;
   text-align: center;
-  line-height: 70px; /* 垂直居中 */
+  line-height: 70px;
+  /* 垂直居中 */
   cursor: pointer;
-  transition: transform 0.2s ease; /* 添加轻微缩放效果 */
+  transition: transform 0.2s ease;
+  /* 添加轻微缩放效果 */
   display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-  font-size: 24px; /* 将字体大小设置为 24px */
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+  font-size: 24px;
+  /* 将字体大小设置为 24px */
 }
 
 .banner .bigbtn:hover {
-  transform: scale(1.10); /* 鼠标悬停时轻微放大 */
+  transform: scale(1.10);
+  /* 鼠标悬停时轻微放大 */
 }
 
 .banner .letter {
   position: relative;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%); /* 组合水平和垂直居中的转换 */
+  transform: translate(-50%, -50%);
+  /* 组合水平和垂直居中的转换 */
   width: 950px;
   height: 600px;
   background-position: center center;
@@ -396,53 +415,79 @@ export default {
 }
 
 .banner .bigbtn1 {
-  position: absolute; /* 使用绝对定位 */
+  position: absolute;
+  /* 使用绝对定位 */
   top: 380px;
   left: 730px;
   width: 180px;
   height: 70px;
-  background: rgba(255, 255, 255, 0.3); /* 半透明的白色背景，模拟玻璃 */
-  border: 2px solid rgba(255, 255, 255, 0.5); /* 边框半透明，增加玻璃感 */
-  border-radius: 35px; /* 圆角，模拟瓶子形状 */
-  backdrop-filter: blur(5px); /* 模糊效果，提升玻璃质感 */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2), /* 模拟瓶子的投影 */
-              inset 0px 4px 6px rgba(255, 255, 255, 0.4); /* 内部的亮光效果，增加立体感 */
-  color: #333; /* 文本颜色 */
+  background: rgba(255, 255, 255, 0.3);
+  /* 半透明的白色背景，模拟玻璃 */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  /* 边框半透明，增加玻璃感 */
+  border-radius: 35px;
+  /* 圆角，模拟瓶子形状 */
+  backdrop-filter: blur(5px);
+  /* 模糊效果，提升玻璃质感 */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2),
+    /* 模拟瓶子的投影 */
+    inset 0px 4px 6px rgba(255, 255, 255, 0.4);
+  /* 内部的亮光效果，增加立体感 */
+  color: #333;
+  /* 文本颜色 */
   font-size: 16px;
   font-weight: bold;
   text-align: center;
-  line-height: 70px; /* 垂直居中 */
+  line-height: 70px;
+  /* 垂直居中 */
   cursor: pointer;
-  transition: transform 0.2s ease; /* 添加轻微缩放效果 */
+  transition: transform 0.2s ease;
+  /* 添加轻微缩放效果 */
   display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-  font-size: 24px; /* 将字体大小设置为 24px */
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+  font-size: 24px;
+  /* 将字体大小设置为 24px */
 }
 
 .banner .bigbtn2 {
-  position: absolute; /* 使用绝对定位 */
+  position: absolute;
+  /* 使用绝对定位 */
   top: 470px;
   left: 730px;
   width: 150px;
   height: 70px;
-  background: rgba(255, 255, 255, 0.3); /* 半透明的白色背景，模拟玻璃 */
-  border: 2px solid rgba(255, 255, 255, 0.5); /* 边框半透明，增加玻璃感 */
-  border-radius: 35px; /* 圆角，模拟瓶子形状 */
-  backdrop-filter: blur(5px); /* 模糊效果，提升玻璃质感 */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2), /* 模拟瓶子的投影 */
-              inset 0px 4px 6px rgba(255, 255, 255, 0.4); /* 内部的亮光效果，增加立体感 */
-  color: #333; /* 文本颜色 */
+  background: rgba(255, 255, 255, 0.3);
+  /* 半透明的白色背景，模拟玻璃 */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  /* 边框半透明，增加玻璃感 */
+  border-radius: 35px;
+  /* 圆角，模拟瓶子形状 */
+  backdrop-filter: blur(5px);
+  /* 模糊效果，提升玻璃质感 */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2),
+    /* 模拟瓶子的投影 */
+    inset 0px 4px 6px rgba(255, 255, 255, 0.4);
+  /* 内部的亮光效果，增加立体感 */
+  color: #333;
+  /* 文本颜色 */
   font-size: 16px;
   font-weight: bold;
   text-align: center;
-  line-height: 70px; /* 垂直居中 */
+  line-height: 70px;
+  /* 垂直居中 */
   cursor: pointer;
-  transition: transform 0.2s ease; /* 添加轻微缩放效果 */
+  transition: transform 0.2s ease;
+  /* 添加轻微缩放效果 */
   display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-  font-size: 24px; /* 将字体大小设置为 24px */
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+  font-size: 24px;
+  /* 将字体大小设置为 24px */
 }
 
 .banner .smallbtn1,
@@ -451,37 +496,58 @@ export default {
   position: absolute;
   width: 120px;
   height: 50px;
-  background-color: rgba(199, 43, 43, 0.3); /* 默认的半透明红色背景 */
-  border: 2px solid rgba(255, 255, 255, 0.5); /* 默认的半透明白色边框 */
-  border-radius: 25px; /* 圆角效果 */
-  backdrop-filter: blur(10px); /* 模糊效果，增加玻璃感 */
-  color: #fff; /* 白色文本 */
+  background-color: rgba(199, 43, 43, 0.3);
+  /* 默认的半透明红色背景 */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  /* 默认的半透明白色边框 */
+  border-radius: 25px;
+  /* 圆角效果 */
+  backdrop-filter: blur(10px);
+  /* 模糊效果，增加玻璃感 */
+  color: #fff;
+  /* 白色文本 */
   font-size: 18px;
   font-weight: bold;
   text-align: center;
   display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
   right: 50px;
   cursor: pointer;
   transition: background-color 0.3s ease,
-              border-color 0.3s ease,
-              transform 0.3s ease, /* 添加平滑过渡效果 */
-              box-shadow 0.3s ease; /* 添加阴影过渡效果 */
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    /* 添加平滑过渡效果 */
+    box-shadow 0.3s ease;
+  /* 添加阴影过渡效果 */
 }
 
-.banner .smallbtn1 { top: 50px; }
-.banner .smallbtn2 { top: 120px; }
-.banner .smallbtn3 { top: 190px; }
+.banner .smallbtn1 {
+  top: 50px;
+}
+
+.banner .smallbtn2 {
+  top: 120px;
+}
+
+.banner .smallbtn3 {
+  top: 190px;
+}
 
 /* 激活状态的样式 */
 .banner .smallbtn1.active,
 .banner .smallbtn2.active,
 .banner .smallbtn3.active {
-  background-color: rgba(199, 43, 43, 0.8); /* 激活时的背景颜色 */
-  border-color: rgba(255, 255, 255, 1); /* 激活时的边框颜色 */
-  transform: scale(1.1); /* 激活时略微放大按钮 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 激活时的阴影效果 */
+  background-color: rgba(199, 43, 43, 0.8);
+  /* 激活时的背景颜色 */
+  border-color: rgba(255, 255, 255, 1);
+  /* 激活时的边框颜色 */
+  transform: scale(1.1);
+  /* 激活时略微放大按钮 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* 激活时的阴影效果 */
 }
 
 /* 写漂流瓶 */
@@ -492,16 +558,19 @@ export default {
   left: 5%;
   padding: 20px;
   box-sizing: border-box;
-  background-color: rgba(240, 222, 200, 0.88); /* 更和谐的背景色 */
+  background-color: rgba(240, 222, 200, 0.88);
+  /* 更和谐的背景色 */
   border-radius: 25px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* 柔和的阴影效果 */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  /* 柔和的阴影效果 */
   font-family: Arial, sans-serif;
   height: 400px;
   transition: all 0.3s ease;
 }
 
 .write .left h2 {
-  color: rgb(92, 58, 42); /* 更柔和的深色 */
+  color: rgb(92, 58, 42);
+  /* 更柔和的深色 */
   font-size: 26px;
   margin-bottom: 20px;
   text-align: center;
@@ -526,9 +595,11 @@ export default {
   padding: 12px;
   font-size: 14px;
   border-radius: 8px;
-  border: 1px solid rgba(200, 200, 200, 0.5); /* 柔和的边框颜色 */
+  border: 1px solid rgba(200, 200, 200, 0.5);
+  /* 柔和的边框颜色 */
   resize: vertical;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* 内阴影增加层次感 */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+  /* 内阴影增加层次感 */
 }
 
 .write .left button {
@@ -537,7 +608,8 @@ export default {
   padding: 14px;
   font-size: 16px;
   color: #fff;
-  background-image: linear-gradient(135deg, rgba(98, 62, 45, 0.95), rgba(79, 50, 35, 0.95)); /* 高级渐变色 */
+  background-image: linear-gradient(135deg, rgba(98, 62, 45, 0.95), rgba(79, 50, 35, 0.95));
+  /* 高级渐变色 */
   border: none;
   border-radius: 25px;
   cursor: pointer;
@@ -547,7 +619,8 @@ export default {
 }
 
 .write .left button:hover {
-  background-image: linear-gradient(135deg, rgba(79, 50, 35, 0.95), rgba(98, 62, 45, 0.95)); /* 悬停时反向渐变 */
+  background-image: linear-gradient(135deg, rgba(79, 50, 35, 0.95), rgba(98, 62, 45, 0.95));
+  /* 悬停时反向渐变 */
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
@@ -560,13 +633,16 @@ export default {
   background-position: center;
   background-size: cover;
   border-radius: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* 加深阴影效果 */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  /* 加深阴影效果 */
   transition: all 0.3s ease;
 }
 
 .write .right:hover {
-  transform: scale(1.02); /* 悬停时略微放大效果 */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* 增加悬停阴影 */
+  transform: scale(1.02);
+  /* 悬停时略微放大效果 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  /* 增加悬停阴影 */
 }
 
 /* end */
@@ -623,37 +699,54 @@ button:hover {
 /* 模态框内容 */
 .modal-content {
   border-radius: 10px;
-  width: 35%; /* 调整宽度 */
-  height: 70%; /* 调整高度 */
-  max-height: 400px; /* 最大高度 */
+  width: 35%;
+  /* 调整宽度 */
+  height: 70%;
+  /* 调整高度 */
+  max-height: 400px;
+  /* 最大高度 */
   background-color: #fff;
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   transition: transform 0.3s ease-in-out;
-  z-index: 10001; /* 确保内容位于背景之上 */
+  z-index: 10001;
+  /* 确保内容位于背景之上 */
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* 让子元素扩展至填充整个容器 */
-  overflow-y: auto; /* 内容超出时显示滚动条 */
+  align-items: stretch;
+  /* 让子元素扩展至填充整个容器 */
+  overflow-y: auto;
+  /* 内容超出时显示滚动条 */
 }
 
 /* 关闭按钮 */
 .close {
-  position: absolute; /* 绝对定位，使按钮相对于最近的非 static 定位祖先元素定位 */
-  top: 70px; /* 设置按钮距离顶部的距离为70px */
-  right: 290px; /* 设置按钮距离右侧的距离为290px */
-  font-size: 24px; /* 设置字体大小为24px */
-  color: #333; /* 设置字体颜色为深灰色 */
-  cursor: pointer; /* 设置鼠标指针为手指形状，表示可点击 */
-  transition: color 0.3s ease; /* 设置颜色变化的过渡效果，0.3秒内平滑过渡 */
-  background-color: transparent; /* 设置背景为透明 */
-  border: none; /* 移除边框 */
-  padding: 0; /* 移除内边距 */
+  position: absolute;
+  /* 绝对定位，使按钮相对于最近的非 static 定位祖先元素定位 */
+  top: 70px;
+  /* 设置按钮距离顶部的距离为70px */
+  right: 290px;
+  /* 设置按钮距离右侧的距离为290px */
+  font-size: 24px;
+  /* 设置字体大小为24px */
+  color: #333;
+  /* 设置字体颜色为深灰色 */
+  cursor: pointer;
+  /* 设置鼠标指针为手指形状，表示可点击 */
+  transition: color 0.3s ease;
+  /* 设置颜色变化的过渡效果，0.3秒内平滑过渡 */
+  background-color: transparent;
+  /* 设置背景为透明 */
+  border: none;
+  /* 移除边框 */
+  padding: 0;
+  /* 移除内边距 */
 }
 
 .close:hover {
-  color: #f44336; /* 鼠标悬停时变红 */
+  color: #f44336;
+  /* 鼠标悬停时变红 */
 }
 
 /* 标题 */
@@ -668,8 +761,10 @@ h2 {
 form {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* 确保表单内容可以扩展 */
-  align-items: center; /* 居中对齐表单内容 */
+  flex-grow: 1;
+  /* 确保表单内容可以扩展 */
+  align-items: center;
+  /* 居中对齐表单内容 */
 }
 
 /* 地图输入框 */
@@ -741,13 +836,15 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3; /* 鼠标悬停时变暗 */
+  background-color: #0056b3;
+  /* 鼠标悬停时变暗 */
 }
 
 /* 媒体查询，用于小屏幕设备 */
 @media (max-width: 600px) {
   .modal-content {
-    width: 95%; /* 在更小的屏幕上进一步缩放 */
+    width: 95%;
+    /* 在更小的屏幕上进一步缩放 */
   }
 
   button {
@@ -769,7 +866,8 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
+  /* Darker blue on hover */
 }
 
 .form-group {
@@ -834,10 +932,14 @@ button:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60vw; /* 设置宽度为视口宽度的 60% */
-  height: 80vh; /* 设置高度为视口高度的 80% */
-  max-width: 750px; /* 限制最大宽度 */
-  max-height: 500px; /* 限制最大高度 */
+  width: 60vw;
+  /* 设置宽度为视口宽度的 60% */
+  height: 80vh;
+  /* 设置高度为视口高度的 80% */
+  max-width: 750px;
+  /* 限制最大宽度 */
+  max-height: 500px;
+  /* 限制最大高度 */
   padding: 25px;
   background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
   border-radius: 12px;
@@ -899,7 +1001,8 @@ button:hover {
   right: 0;
 }
 
-.button1, .button2 {
+.button1,
+.button2 {
   padding: 8px 16px;
   font-size: 14px;
   border: none;
@@ -935,5 +1038,4 @@ button:hover {
   font-size: 16px;
   color: #888;
 }
-
 </style>

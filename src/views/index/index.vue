@@ -58,13 +58,14 @@
                 </a>
               </div>
               <div class="tab-container">
-                <div class="link" @mouseover="showSignPopover = true" @mouseleave="showSignPopover = false">
+                <div class="link" @mouseover="showDailyPopover = true" @mouseleave="showDailyPopover = false">
                   <div class="link-content">
                     <div class="icon icon-task"></div>
                     <span>每日任务</span>
                   </div>
                   <transition name="el-fade-in-linear">
-                    <div v-show="showSignPopover" class="v-popover" @mouseenter="showSignPopover = true">
+                    <div v-show="showDailyPopover" class="v-popover" style="top: 33%;padding-right: 10px; width: 350px;"
+                      @mouseenter="showDailyPopover = true">
                       <div class="signDialog">
                         <div class="signTitle"><svg t="1730991046359"
                             style="width:1.2em;height:1.2em; margin-right: 5px; margin-top: -5px; vertical-align: middle;"
@@ -79,25 +80,37 @@
                             <path
                               d="M835.9 242.8H186.8c-37.5 0-68.1 31.4-68.1 70v54.7H904v-54.7c0-38.6-30.6-70-68.1-70z"
                               fill="#FFD524" p-id="10888"></path>
-                          </svg>本周已累签 <span style="color:#ff6200">{{ signedDays }}</span> 天
-                          <el-button @click="sign" size="small" :disabled="isSignToday"
-                            :style="{ float: 'right', backgroundColor: isSignToday ? '#C7C7C7' : '#ff6200', color: 'aliceblue' }"
-                            round>
-                            {{ isSignToday ? '已签到' : '立即签到' }}
-                          </el-button>
+                          </svg>每日任务
                         </div>
-                        <div class="signContent">
-                          <div class="signAwardContent">
-                            <div class="signAwardContentItem" v-for="item in signList" :key="item.id">
-                              <div class="signAwardInfo">
-                                第 {{ item.id }} 天
+                        <div class="signContent beautify-scroll-bar"
+                          style="overflow-x: hidden; overflow-y: auto; height: 300px;">
+                          <div class="signAwardContent" style="display: block;">
+                            <div class="dailyAwardContentItem" v-for="item in tasks" :key="item.id">
+                              <div class="dailyAwardPreviewLink">
+                                <img :src="item.link" :alt="item.taskName" :title="item.taskName">
                               </div>
-                              <div class="signAwardPreviewLink"><img :src="item.previewLink" :alt="item.awardName"
-                                  :title="item.awardDesc"></div>
-                              <div class="signAwardInfo">
-                                {{ item.awardName }}x{{ item.awardNum }}
+                              <div class="dailyAwardInfo" style="padding-left: 15px;">
+                                <p class="promo-title"> {{ item.taskName }} </p>
+                                <p class="promo-desc">{{ item.description }}</p>
                               </div>
-                              <div v-if="item.received" class="overlay">
+                              <div class="dailyAwardInfo" style="width: 60px;">
+                                <div class="fc_auto pc b_subtitle">
+                                  <div class="point_cont"><svg width="16" height="16" viewBox="0 0 16 16"
+                                      class="rw-si add" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5 0C4.44772 0 4 0.447715 4 1V4L1 4C0.447715 4 0 4.44771 0 5C0 5.55228 0.447715 6 1 6H4V9C4 9.55229 4.44772 10 5 10C5.55228 10 6 9.55228 6 9V6H9C9.55228 6 10 5.55228 10 5C10 4.44772 9.55228 4 9 4L6 4V1C6 0.447715 5.55228 0 5 0Z"
+                                        fill="#DDFFE8"></path>
+                                    </svg>
+                                    <div class="shortPoint point">{{ item.money }}</div>
+                                  </div>
+                                </div>
+                                <el-button v-show="item.status !== 2" size="mini" class="daily_button"
+                                  @click="goTask(item)"
+                                  :style="{ backgroundColor: item.status === 0 ? 'trasparent' : '#ff6200', color: item.status === 0 ? '#000' : '#fff' }"
+                                  round>{{
+                                    item.status === 0 ? '去完成' : '立即领取' }}</el-button>
+                              </div>
+                              <div v-if="item.status === 2" class="overlay">
                                 <svg t="1730990885102" style="width:40px;height:40px" viewBox="0 0 1024 1024"
                                   version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7933" width="200" height="200">
                                   <path
@@ -220,7 +233,7 @@
 </template>
 
 <script>
-import { getUserMoney, sign, getSignList, getMyStatistics } from '@/api/user'
+import { getUserMoney, sign, getSignList, getMyStatistics, finishTask, getTask } from '@/api/user'
 import useUserStore from '@/store/modules/user'
 
 export default {
@@ -233,7 +246,9 @@ export default {
       activeIndex: 0,
       isHovered: false,
       showSignPopover: false,
+      showDailyPopover: false,
       signList: [],
+      tasks: [],
       isSignToday: false,
       signedDays: 0,
       myStatistics: {},
@@ -270,6 +285,31 @@ export default {
     }
   },
   methods: {
+    goTask(item) {
+      if (item.status === 1) {
+        this.finishTask(item.id)
+      } else {
+        this.$router.push(item.route)
+      }
+    },
+    getTask() {
+      getTask().then(res => {
+        this.tasks = res.data
+      })
+    },
+    finishTask(id) {
+      finishTask(id).then(res => {
+        this.$notify({
+          title: '任务完成',
+          message: '每天完成任务，积攒多多的猪仔钱🥳',
+          type: 'success',
+          offset: 100,
+          position: 'top-left'
+        })
+        this.getTask()
+        this.getUserMoney()
+      })
+    },
     getMyStatistics() {
       getMyStatistics().then(res => {
         this.myStatistics = res.data
@@ -311,6 +351,7 @@ export default {
         this.getMyStatistics()
         this.myStatisticsFetched = true
       }
+      this.getTask()
     },
     updatePositions() {
       this.positions = [
@@ -1182,5 +1223,156 @@ a {
   font-size: 18px;
   font-weight: bold;
   border-radius: 8px;
+}
+
+.signAwardContent .dailyAwardContentItem {
+  display: flex;
+  background-color: #f3f6f8;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  font-weight: 400;
+  /* height: 80px; */
+  margin-top: 12px;
+  padding: 12px 12px 9px;
+  position: relative;
+  width: 90%;
+  --un-shadow: var(--bew-shadow-edge-glow-1), var(--bew-shadow-1);
+  box-shadow: var(--un-ring-offset-shadow), var(--un-ring-shadow), var(--un-shadow);
+  flex: 1;
+}
+
+.signAwardContent .dailyAwardPreviewLink {
+  color: #50607a;
+  height: 65px;
+  width: 65px;
+  line-height: 18px;
+}
+
+.signAwardContent .dailyAwardPreviewLink img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+}
+
+.signAwardContent .dailyAwardInfo {
+  flex-direction: row;
+  line-height: 12px;
+  margin-bottom: 8px;
+  text-align: left;
+  flex: 2;
+}
+
+.beautify-scroll-bar {
+  scrollbar-color: #e6e9eb;
+  scrollbar-width: 4px
+}
+
+.promo-title {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  width: 180px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  max-height: none;
+}
+
+.promo-desc {
+  padding: 5px 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  max-height: 34px;
+  margin-right: 10px;
+}
+
+.beautify-scroll-bar::-webkit-scrollbar-thumb {
+  background: #e6e9eb;
+  border-radius: 4px;
+  height: 4px;
+  width: 4px
+}
+
+/* 滑动轨道按钮 */
+::-webkit-scrollbar-button {
+  width: 10px;
+  height: 10px;
+  display: none;
+}
+
+.fc_auto.pc.b_subtitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  height: 22px;
+  left: 258px;
+  bottom: 45px;
+  /* background: linear-gradient(112.41deg, #1C5F57 14.6%, #0078D4 85.4%); */
+  background: linear-gradient(148.41deg, #18b5d5 28.6%, #a3b9cc 85.4%);
+  border-radius: 15px 0px 0px 15px;
+  position: absolute;
+  top: 10px;
+  right: 0;
+  bottom: 0;
+  left: inherit;
+}
+
+.b_subtitle {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.fc_auto {
+  flex: 0 0 auto;
+}
+
+.point_cont {
+  display: flex;
+  white-space: nowrap;
+  line-height: 16px;
+  align-items: center;
+}
+
+.point_cont svg {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  top: 3px;
+  left: 7px;
+}
+
+.point_cont .point {
+  font-weight: 900;
+  line-height: 14px;
+  color: #fff;
+  margin: 0 7px 0 5px;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.daily_button {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.daily_button:hover {
+  background-color: #ff6200;
+  color: #fff;
 }
 </style>
