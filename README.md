@@ -77,14 +77,16 @@
 `nginx.conf`配置如下，替换为您的后端服务地址，将`npm run build` 打包后的 `dist` 下的文件移动到nginx的html文件夹即可
 
 ```
-#user  nobody;
+# Nginx 配置文件
+
+nobody;
 worker_processes  1;
 
-#error_log  logs/error.log;
-#error_log  logs/error.log  notice;
-#error_log  logs/error.log  info;
+# error_log  logs/error.log;
+# error_log  logs/error.log  notice;
+# error_log  logs/error.log  info;
 
-#pid        logs/nginx.pid;
+# pid        logs/nginx.pid;
 
 events {
     worker_connections  1024;
@@ -95,19 +97,19 @@ http {
     default_type  application/octet-stream;
 
     #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-    #                  '$status $body_bytes_sent "$http_referer" '
-    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+    #'$status $body_bytes_sent "$http_referer" '
+    #'"$http_user_agent" "$http_x_forwarded_for"';
 
-    #access_log  logs/access.log  main;
+    # access_log  logs/access.log  main;
 
     sendfile        on;
-    #tcp_nopush     on;
+    # tcp_nopush     on;
 
-    #keepalive_timeout  0;
+    # keepalive_timeout  0;
     keepalive_timeout  65;
 
-    #gzip  on;
-	
+    # gzip  on;
+
     server {
         listen 80;
         server_name  qiaopi;
@@ -151,30 +153,27 @@ http {
             root   html;
         }
     }
-	
-	server {
-		listen 443 ssl;
-		server_name 您的后端服务地址;
 
-		# SSL 配置，需申请证书，可使用自签名证书，https://csr.chinassl.net/
-    ssl_certificate /www/wwwroot/www/etc/您的后端服务地址.crt; 
-    ssl_certificate_key /www/wwwroot/www/etc/您的后端服务地址.private; 
+    server {
+        listen 443 ssl;
+        server_name 您的后端服务地址;
 
+        # SSL 配置，需申请证书，可使用自签名证书，https://csr.chinassl.net/
+        ssl_certificate /www/wwwroot/www/etc/您的后端服务地址.crt;
+        ssl_certificate_key /www/wwwroot/www/etc/您的后端服务地址.private;
 
-		# 重定向所有 HTTPS 请求到 HTTP
-		    # 匹配 MinIO 的路径
-		location /qiaopi/ {
-			# 重定向所有 HTTPS 请求到 HTTP
-			proxy_pass http://您的后端服务地址:9000/qiaopi/;
-		}
-		
-		location / {
-			return 301 http://您的后端服务地址;
-		}
-	}
+        # 重定向所有 HTTPS 请求到 HTTP
+        # 匹配 MinIO 的路径
+        location /qiaopi/ {
+            # 重定向所有 HTTPS 请求到 HTTP
+            proxy_pass http://您的后端服务地址:9000/qiaopi/;
+        }
 
+        location / {
+            return 301 http://您的后端服务地址;
+        }
+    }
 }
-
 ```
 
 
