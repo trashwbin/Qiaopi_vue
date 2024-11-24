@@ -76,7 +76,7 @@
 
 `nginx.conf`配置如下，替换为您的后端服务地址，将`npm run build` 打包后的 `dist` 下的文件移动到nginx的html文件夹即可
 
-```json
+```
 #user  nobody;
 worker_processes  1;
 
