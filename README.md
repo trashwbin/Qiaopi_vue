@@ -156,9 +156,9 @@ http {
 		listen 443 ssl;
 		server_name 您的后端服务地址;
 
-		# SSL 配置
-        ssl_certificate /www/wwwroot/www/etc/您的后端服务地址.crt; 
-        ssl_certificate_key /www/wwwroot/www/etc/您的后端服务地址.private; 
+		# SSL 配置，需申请证书，可使用自签名证书，https://csr.chinassl.net/
+    ssl_certificate /www/wwwroot/www/etc/您的后端服务地址.crt; 
+    ssl_certificate_key /www/wwwroot/www/etc/您的后端服务地址.private; 
 
 
 		# 重定向所有 HTTPS 请求到 HTTP
