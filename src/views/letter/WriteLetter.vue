@@ -1134,7 +1134,7 @@ export default {
       }
       if (this.letterVo.speedRate !== '1' && this.letterVo.speedRate !== null) {
         const card = this.myFunctionCards.find(card => card.id === this.useCardDto.cardId)
-        console.log(card)
+        // console.log(card)
         if (card && card.cardType === 1) {
           MessageBox.confirm(`当前已处于${this.letterVo.speedRate}倍加速中，继续使用加速卡将覆盖原来加速效果！是否继续使用？`, '侨缘信使', {
             confirmButtonText: '确定',

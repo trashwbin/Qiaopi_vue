@@ -81,14 +81,12 @@ export default {
         this.page,
         this.limit
       ).then(res => {
-        console.log(res.data.records.length)
+        // console.log(res.data.records.length)
         if (res.data.records.length === 0) {
           this.loading = false
           this.noMore = true
           return
         }
-        const ids = res.data.records.map(record => record.id)
-        console.log(ids.join(', '))
         this.data = [...this.data, ...res.data.records]
         this.page++
         this.loading = false
@@ -233,8 +231,10 @@ img {
 .title--qJ7Xg_90 {
   -webkit-box-orient: vertical;
   word-wrap: break-word;
-  -webkit-line-clamp: 2; /* 兼容旧版Webkit内核浏览器 */
-  line-clamp: 2; /* 标准属性，提高兼容性 */
+  -webkit-line-clamp: 2;
+  /* 兼容旧版Webkit内核浏览器 */
+  line-clamp: 2;
+  /* 标准属性，提高兼容性 */
   color: #11192d;
   display: -webkit-box;
   font-family: PingFangSC-Medium;

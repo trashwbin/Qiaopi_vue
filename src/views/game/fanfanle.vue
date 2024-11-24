@@ -1,4 +1,3 @@
-
 <template>
   <div class="memory-game">
     <h1>翻翻乐</h1>
@@ -6,13 +5,8 @@
       游戏已禁用，您没有剩余的翻翻乐次数。
     </div>
     <div v-else class="game-board">
-      <div
-        v-for="(card, index) in cards"
-        :key="index"
-        class="card"
-        :class="{ flipped: card.flipped, matched: card.matched }"
-        @click="flipCard(index)"
-      >
+      <div v-for="(card, index) in cards" :key="index" class="card"
+        :class="{ flipped: card.flipped, matched: card.matched }" @click="flipCard(index)">
         <div class="card-inner">
           <div class="card-front">?</div>
           <div class="card-back">
@@ -100,7 +94,7 @@ export default {
     checkWin() {
       const allMatched = this.cards.every(card => card.matched)
       if (allMatched) {
-        console.log('游戏胜利')
+        // console.log('游戏胜利')
         this.winFfl()
         this.getFflLimit()
       }
@@ -117,7 +111,7 @@ export default {
       const res = await getFflLimit()
       if (res.code === 200) {
         this.winLimit = res.data
-        console.log(this.winLimit)
+        // console.log(this.winLimit)
         if (this.winLimit <= 0) {
           this.canPlay = false // 设置一个标志来禁止游戏
         } else {
@@ -139,7 +133,7 @@ export default {
 .memory-game {
   font-family: Arial, sans-serif;
   text-align: center;
-  padding:0 20px;
+  padding: 0 20px;
 }
 
 .game-board {
@@ -219,6 +213,7 @@ export default {
 .reset-button:hover {
   background-color: #c0392b;
 }
+
 .game-disabled {
   text-align: center;
   color: rgb(172, 90, 90);

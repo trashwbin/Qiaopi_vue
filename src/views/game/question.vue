@@ -1,4 +1,3 @@
-
 <template>
   <div class="banner">
     <img src="../../assets/imgs/knowledge.png" alt="" class="bgd">
@@ -10,7 +9,7 @@
       </div>
       <el-button @click="goToPreviousQuestion">上一题</el-button>
       <el-button @click="goToNextQuestion" :disabled="!hasSubmittedAnswer"
-        :class="{'btn--disabled': currentQuestionIndex !== contents.length - 1}">
+        :class="{ 'btn--disabled': currentQuestionIndex !== contents.length - 1 }">
         {{ currentQuestionIndex === contents.length - 1 ? '查看获得的猪仔钱' : '下一题' }}
       </el-button>
       <el-button @click="checkAnswer">提交答案</el-button>
@@ -161,7 +160,7 @@ export default {
         const response = await submitAnswers(answers)
         Message.success('答案提交成功！')
         this.handleResponse(response.data)
-        console.log(this.pigMoney)
+        // console.log(this.pigMoney)
       } catch (error) {
         // console.error('提交答案失败:', error)
         Message.error('提交答案失败')
@@ -203,11 +202,13 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
-  max-width: 800px; /* Ensure content does not exceed the image */
+  max-width: 800px;
+  /* Ensure content does not exceed the image */
   padding: 20px;
 }
+
 .question-container h2 {
-  margin-top:50px;
+  margin-top: 50px;
   font-size: 22px;
 }
 
@@ -225,12 +226,15 @@ export default {
 .explanation {
   margin-top: 5px;
 }
+
 .explanation h3 {
   margin-top: -30px;
 }
+
 .explanation p {
   margin-top: -30px;
 }
+
 .results {
   /* 定位和布局 */
   position: absolute;
@@ -238,27 +242,37 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
-  max-width: 800px; /* 限制最大宽度 */
+  max-width: 800px;
+  /* 限制最大宽度 */
   padding: 20px;
   box-sizing: border-box;
 
   /* 文本样式 */
   text-align: center;
-  color: black; /* 文本颜色 */
-  font-family: 'Arial', sans-serif; /* 字体 */
+  color: black;
+  /* 文本颜色 */
+  font-family: 'Arial', sans-serif;
+  /* 字体 */
 
   /* 背景和边框 */
-  background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
-  border-radius: 8px; /* 圆角边框 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 阴影 */
+  background-color: rgba(255, 255, 255, 0.8);
+  /* 半透明背景 */
+  border-radius: 8px;
+  /* 圆角边框 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* 阴影 */
 
   /* 动画 */
-  animation: fadein 1s ease-in-out forwards; /* 淡入动画 */
+  animation: fadein 1s ease-in-out forwards;
+  /* 淡入动画 */
 }
+
 .think {
   position: absolute;
-   width: 186px; /* 或者你需要的尺寸 */
-  height: 168px; /* 保持图片比例 */
+  width: 186px;
+  /* 或者你需要的尺寸 */
+  height: 168px;
+  /* 保持图片比例 */
   right: -50px;
   bottom: 50px;
 }

@@ -164,7 +164,7 @@ export default {
       this.scrollToBottom()
     },
     onMessage(event) {
-      console.log(event)
+      // console.log(event)
       try {
         const response = JSON.parse(event.data)
         if (response.code === 200) {
@@ -176,7 +176,7 @@ export default {
           this.chatCount--
           return
         }
-        console.log(response)
+        // console.log(response)
       } catch (e) {
         // event.data is not JSON, handle accordingly if needed
       }
@@ -196,7 +196,7 @@ export default {
       if (this.chatCount === 1) {
         document.getElementById('hello').after(userDiv)
       } else {
-        console.log(this.chatCount);
+        // console.log(this.chatCount);
         (document.getElementById('user' + this.chatCount) || document.getElementById('response' + (this.chatCount - 1))).after(userDiv)
       }
       this.websocket.send(JSON.stringify({

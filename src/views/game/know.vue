@@ -89,9 +89,9 @@ export default {
               questions: content
             }
           })
-          console.log('Decrypted Questions:', content)
+          // console.log('Decrypted Questions:', content)
         } catch (error) {
-          console.error('Decryption failed:', error)
+          // console.error('Decryption failed:', error)
         }
       })
     },

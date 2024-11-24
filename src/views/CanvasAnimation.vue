@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="canvas"></canvas>
+  <canvas ref="canvas"></canvas>
 </template>
 
 <script>
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     handleCanvasClick(event) {
-      console.log('Canvas clicked', event)
+      // console.log('Canvas clicked', event)
     },
     initCanvas() {
       const canvas = this.$refs.canvas
@@ -104,12 +104,12 @@ export default {
 
 <style scoped>
 canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-    pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  pointer-events: none;
 }
 </style>

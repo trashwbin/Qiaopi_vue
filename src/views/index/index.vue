@@ -28,8 +28,9 @@
             </el-dropdown-menu>
           </el-dropdown> -->
           <a href="/profile" :class="{ 'hover': isHovered }" class="avatar-img"
-            :style="{ backgroundImage: `url(${userAvatar})` }"></a>
-          <div class="avatar-shadow" :class="{ 'hover': isHovered }" :style="{ backgroundImage: `url(${userAvatar})` }">
+            :style="{ backgroundImage: `url(${userAvatar})`, zIndex: '12' }"></a>
+          <div class="avatar-shadow" :class="{ 'hover': isHovered }"
+            :style="{ backgroundImage: `url(${userAvatar})`, zIndex: '11' }">
           </div>
           <transition name="el-zoom-in-top">
             <div class="bew-popover" v-show="isHovered">
@@ -363,13 +364,13 @@ export default {
       ]
     },
     handleCommand(router, command = '') {
-      console.log(router, command)
+      // console.log(router, command)
       if (router === 'logout') {
         const userStore = useUserStore()
         userStore.logOut()
         this.$router.push('/login')
       } else if (router === 'profile') {
-        console.log(this.currentRoute)
+        // console.log(this.currentRoute)
         // this.$router.go(0) // 刷新页面
         this.$router.push({
           path: '/profile',

@@ -98,17 +98,17 @@
                 title="漂流瓶"></router-link>
             <router-link to="/shop"><img src="../../assets/imgss/function2.webp" alt="" class="function-img"
                 title="兑换商城"></router-link>
-            <router-link to=""><img src="../../assets/imgss/function3.webp" alt="" class="function-img"
+            <router-link to="/import"><img src="../../assets/imgss/function3.webp" alt="" class="function-img"
                 title="故事线探索"></router-link>
           </div>
           <div class="bottom-row">
-            <router-link to=""><img src="../../assets/imgss/function4.webp" alt="" class="function-img"
+            <router-link to="/memory"><img src="../../assets/imgss/function4.webp" alt="" class="function-img"
                 title="游戏翻翻乐"></router-link>
             <router-link to="/write"><img src="../../assets/imgss/function5.webp" alt="" class="function-img"
                 title="写一封侨批"></router-link>
             <router-link to="/receive"><img src="../../assets/imgss/function6.webp" alt="" class="function-img"
                 title="查看收信"></router-link>
-            <router-link to=""><img src="../../assets/imgss/function7.webp" alt="" class="function-img"
+            <router-link to="/know"><img src="../../assets/imgss/function7.webp" alt="" class="function-img"
                 title="知识问答"></router-link>
           </div>
         </div>

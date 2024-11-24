@@ -992,12 +992,15 @@ export default {
   cursor: pointer;
   animation: float 2.7s ease-in-out infinite;
 }
+
 .ink:hover {
   animation: big 0.5s linear forwards;
 }
+
 .pen:hover {
   animation: big 0.5s linear forwards;
 }
+
 .envelope:hover {
   animation: big 0.5s linear forwards;
 }
@@ -1019,16 +1022,18 @@ export default {
   cursor: pointer;
   animation: float 2.5s ease-in-out infinite;
 }
-@keyframes big{
 
-  0%
-  {
+@keyframes big {
+
+  0% {
     transform: scale(1);
   }
-  100%{
+
+  100% {
     transform: scale(1.2);
   }
 }
+
 @keyframes float {
 
   0%,
@@ -1151,6 +1156,7 @@ li {
   position: absolute;
   top: 50px;
   left: 80px;
+  z-index: 1;
 }
 
 .box {
@@ -1169,6 +1175,7 @@ li {
   position: absolute;
   top: 40px;
   left: 40px;
+  z-index: 1;
 }
 
 .penbox {
@@ -1191,6 +1198,7 @@ li {
   margin-right: 12px;
   margin-bottom: 5px;
   border-radius: 5px;
+  z-index: 1;
 }
 
 .modal-content {
@@ -1202,6 +1210,7 @@ li {
   top: -40px;
   right: -10px;
   cursor: pointer;
+  z-index: 1;
 }
 
 .friends-container {
