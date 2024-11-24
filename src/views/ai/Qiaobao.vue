@@ -562,8 +562,7 @@ export default {
       if ('WebSocket' in window) {
         // 这里记得要改成你自己的ip
         if (!this.isLinked && this.isTokenAvailable) {
-          this.websocket = new WebSocket('ws://110.41.58.26:8080/ws/chat', useUserStore().token)
-          // this.websocket = new WebSocket('ws://localhost:8080/ws/chat', useUserStore().token)
+          this.websocket = new WebSocket('ws://localhost:8080/ws/chat', useUserStore().token)
           this.websocket.onerror = this.onError
           this.websocket.onopen = this.onOpen
           this.websocket.onmessage = this.onMessage
